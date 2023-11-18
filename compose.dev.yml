@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   api:
+    container_name: api
     build: .
     command: "uvicorn api.main:api --host 0.0.0.0 --port 8080 --reload"
     volumes:
@@ -9,6 +10,10 @@ services:
     ports:
       - "8080:8080"
     restart: "unless-stopped"
+    environment:
+      PIHOLE_API_BASE: 'http://192.168.0.69/admin/api.php'
+    secrets:
+      - pihole_api_token
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -36,10 +41,10 @@ services:
     security_opt:
       - seccomp=unconfined
     restart: unless-stopped
-    secrets:
-      - pihole_password
 
 secrets:
   pihole_password:
     file: './secrets/pihole_password.txt'
+  pihole_api_token:
+    file: './secrets/pihole_api_token.txt'
 

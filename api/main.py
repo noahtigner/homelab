@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
+import requests
 
+from .config import Settings
 from .diagnostics import get_cpu_usage, get_mem_usage, get_disk_usage, get_pids
 
 api = FastAPI()
@@ -35,6 +37,16 @@ def diagnostics(interval: float = 0.5):
         },
     }
 
+@api.get('/api/pihole/summary')
+def get_pihole_summary(response: Response):
+    token = Settings.PIHOLE_API_TOKEN
+    url = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
+    r = requests.get(url)
+    response.status_code = r.status_code
+    return r.json()
+
+# example
 @api.get('/api/params/{item_id}')
 def get_params(item_id: str):
     return {"item_id": item_id}
+
