@@ -162,3 +162,7 @@ cython_debug/
 # Pi-Hole volumes
 etc-dnsmasq.d/
 etc-pihole/
+
+# Docker secrets
+secrets/
+

@@ -21,9 +21,11 @@ services:
       - "80:80/tcp"
     environment:
       TZ: 'America/Boise'
-      WEBPASSWORD: 'temporary-password'
+      WEBPASSWORD_FILE: /run/secrets/pihole_password
       CORS_HOSTS: 'localhost,127.0.0.1,192.168.0.69,localhost:80,localhost:8000,localhost:8080,localhost:5173'
-      FTLCONF_LOCAL_IPV4: '192.168.0.1'
+      WEBTHEME: 'default-dark'
+      TEMPERATUREUNIT: 'f'
+      # FTLCONF_LOCAL_IPV4: '192.168.0.1'
     # Volumes store your data between container upgrades
     volumes:
       - './etc-pihole:/etc/pihole'
@@ -34,4 +36,10 @@ services:
     security_opt:
       - seccomp=unconfined
     restart: unless-stopped
+    secrets:
+      - pihole_password
+
+secrets:
+  pihole_password:
+    file: './secrets/pihole_password.txt'
 
