@@ -1,15 +1,15 @@
-version: "3.8"
+version: '3.9'
 
 services:
   api:
     container_name: api
     build: .
-    command: "uvicorn api.main:api --host 0.0.0.0 --port 8080 --reload"
+    command: 'uvicorn api.main:api --host 0.0.0.0 --port 8080 --reload'
     volumes:
       - ./api:/app/api
     ports:
-      - "8080:8080"
-    restart: "unless-stopped"
+      - '8080:8080'
+    restart: 'unless-stopped'
     environment:
       PIHOLE_API_BASE: 'http://192.168.0.69/admin/api.php'
     secrets:
@@ -20,10 +20,10 @@ services:
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     # network_mode: "host"
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
+      - '53:53/tcp'
+      - '53:53/udp'
       # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "80:80/tcp"
+      - '80:80/tcp'
     environment:
       TZ: 'America/Boise'
       WEBPASSWORD_FILE: /run/secrets/pihole_password
@@ -47,4 +47,3 @@ secrets:
     file: './secrets/pihole_password.txt'
   pihole_api_token:
     file: './secrets/pihole_api_token.txt'
-

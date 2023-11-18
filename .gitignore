@@ -166,3 +166,5 @@ etc-pihole/
 # Docker secrets
 secrets/
 
+# JS
+node_modules/
