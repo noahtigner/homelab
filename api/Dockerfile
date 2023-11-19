@@ -2,6 +2,9 @@ FROM python:3.11-slim-buster
 
 WORKDIR /app
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONBUFFERED 1
+
 COPY ./requirements.txt /app/requirements.txt
 
 # requirements for psutil
