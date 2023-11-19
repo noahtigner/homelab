@@ -3,7 +3,8 @@ version: "3.8"
 services:
   api:
     container_name: api
-    build: .
+    build:
+      context: ./api
     command: "uvicorn api.main:api --host 0.0.0.0 --port 8080 --reload"
     volumes:
       - ./api:/app/api
