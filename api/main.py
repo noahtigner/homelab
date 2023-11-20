@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 
@@ -22,11 +22,11 @@ api.add_middleware(
 )
 
 @api.get("/")
-def ping():
-    return {"status": "ok"}
+@api.get("/ping")
+def ping(request: Request):
+    return {"status": "ok", "root_path": request.scope.get("root_path")}
 
-
-@api.get("/api/diagnostics")
+@api.get("/diagnostics")
 def diagnostics(interval: float = 0.5):
     return {
         "diagnostics": {
