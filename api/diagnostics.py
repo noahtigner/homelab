@@ -17,10 +17,10 @@ def get_cpu_temp() -> Union[float, None]:
 def get_cpu_count() -> int:
     return psutil.cpu_count()
 
-def get_cpu_percent(interval: float) -> float:
+def get_cpu_percent(interval: Union[float, None]) -> float:
     return psutil.cpu_percent(interval=interval, percpu=True)
 
-def get_cpu_usage(interval: float) -> dict:
+def get_cpu_usage(interval: Union[float, None]) -> dict:
     return {
         "count": get_cpu_count(),
         "percent": get_cpu_percent(interval),

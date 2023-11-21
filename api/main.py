@@ -1,11 +1,20 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 import requests
+from typing import Union
 
 from .config import Settings
-from .diagnostics import get_cpu_usage, get_mem_usage, get_disk_usage, get_pids
+from .diagnostics import get_cpu_percent, get_cpu_usage, get_mem_usage, get_disk_usage, get_pids
 
-api = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    #startup
+    get_cpu_percent() # first call will always return 0
+    yield
+    #cleanup
+
+api = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost",
@@ -27,7 +36,7 @@ def ping(request: Request):
     return {"status": "ok", "root_path": request.scope.get("root_path")}
 
 @api.get("/diagnostics")
-def diagnostics(interval: float = 0.5):
+def diagnostics(interval: Union[float, None] = None):
     return {
         "diagnostics": {
             "cpu": get_cpu_usage(interval),
