@@ -37,7 +37,7 @@ def diagnostics(interval: float = 0.5):
         },
     }
 
-@api.get('/api/pihole/summary')
+@api.get('/pihole/summary')
 def get_pihole_summary(response: Response):
     token = Settings.PIHOLE_API_TOKEN
     url = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
@@ -46,7 +46,7 @@ def get_pihole_summary(response: Response):
     return r.json()
 
 # example
-@api.get('/api/params/{item_id}')
+@api.get('/params/{item_id}')
 def get_params(item_id: str):
     return {"item_id": item_id}
 
