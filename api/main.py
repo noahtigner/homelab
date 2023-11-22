@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from typing import Union
@@ -50,9 +50,14 @@ def diagnostics(interval: Union[float, None] = None):
 def get_pihole_summary(response: Response):
     token = Settings.PIHOLE_API_TOKEN
     url = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
-    r = requests.get(url)
-    response.status_code = r.status_code
-    return r.json()
+
+    try:
+        r = requests.get(url)
+        response.status_code = r.status_code
+        return r.json()
+    except requests.exceptions.ConnectionError as e:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {"error": "Connection to Pi-hole Refused"}
 
 # example
 @api.get('/params/{item_id}')

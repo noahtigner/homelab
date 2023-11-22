@@ -1,8 +1,7 @@
-import os
 import psutil
-from typing import Optional
+from typing import Union
 
-def get_cpu_temp() -> Optional[float]:
+def get_cpu_temp() -> Union[float, None]:
     temperature_file_path = '/sys/class/thermal/thermal_zone0/temp'
     try:
         raw_temp = None
@@ -17,10 +16,10 @@ def get_cpu_temp() -> Optional[float]:
 def get_cpu_count() -> int:
     return psutil.cpu_count()
 
-def get_cpu_percent(interval: Optional[float]) -> float:
+def get_cpu_percent(interval: Union[float, None]) -> float:
     return psutil.cpu_percent(interval=interval, percpu=True)
 
-def get_cpu_usage(interval: Optional[float]) -> dict:
+def get_cpu_usage(interval: Union[float, None]) -> dict:
     return {
         "count": get_cpu_count(),
         "percent": get_cpu_percent(interval),
@@ -41,10 +40,9 @@ def get_disk_usage() -> dict:
     return {
         "total": disk_usage.total,
         "used": disk_usage.used,
-        "free": disk_usage.free,
+        "available": disk_usage.free,
         "percent": disk_usage.percent,
     }
 
 def get_pids() -> list[int]:
     return psutil.pids()
-
