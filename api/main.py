@@ -1,11 +1,11 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-import requests
-from typing import Union
 
-from .config import Settings
-from .diagnostics import get_cpu_percent, get_cpu_usage, get_mem_usage, get_disk_usage, get_pids
+from api.config import Settings
+from api.diagnostics.retrieval import get_cpu_percent
+from api.diagnostics.router import router as diagnostics_router
+from api.pihole.router import router as pihole_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,7 +14,13 @@ async def lifespan(app: FastAPI):
     yield
     #cleanup
 
-api = FastAPI(lifespan=lifespan)
+api = FastAPI(
+    lifespan=lifespan,
+    title="Homelab API",
+    version="0.1.0",
+    description="API for Homelab",
+    tags=["homelab"],
+)
 
 origins = [
     "http://localhost",
@@ -30,34 +36,13 @@ api.add_middleware(
     allow_headers=["*"],
 )
 
+api.include_router(diagnostics_router)
+api.include_router(pihole_router)
+
 @api.get("/")
 @api.get("/ping")
 def ping(request: Request):
     return {"status": "ok", "root_path": request.scope.get("root_path")}
-
-@api.get("/diagnostics")
-def diagnostics(interval: Union[float, None] = None):
-    return {
-        "diagnostics": {
-            "cpu": get_cpu_usage(interval),
-            "memory": get_mem_usage(),
-            "disk": get_disk_usage(),
-            "pids": get_pids(),
-        },
-    }
-
-@api.get('/pihole/summary')
-def get_pihole_summary(response: Response):
-    token = Settings.PIHOLE_API_TOKEN
-    url = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
-
-    try:
-        r = requests.get(url)
-        response.status_code = r.status_code
-        return r.json()
-    except requests.exceptions.ConnectionError as e:
-        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return {"error": "Connection to Pi-hole Refused"}
 
 # example
 @api.get('/params/{item_id}')
