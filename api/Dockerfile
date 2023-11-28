@@ -18,4 +18,3 @@ RUN apt-get update --yes && \
 
 # install python packages
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-
