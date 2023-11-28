@@ -8,4 +8,5 @@ COPY pnpm-lock.yaml /app/pnpm-lock.yaml
 
 WORKDIR /app
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+# RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+RUN pnpm install
