@@ -1,6 +1,6 @@
 from typing import Union
 import requests
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi import APIRouter, HTTPException, Response, status
 
 from api.config import Settings
 
