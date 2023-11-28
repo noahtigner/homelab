@@ -78,7 +78,7 @@ services:
     container_name: dashboard
     build:
       context: ./dashboard
-    command: 'npm run dev'
+    command: 'pnpm run dev'
     volumes:
       - ./dashboard:/app
     ports:
