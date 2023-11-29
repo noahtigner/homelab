@@ -35,6 +35,9 @@ body {
 .logo.pihole:hover {
   filter: drop-shadow(0 0 2em #f60d1a);
 }
+.logo.fastAPI:hover {
+  filter: drop-shadow(0 0 2em #05998b);
+}
 
 @keyframes logo-spin {
   from {
