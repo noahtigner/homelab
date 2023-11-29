@@ -26,11 +26,14 @@ body {
   will-change: filter;
   transition: filter 300ms;
 }
-.logo:hover {
+.logo.vite:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+.logo.pihole:hover {
+  filter: drop-shadow(0 0 2em #F60D1A);
 }
 
 @keyframes logo-spin {
