@@ -26,6 +26,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:5173",
+    'http://192.168.0.69:5173'
 ]
 
 api.add_middleware(
