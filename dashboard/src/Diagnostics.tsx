@@ -7,13 +7,13 @@ function Diagnostics() {
   const [lc, setLc] = useState(null);
 
   useEffect(() => {
-    fetch('http://192.168.0.69:81/api/diagnostics')
+    fetch('http://192.168.0.69:81/api/diagnostics/')
       .then((res) => res.json())
       .then((res) => setData(res))
       .catch((error) => console.log(error));
 
     axios
-      .get('http://192.168.0.69:81/api/pihole/summary')
+      .get('http://192.168.0.69:81/api/pihole/summary/')
       .then((response) => {
         setPihole(response.data);
       })
