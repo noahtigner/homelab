@@ -15,6 +15,18 @@ const theme = createTheme({
     primary: {
       main: '#6EDFCA',
     },
+    success: {
+      main: '#20503E',
+      contrastText: '#A0F5D1',
+    },
+    error: {
+      main: '#8C1D18',
+      contrastText: '#F9DEDC',
+    },
+    warning: {
+      main: '#534612',
+      contrastText: '#FAE190',
+    },
   },
   shape: {
     borderRadius: 8,
@@ -48,7 +60,7 @@ const theme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: '4px',
+          borderRadius: '8px',
         },
       },
     },

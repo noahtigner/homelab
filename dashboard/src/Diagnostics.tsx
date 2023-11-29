@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, CardContent, Typography, styled, useTheme } from '@mui/material';
+import { Card, CardContent, Chip, Typography, styled, useTheme } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -161,6 +162,11 @@ function Diagnostics() {
           </>
         )}
       </Grid>
+      <Chip color="success" icon={<CheckCircleIcon />} label="Pihole" />
+      <Chip color="success" icon={<CheckCircleIcon />} label="API" />
+      <Chip color="warning" icon={<CheckCircleIcon />} label="Traefik" />
+      <Chip color="error" icon={<CheckCircleIcon />} label="Dashboard" />
+      <Chip disabled icon={<CheckCircleIcon />} label="Disabled" />
       <pre>{JSON.stringify(data, null, 4)}</pre>
       <pre>{JSON.stringify(lc, null, 4)}</pre>
     </div>
