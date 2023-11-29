@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  styled,
-  useTheme,
-} from '@mui/material';
+import { Card, CardContent, Typography, styled, useTheme } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -76,12 +70,7 @@ function PiholeSummaryCard({
   const theme = useTheme();
 
   return (
-    <Grid
-      item
-      xs={12}
-      sm={6}
-      md={4}
-    >
+    <Grid xs={12} sm={6} md={4}>
       <StyledCard variant="outlined">
         <StyledCardContent>
           <Typography
@@ -111,9 +100,7 @@ function PiholeSummaryCard({
 function Diagnostics() {
   const [data, setData] = useState(null);
   const [lc, setLc] = useState(null);
-  const [piholeData, setPiholeData] = useState<PiholeData | null>(
-    null
-  );
+  const [piholeData, setPiholeData] = useState<PiholeData | null>(null);
 
   useEffect(() => {
     fetch('http://192.168.0.69:81/api/diagnostics/')
@@ -169,9 +156,7 @@ function Diagnostics() {
             <PiholeSummaryCard
               title="Domains Being Blocked"
               value1={Number(piholeData.domains_being_blocked).toLocaleString()}
-              value2={
-                `Updated ${piholeData.gravity_last_updated.relative.days} days, ${piholeData.gravity_last_updated.relative.hours} hours, ${piholeData.gravity_last_updated.relative.minutes} minutes ago`
-              }
+              value2={`Updated ${piholeData.gravity_last_updated.relative.days} days, ${piholeData.gravity_last_updated.relative.hours} hours, ${piholeData.gravity_last_updated.relative.minutes} minutes ago`}
             />
           </>
         )}
