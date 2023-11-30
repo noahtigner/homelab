@@ -13,16 +13,24 @@ router = APIRouter(
 @router.get('/ping')
 def get_pihole_health(response: Response):
     token = Settings.PIHOLE_API_TOKEN
-    url = f'{Settings.PIHOLE_API_BASE}?summaryRaw&messages&auth={token}'
+    url1 = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
+    url2 = f'{Settings.PIHOLE_API_BASE}/api_db.php?messages&auth={token}'
 
     try:
-        r = requests.get(url)
-        response.status_code = r.status_code
-        response_data = r.json()
-        return {
-            "status": "ok" if response_data['status'] == 'enabled' else 'error',
-            "messages": response_data['messages']
-        }
+        r1 = requests.get(url1)
+        r2 = requests.get(url2)
+
+        if r1.status_code != 200 or r2.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Connection to Pi-hole Refused"
+            )
+        
+        enabled = r1.json().get('status') == 'enabled'
+        messages = r2.json().get('messages')
+        service_status = "ok" if enabled and len(messages) == 0 else "warning"
+
+        return {"status": service_status, "messages": messages}
     except requests.exceptions.ConnectionError as e:
         print(e)
         raise HTTPException(
@@ -33,7 +41,7 @@ def get_pihole_health(response: Response):
 @router.get('/summary')
 def get_pihole_summary(response: Response):
     token = Settings.PIHOLE_API_TOKEN
-    url = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
+    url = f'{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}'
 
     try:
         r = requests.get(url)

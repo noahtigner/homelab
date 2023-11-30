@@ -12,7 +12,7 @@ services:
       - '8000'
     restart: 'unless-stopped'
     environment:
-      PIHOLE_API_BASE: 'http://${IP}/admin/api.php'
+      PIHOLE_API_BASE: 'http://${IP}/admin'
     secrets:
       - pihole_api_token
     labels:
