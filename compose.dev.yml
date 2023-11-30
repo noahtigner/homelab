@@ -5,11 +5,11 @@ services:
     container_name: api
     build:
       context: ./api
-    command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8080 --root-path /api --reload'
+    command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api --reload'
     volumes:
       - ./api:/app/api
     expose:
-      - '8080'
+      - '8000'
     restart: 'unless-stopped'
     environment:
       PIHOLE_API_BASE: 'http://${IP}/admin/api.php'
@@ -61,12 +61,6 @@ services:
       - '--providers.docker=true'
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:81'
-      # CORS
-      - "traefik.http.middlewares.web.headers.accesscontrolallowmethods=GET,OPTIONS"
-      - "traefik.http.middlewares.web.headers.accesscontrolallowheaders=*"
-      - "traefik.http.middlewares.web.headers.accesscontrolalloworiginlist=*"
-
-
     ports:
       - '81:81'
       - '8080:8080'

@@ -204,7 +204,6 @@ function DiagnosticsCard({
 function Diagnostics() {
   // const [data, setData] = useState(null);
   const [lc, setLc] = useState(null);
-  const [traefik, setTraefik] = useState(null);
   const [piholeData, setPiholeData] = useState<PiholeData | null>(null);
   const [diagnosticsData, setDiagnosticsData] =
     useState<DiangosticsData | null>(null);
@@ -228,14 +227,6 @@ function Diagnostics() {
       .then(({ data }) => {
         console.log(data);
         setPiholeData(data);
-      })
-      .catch((error) => console.log(error));
-
-    axios
-      .get('http://192.168.0.69:8080/api/overview')
-      .then(({ data }) => {
-        console.log(data);
-        setTraefik(data);
       })
       .catch((error) => console.log(error));
 
@@ -364,7 +355,6 @@ function Diagnostics() {
           />
         </ListItem>
       </List>
-      <pre>{JSON.stringify(traefik, null, 4)}</pre>
       <pre>{JSON.stringify(lc, null, 4)}</pre>
     </Box>
   );
