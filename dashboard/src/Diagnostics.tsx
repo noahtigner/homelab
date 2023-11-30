@@ -19,7 +19,7 @@ import {
   DnsOutlined as DnsIcon,
   Block as BlockIcon,
   AccessTime as AccessTimeIcon,
-  Save as SaveIcon,
+  SaveOutlined as SaveIcon,
   DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
   MemoryOutlined as MemoryIcon,
 } from '@mui/icons-material';
