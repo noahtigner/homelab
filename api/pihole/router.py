@@ -18,7 +18,7 @@ def get_pihole_health(response: Response):
     try:
         r = requests.get(url)
         response.status_code = r.status_code
-        return {"status": "ok", "messages": r.json()}
+        return {"status": "ok" if r.json().length == 0 else "warning", "messages": r.json()}
     except requests.exceptions.ConnectionError as e:
         print(e)
         raise HTTPException(

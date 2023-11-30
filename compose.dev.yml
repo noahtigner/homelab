@@ -55,7 +55,7 @@ services:
     image: 'traefik:v2.10'
     command:
       # - "--log.level=DEBUG"
-      - "--log.level=INFO"
+      - '--log.level=INFO'
       - '--api.insecure=true'
       - '--api.dashboard=true'
       - '--providers.docker=true'
