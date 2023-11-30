@@ -42,7 +42,7 @@ api.include_router(pihole_router)
 
 @api.get("/")
 @api.get("/ping")
-def ping(request: Request):
+def get_health(request: Request):
     return {"status": "ok", "root_path": request.scope.get("root_path")}
 
 # example

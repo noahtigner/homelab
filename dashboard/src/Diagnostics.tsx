@@ -29,7 +29,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  // backgroundColor: theme.palette.success.main,
   [theme.breakpoints.up('md')]: {
     transition: 'transform 0.2s ease-in-out',
     '&:hover': {
