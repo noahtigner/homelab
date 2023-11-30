@@ -11,9 +11,9 @@ router = APIRouter(
 
 @router.get('/')
 @router.get('/ping')
-def get_pihole_health(response: Response):
+def get_pihole_health():
     token = Settings.PIHOLE_API_TOKEN
-    url1 = f'{Settings.PIHOLE_API_BASE}?summaryRaw&auth={token}'
+    url1 = f'{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}'
     url2 = f'{Settings.PIHOLE_API_BASE}/api_db.php?messages&auth={token}'
 
     try:
