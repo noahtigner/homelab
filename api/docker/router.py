@@ -14,6 +14,6 @@ def get_docker_health():
     status = ping_docker()
     return {"status": "ok" if status else "error"}
 
-@router.get("/docker", response_model=DockerStatsModel)
+@router.get("/stats", response_model=DockerStatsModel)
 def get_docker_stats():
     return get_container_stats()

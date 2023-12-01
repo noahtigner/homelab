@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Stack,
   Typography,
   styled,
   useTheme,
@@ -22,6 +23,8 @@ import {
   SaveOutlined as SaveIcon,
   DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
   MemoryOutlined as MemoryIcon,
+  CircleOutlined as CircleIcon,
+  ErrorOutlineOutlined as ErrorCircleIcon,
 } from '@mui/icons-material';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -200,19 +203,71 @@ function DiagnosticsCard({
   );
 }
 
+type ServiceStatus = 'ok' | 'warning' | 'error' | 'loading';
+
+const statusToColor = (status: ServiceStatus) => {
+  switch (status) {
+    case 'ok':
+      return 'success';
+    case 'warning':
+      return 'warning';
+    case 'error':
+      return 'error';
+    case 'loading':
+    default:
+      return 'default';
+  }
+};
+
+const statusToIcon = (status: ServiceStatus) => {
+  switch (status) {
+    case 'ok':
+      return <CheckCircleIcon />;
+    case 'warning':
+    case 'error':
+      return <ErrorCircleIcon />;
+    case 'loading':
+    default:
+      return <CircleIcon />;
+  }
+};
+
+function StatusChip({
+  label,
+  status,
+}: {
+  label: string;
+  status: ServiceStatus;
+}) {
+  return (
+    <Chip
+      label={label}
+      color={statusToColor(status)}
+      icon={statusToIcon(status)}
+      sx={{ justifyContent: 'start' }}
+      // sx={{
+      //   paddingY: '4px',
+      //   justifyContent: 'start',
+      //   // height: 'auto',
+      //   '& .MuiChip-label': {
+      //     display: 'block',
+      //     whiteSpace: 'normal',
+      //   },
+      // }}
+    />
+  );
+}
+
 function Diagnostics() {
-  // const [data, setData] = useState(null);
   const [lc, setLc] = useState(null);
+  const [docker, setDocker] = useState(null);
+
   const [piholeData, setPiholeData] = useState<PiholeData | null>(null);
   const [diagnosticsData, setDiagnosticsData] =
     useState<DiangosticsData | null>(null);
+  const [piholeHealth, setPiholeHealth] = useState<ServiceStatus>('loading');
 
   useEffect(() => {
-    // fetch('http://192.168.0.69:81/api/diagnostics/')
-    //   .then((res) => res.json())
-    //   .then((res) => setData(res))
-    //   .catch((error) => console.log(error));
-
     axios
       .get('http://192.168.0.69:81/api/diagnostics/')
       .then(({ data }) => {
@@ -226,6 +281,14 @@ function Diagnostics() {
       .then(({ data }) => {
         console.log(data);
         setPiholeData(data);
+      })
+      .catch((error) => console.log(error));
+
+    axios
+      .get('http://192.168.0.69:81/api/pihole/')
+      .then(({ data }) => {
+        console.log(data);
+        setPiholeHealth(data.status);
       })
       .catch((error) => console.log(error));
 
@@ -249,98 +312,124 @@ function Diagnostics() {
         setLc(response.data);
       })
       .catch((error) => console.log(error));
+
+    axios
+      .get('http://192.168.0.69:81/api/docker/stats/')
+      .then((response) => {
+        setDocker(response.data);
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   return (
     <Box sx={{ marginTop: '8px' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          // justifyContent: 'center',
-          flexWrap: 'wrap',
-          gap: '8px',
-          marginY: '16px',
-        }}
-      >
-        <Chip
-          label="Pihole"
-          color={piholeData ? 'success' : 'default'}
-          disabled={!piholeData}
-          icon={<CheckCircleIcon />}
-        />
-        <Chip
-          label="API"
-          color={diagnosticsData ? 'success' : 'default'}
-          disabled={!diagnosticsData}
-          icon={<CheckCircleIcon />}
-        />
-        <Chip color="warning" icon={<CheckCircleIcon />} label="Traefik" />
-        <Chip color="error" icon={<CheckCircleIcon />} label="Dashboard" />
-        <Chip disabled icon={<CheckCircleIcon />} label="Disabled" />
-      </Box>
       <Grid container spacing={2}>
-        {diagnosticsData && (
-          <>
-            <DiagnosticsCard
-              title="CPU"
-              // value1={diagnosticsData.cpu.percent
-              //   .map((percent) => `${percent}%`)
-              //   .join(', ')}
-              values={[
-                `${Math.max(...diagnosticsData.cpu.percent).toFixed(2)}% max`,
-                `${(
-                  diagnosticsData.cpu.percent.reduce((acc, c) => acc + c, 0) /
-                  diagnosticsData.cpu.percent.length
-                ).toFixed(2)}% avg`,
-              ]}
-              icon={<MemoryIcon color="success" sx={{ fontSize: 48 }} />}
+        <Grid xs={12} sm={3} md={2}>
+          <Stack
+            direction="column"
+            // direction="row"
+            justifyContent="flex-start"
+            // alignItems="flex-start"
+            alignItems="stretch"
+            spacing={1}
+          >
+            <StatusChip label="Dashboard" status="ok" />
+            <StatusChip
+              label="API"
+              status={diagnosticsData ? 'ok' : 'loading'}
             />
-            <DiagnosticsCard
-              title="Memory"
-              values={[`${diagnosticsData.memory.percent.toFixed(1)}%`]}
-              icon={<MemoryIcon color="success" sx={{ fontSize: 48 }} />}
-            />
-            <DiagnosticsCard
-              title="Disk"
-              values={[`${diagnosticsData.disk.percent.toFixed(1)}%`]}
-              icon={<SaveIcon color="success" sx={{ fontSize: 48 }} />}
-            />
-            <DiagnosticsCard
-              title="Temperature"
-              values={[
-                `${celsiusToFahrenheit(diagnosticsData.cpu.temp).toFixed(1)}°F`,
-              ]}
-              icon={
-                <DeviceThermostatOutlinedIcon
-                  color="success"
-                  sx={{ fontSize: 48 }}
-                />
-              }
-            />
-          </>
-        )}
-        {piholeData && (
-          <>
-            <PiholeSummaryCard
-              title="DNS Queries Today"
-              value1={Number(piholeData.dns_queries_today).toLocaleString()}
-              value2={`${piholeData.unique_clients} unique clients`}
-              icon={<DnsIcon color="success" sx={{ fontSize: 48 }} />}
-            />
-            <PiholeSummaryCard
-              title="Ads Blocked Today"
-              value1={Number(piholeData.ads_blocked_today).toLocaleString()}
-              value2={`${Number(piholeData.ads_percentage_today).toFixed(2)}%`}
-              icon={<AccessTimeIcon color="success" sx={{ fontSize: 48 }} />}
-            />
-            <PiholeSummaryCard
-              title="Domains Being Blocked"
-              value1={Number(piholeData.domains_being_blocked).toLocaleString()}
-              value2={`Updated ${piholeData.gravity_last_updated.relative.days} days, ${piholeData.gravity_last_updated.relative.hours} hours, ${piholeData.gravity_last_updated.relative.minutes} minutes ago`}
-              icon={<BlockIcon color="success" sx={{ fontSize: 48 }} />}
-            />
-          </>
-        )}
+            <StatusChip label="Pihole" status={piholeHealth} />
+            <StatusChip label="Traefik" status={'warning'} />
+            <StatusChip label="Spotify API" status={'loading'} />
+            <StatusChip label="Nest API" status={'loading'} />
+            <StatusChip label="Weather Forecast" status={'loading'} />
+          </Stack>
+        </Grid>
+        {/* <Box
+          sx={{
+            display: 'flex',
+            // justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: '8px',
+            marginY: '16px',
+          }}
+        >
+          <StatusChip label="Pihole" status={piholeHealth} />
+          <StatusChip label="API" status={diagnosticsData ? 'ok' : 'loading'} />
+          <Chip color="warning" icon={<CheckCircleIcon />} label="Traefik" />
+          <Chip color="error" icon={<CheckCircleIcon />} label="Dashboard" />
+          <Chip disabled icon={<CheckCircleIcon />} label="Disabled" />
+        </Box> */}
+        <Grid container spacing={2} xs={12} sm={9} md={10}>
+          {diagnosticsData && (
+            <>
+              <DiagnosticsCard
+                title="CPU"
+                // value1={diagnosticsData.cpu.percent
+                //   .map((percent) => `${percent}%`)
+                //   .join(', ')}
+                values={[
+                  `${Math.max(...diagnosticsData.cpu.percent).toFixed(2)}% max`,
+                  `${(
+                    diagnosticsData.cpu.percent.reduce((acc, c) => acc + c, 0) /
+                    diagnosticsData.cpu.percent.length
+                  ).toFixed(2)}% avg`,
+                ]}
+                icon={<MemoryIcon color="success" sx={{ fontSize: 48 }} />}
+              />
+              <DiagnosticsCard
+                title="Memory"
+                values={[`${diagnosticsData.memory.percent.toFixed(1)}%`]}
+                icon={<MemoryIcon color="success" sx={{ fontSize: 48 }} />}
+              />
+              <DiagnosticsCard
+                title="Disk"
+                values={[`${diagnosticsData.disk.percent.toFixed(1)}%`]}
+                icon={<SaveIcon color="success" sx={{ fontSize: 48 }} />}
+              />
+              <DiagnosticsCard
+                title="Temperature"
+                values={[
+                  `${celsiusToFahrenheit(diagnosticsData.cpu.temp).toFixed(
+                    1
+                  )}°F`,
+                ]}
+                icon={
+                  <DeviceThermostatOutlinedIcon
+                    color="success"
+                    sx={{ fontSize: 48 }}
+                  />
+                }
+              />
+            </>
+          )}
+          {piholeData && (
+            <>
+              <PiholeSummaryCard
+                title="DNS Queries Today"
+                value1={Number(piholeData.dns_queries_today).toLocaleString()}
+                value2={`${piholeData.unique_clients} unique clients`}
+                icon={<DnsIcon color="success" sx={{ fontSize: 48 }} />}
+              />
+              <PiholeSummaryCard
+                title="Ads Blocked Today"
+                value1={Number(piholeData.ads_blocked_today).toLocaleString()}
+                value2={`${Number(piholeData.ads_percentage_today).toFixed(
+                  2
+                )}%`}
+                icon={<AccessTimeIcon color="success" sx={{ fontSize: 48 }} />}
+              />
+              <PiholeSummaryCard
+                title="Domains Being Blocked"
+                value1={Number(
+                  piholeData.domains_being_blocked
+                ).toLocaleString()}
+                value2={`Updated ${piholeData.gravity_last_updated.relative.days} days, ${piholeData.gravity_last_updated.relative.hours} hours, ${piholeData.gravity_last_updated.relative.minutes} minutes ago`}
+                icon={<BlockIcon color="success" sx={{ fontSize: 48 }} />}
+              />
+            </>
+          )}
+        </Grid>
       </Grid>
       <List dense>
         <ListItem>
@@ -354,6 +443,7 @@ function Diagnostics() {
           />
         </ListItem>
       </List>
+      <pre>{JSON.stringify(docker, null, 4)}</pre>
       <pre>{JSON.stringify(lc, null, 4)}</pre>
     </Box>
   );
