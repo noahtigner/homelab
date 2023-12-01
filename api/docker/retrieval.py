@@ -7,7 +7,7 @@ def ping_docker() -> bool:
         client = get_docker_client()
         return client.ping()
     except (DockerAPIError, DockerException) as e:
-        print(e)
+        print('ERROR: Could not connect to Docker daemon')
         return False
 
 def get_container_stats() -> DockerStatsModel:
@@ -27,7 +27,7 @@ def get_container_stats() -> DockerStatsModel:
             block_in = block_io_raw[0]['value'] or 0
             block_out = block_io_raw[1]['value'] or 0
         except (KeyError, IndexError) as e:
-            print(e)
+            print('ERROR: Could not read block I/O')
             block_in = 0
             block_out = 0
         # parse memory usage
@@ -37,7 +37,7 @@ def get_container_stats() -> DockerStatsModel:
             memory_usage = stats_raw['memory_stats']['usage']
             memory_limit = stats_raw['memory_stats']['limit']
         except KeyError as e:
-            print(e)
+            print('ERROR: Could not read memory usage')
             memory_usage = 0
             memory_limit = 0
 
