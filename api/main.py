@@ -6,6 +6,7 @@ from api.config import Settings
 from api.diagnostics.retrieval import get_cpu_percent
 from api.diagnostics.router import router as diagnostics_router
 from api.pihole.router import router as pihole_router
+from api.docker.router import router as docker_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -39,6 +40,7 @@ api.add_middleware(
 
 api.include_router(diagnostics_router)
 api.include_router(pihole_router)
+api.include_router(docker_router)
 
 @api.get("/")
 @api.get("/ping")

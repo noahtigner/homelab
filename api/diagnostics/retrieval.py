@@ -1,5 +1,5 @@
-import psutil
 from typing import Union
+import psutil
 
 def get_cpu_temp() -> Union[float, None]:
     temperature_file_path = '/sys/class/thermal/thermal_zone0/temp'

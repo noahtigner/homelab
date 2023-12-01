@@ -5,8 +5,6 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONBUFFERED 1
 
-COPY ./requirements.txt /app/requirements.txt
-
 # requirements for psutil
 RUN apt-get update --yes && \
     apt-get upgrade --yes && \
@@ -16,5 +14,7 @@ RUN apt-get update --yes && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+
 # install python packages
+COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
