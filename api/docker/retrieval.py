@@ -30,13 +30,24 @@ def get_container_stats() -> DockerStatsModel:
             print(e)
             block_in = 0
             block_out = 0
+        # parse memory usage
+        # Note: `docker stats` command does not return memory usage on Raspberry Pis by default
+        # see: https://forums.raspberrypi.com/viewtopic.php?t=203128
+        try:
+            memory_usage = stats_raw['memory_stats']['usage']
+            memory_limit = stats_raw['memory_stats']['limit']
+        except KeyError as e:
+            print(e)
+            memory_usage = 0
+            memory_limit = 0
+
         # create container stats model
         container_stat: DockerContainerStatsModel = DockerContainerStatsModel(
             id=container.id,
             name=container.name,
             cpu_usage=stats_raw['cpu_stats']['cpu_usage']['total_usage'],
-            memory_usage=stats_raw['memory_stats']['usage'],
-            memory_limit=stats_raw['memory_stats']['limit'],
+            memory_usage=memory_usage,
+            memory_limit=memory_limit,
             network_in=stats_raw['networks']['eth0']['rx_bytes'],
             network_out=stats_raw['networks']['eth0']['tx_bytes'],
             network_dropped=stats_raw['networks']['eth0']['rx_dropped'] + stats_raw['networks']['eth0']['tx_dropped'],
