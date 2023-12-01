@@ -23,7 +23,7 @@ def get_container_stats() -> DockerStatsModel:
         stats_raw = container.stats(stream=False)
         # parse block I/O (amount of data the container has written to and read from block devices)
         block_io_raw = stats_raw['blkio_stats']['io_service_bytes_recursive']
-        print(block_io_raw) # TODO: remove
+        print(stats_raw['blkio_stats']) # TODO: remove
         block_in = block_io_raw[0]['value'] if block_io_raw is not None else None
         block_out = block_io_raw[1]['value'] if block_io_raw is not None else None
         # create container stats model
