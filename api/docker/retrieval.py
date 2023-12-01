@@ -22,10 +22,14 @@ def get_container_stats() -> DockerStatsModel:
         # fetch container stats using Docker SDK
         stats_raw = container.stats(stream=False)
         # parse block I/O (amount of data the container has written to and read from block devices)
-        block_io_raw = stats_raw['blkio_stats']['io_service_bytes_recursive']
-        print(stats_raw['blkio_stats']) # TODO: remove
-        block_in = block_io_raw[0]['value'] if block_io_raw is not None else None
-        block_out = block_io_raw[1]['value'] if block_io_raw is not None else None
+        try:
+            block_io_raw = stats_raw['blkio_stats']['io_service_bytes_recursive']
+            block_in = block_io_raw[0]['value'] or 0
+            block_out = block_io_raw[1]['value'] or 0
+        except (KeyError, IndexError) as e:
+            print(e)
+            block_in = 0
+            block_out = 0
         # create container stats model
         container_stat: DockerContainerStatsModel = DockerContainerStatsModel(
             id=container.id,
@@ -36,8 +40,8 @@ def get_container_stats() -> DockerStatsModel:
             network_in=stats_raw['networks']['eth0']['rx_bytes'],
             network_out=stats_raw['networks']['eth0']['tx_bytes'],
             network_dropped=stats_raw['networks']['eth0']['rx_dropped'] + stats_raw['networks']['eth0']['tx_dropped'],
-            block_in=block_in or 0,
-            block_out=block_out or 0,
+            block_in=block_in,
+            block_out=block_out,
             pids=stats_raw['pids_stats']['current'],
         )
         # add container stats to list
