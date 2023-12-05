@@ -15,6 +15,14 @@ def get_secret(name: str) -> str:
     
     raise KeyError(name)
 
+def get_env(name: str) -> str:
+    env_var = os.getenv(name)
+    if env_var is None:
+        raise KeyError(name)
+        
+    return env_var
+
 class Settings:
-    PIHOLE_API_BASE = os.getenv('PIHOLE_API_BASE')
+    PIHOLE_API_BASE = get_env('PIHOLE_API_BASE')
     PIHOLE_API_TOKEN = get_secret('pihole_api_token')
+    LEETCODE_USERNAME = get_env('LEETCODE_USERNAME')
