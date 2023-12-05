@@ -437,7 +437,7 @@ function LeetCodeSummaryCard() {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:81/api/leetcode/solved')
+      .get('http://192.168.0.69:81/api/leetcode/solved')
       .then((response) => {
         setLeetCodeData(response.data);
       })
