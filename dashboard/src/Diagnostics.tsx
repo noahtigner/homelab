@@ -5,11 +5,19 @@ import {
   Card,
   CardContent,
   Chip,
+  LinearProgress,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Paper,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
   styled,
   useTheme,
@@ -25,6 +33,7 @@ import {
   MemoryOutlined as MemoryIcon,
   CircleOutlined as CircleIcon,
   ErrorOutlineOutlined as ErrorCircleIcon,
+  EmojiEventsOutlined as TrophyIcon,
 } from '@mui/icons-material';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -258,10 +267,200 @@ function StatusChip({
   );
 }
 
-function Diagnostics() {
-  const [lc, setLc] = useState(null);
-  const [docker, setDocker] = useState(null);
+interface DockerData {
+  containers: {
+    id: string;
+    name: string;
+    cpu_usage: number;
+    memory_usage: number;
+    memory_limit: number;
+    network_in: number;
+    network_out: number;
+    network_dropped: number;
+    block_in: number;
+    block_out: number;
+    pids: number;
+  }[];
+  system_cpu_usage: number;
+}
 
+const bitsToMegabits = (bits: number): string => (bits / 1000000).toFixed(2);
+const bitsToGigabytes = (bits: number): string =>
+  (bits / 1000000000).toFixed(2);
+
+interface LeetCodeSolvedData {
+  allQuestionsCount: {
+    difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
+    count: number;
+  }[];
+  matchedUser: {
+    problemsSolvedBeatsStats: {
+      difficulty: 'Easy' | 'Medium' | 'Hard';
+      percentage: number;
+    }[];
+    submitStatsGlobal: {
+      acSubmissionNum: {
+        difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
+        count: number;
+      }[];
+    };
+  };
+}
+
+function LeetCodeProgressText({
+  difficulty,
+  solved,
+  questions,
+  beats,
+}: {
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  solved: number;
+  questions: number;
+  beats: number;
+}) {
+  return (
+    <Grid container>
+      <Grid xs={12} sm={4}>
+        <Typography sx={{ fontSize: '1rem' }} variant="h4">
+          {difficulty}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={4}>
+        <Typography sx={{ fontSize: '1rem' }} variant="h4">
+          {solved} / {questions}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={4} justifySelf="end">
+        <Typography sx={{ fontSize: '1rem', textAlign: 'right' }} variant="h4">
+          Beats {beats.toFixed(2)}%
+        </Typography>
+      </Grid>
+    </Grid>
+  );
+}
+
+function LeetCodeSummary({
+  leetCodeData,
+}: {
+  leetCodeData: LeetCodeSolvedData;
+}) {
+  const theme = useTheme();
+
+  const totalQuestions = leetCodeData?.allQuestionsCount[0].count;
+  const easyQuestions = leetCodeData?.allQuestionsCount[1].count;
+  const mediumQuestions = leetCodeData?.allQuestionsCount[2].count;
+  const hardQuestions = leetCodeData?.allQuestionsCount[3].count;
+
+  const totalSolved =
+    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[0].count;
+  const easySolved =
+    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[1].count;
+  const mediumSolved =
+    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[2].count;
+  const hardSolved =
+    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[3].count;
+
+  const easyBeats =
+    leetCodeData?.matchedUser.problemsSolvedBeatsStats[0].percentage;
+  const mediumBeats =
+    leetCodeData?.matchedUser.problemsSolvedBeatsStats[1].percentage;
+  const hardBeats =
+    leetCodeData?.matchedUser.problemsSolvedBeatsStats[2].percentage;
+
+  // const
+
+  return (
+    <>
+      {leetCodeData && (
+        <>
+          <Box
+            sx={{
+              display: 'flex',
+              flexGrow: 1,
+              justifyContent: 'space-between',
+              marginBottom: theme.spacing(2),
+            }}
+          >
+            <Typography
+              sx={{ fontSize: '2.5rem', marginBottom: theme.spacing(0.5) }}
+              variant="h3"
+            >
+              {totalSolved}/{totalQuestions}
+            </Typography>
+            <TrophyIcon color="success" sx={{ fontSize: 48 }} />
+          </Box>
+          <LeetCodeProgressText
+            difficulty="Easy"
+            solved={easySolved}
+            questions={easyQuestions}
+            beats={easyBeats}
+          />
+          <LinearProgress
+            variant="determinate"
+            value={(easySolved / easyQuestions) * 100}
+            color="success"
+          />
+          <LeetCodeProgressText
+            difficulty="Medium"
+            solved={mediumSolved}
+            questions={mediumQuestions}
+            beats={mediumBeats}
+          />
+          <LinearProgress
+            variant="determinate"
+            value={(mediumSolved / mediumQuestions) * 100}
+            color="warning"
+          />
+          <LeetCodeProgressText
+            difficulty="Hard"
+            solved={hardSolved}
+            questions={hardQuestions}
+            beats={hardBeats}
+          />
+          <LinearProgress
+            variant="determinate"
+            value={(hardSolved / hardQuestions) * 100}
+            color="error"
+          />
+        </>
+      )}
+    </>
+  );
+}
+
+function LeetCodeSummaryCard() {
+  const theme = useTheme();
+
+  const [leetCodeData, setLeetCodeData] = useState<LeetCodeSolvedData | null>(
+    null
+  );
+
+  useEffect(() => {
+    axios
+      .get('http://127.0.0.1:81/api/leetcode/solved')
+      .then((response) => {
+        setLeetCodeData(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  return (
+    <StyledCard variant="outlined">
+      <StyledCardContent>
+        <Typography
+          sx={{ fontSize: '1.25rem', marginBottom: theme.spacing(0.5) }}
+          variant="h2"
+        >
+          LeetCode
+        </Typography>
+        {leetCodeData && <LeetCodeSummary leetCodeData={leetCodeData} />}
+      </StyledCardContent>
+    </StyledCard>
+  );
+}
+
+function Diagnostics() {
+  const [dockerData, setDockerData] = useState<DockerData | null>(null);
   const [piholeData, setPiholeData] = useState<PiholeData | null>(null);
   const [diagnosticsData, setDiagnosticsData] =
     useState<DiangosticsData | null>(null);
@@ -293,30 +492,9 @@ function Diagnostics() {
       .catch((error) => console.log(error));
 
     axios
-      .post('https://leetcode.com/graphql/', {
-        query:
-          '\n    query userPublicProfile($username: String!) {\n  matchedUser(username: $username) {\n    contestBadge {\n      name\n      expired\n      hoverText\n      icon\n    }\n    username\n    githubUrl\n    twitterUrl\n    linkedinUrl\n    profile {\n      ranking\n      userAvatar\n      realName\n      aboutMe\n      school\n      websites\n      countryName\n      company\n      jobTitle\n      skillTags\n      postViewCount\n      postViewCountDiff\n      reputation\n      reputationDiff\n      solutionCount\n      solutionCountDiff\n      categoryDiscussCount\n      categoryDiscussCountDiff\n    }\n  }\n}\n    ',
-        variables: {
-          username: 'noahtigner',
-        },
-        operationName: 'userPublicProfile',
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => console.log(error));
-
-    axios
-      .get('https://leetcode-stats-api.herokuapp.com/noahtigner')
-      .then((response) => {
-        setLc(response.data);
-      })
-      .catch((error) => console.log(error));
-
-    axios
       .get('http://192.168.0.69:81/api/docker/stats/')
       .then((response) => {
-        setDocker(response.data);
+        setDockerData(response.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -340,6 +518,7 @@ function Diagnostics() {
             />
             <StatusChip label="Pihole" status={piholeHealth} />
             <StatusChip label="Traefik" status={'warning'} />
+            <StatusChip label="Cache" status={'loading'} />
             <StatusChip label="Spotify API" status={'loading'} />
             <StatusChip label="Nest API" status={'loading'} />
             <StatusChip label="Weather Forecast" status={'loading'} />
@@ -430,6 +609,75 @@ function Diagnostics() {
             </>
           )}
         </Grid>
+        <Grid xs={12}>
+          <TableContainer component={Paper} sx={{ minWidth: 650 }}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Container Name</TableCell>
+                  {/* <TableCell>CPU Usage ()</TableCell> */}
+                  <TableCell>CPU %</TableCell>
+                  <TableCell>Memory Usage / Limit</TableCell>
+                  {/* <TableCell>Memory Limit (GB)</TableCell> */}
+                  <TableCell>Network I/O</TableCell>
+                  {/* <TableCell>Network Out</TableCell> */}
+                  <TableCell>Network Dropped</TableCell>
+                  <TableCell>Block I/O</TableCell>
+                  {/* <TableCell>Block Out</TableCell> */}
+                  <TableCell>PIDs</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dockerData &&
+                  dockerData.containers.map((container) => (
+                    <TableRow
+                      key={container.name}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {container.name}
+                      </TableCell>
+                      {/* <TableCell>{container.cpu_usage}</TableCell> */}
+                      <TableCell>
+                        {(
+                          (container.cpu_usage / dockerData.system_cpu_usage) *
+                          100
+                        ).toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        {`${bitsToMegabits(
+                          container.memory_usage
+                        )}Mb / ${bitsToGigabytes(container.memory_limit)}GB`}
+                      </TableCell>
+                      {/* <TableCell>
+                      {bitsToGigabytes(container.memory_limit)}
+                    </TableCell> */}
+                      <TableCell>
+                        {`${bitsToMegabits(
+                          container.network_in
+                        )}Mb / ${bitsToMegabits(container.network_out)}Mb`}
+                      </TableCell>
+                      {/* <TableCell>{bitsToMegabits(container.network_in)}</TableCell>
+                <TableCell>{bitsToMegabits(container.network_out)}</TableCell> */}
+                      <TableCell>
+                        {bitsToMegabits(container.network_dropped)}
+                      </TableCell>
+                      <TableCell>
+                        {`${bitsToMegabits(
+                          container.block_in
+                        )} / ${bitsToMegabits(container.block_out)}`}
+                      </TableCell>
+                      {/* <TableCell>{bitsToMegabits(container.block_out)}</TableCell> */}
+                      <TableCell>{container.pids}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        <Grid xs={12} sm={6} md={4}>
+          <LeetCodeSummaryCard />
+        </Grid>
       </Grid>
       <List dense>
         <ListItem>
@@ -443,8 +691,6 @@ function Diagnostics() {
           />
         </ListItem>
       </List>
-      <pre>{JSON.stringify(docker, null, 4)}</pre>
-      <pre>{JSON.stringify(lc, null, 4)}</pre>
     </Box>
   );
 }

@@ -44,7 +44,7 @@ def get_problems_solved(response: Response):
     try:
         r = requests.post(url, json=request_body)
         response.status_code = r.status_code
-        return r.json()
+        return r.json()['data']
     except requests.exceptions.ConnectionError as e:
         print(e)
         raise HTTPException(

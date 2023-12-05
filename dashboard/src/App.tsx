@@ -64,13 +64,27 @@ const theme = createTheme({
         },
       },
     },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#282828',
+        },
+      },
+    },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#282828',
+        },
+      },
+    },
   },
 });
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Index />
       </Container>
     </ThemeProvider>
