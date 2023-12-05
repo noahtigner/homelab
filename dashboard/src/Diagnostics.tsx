@@ -603,7 +603,7 @@ function Diagnostics() {
           )}
         </Grid>
         <Grid xs={12}>
-          <TableContainer component={Paper} sx={{ minWidth: 650 }}>
+          <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
