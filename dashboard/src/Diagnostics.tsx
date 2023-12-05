@@ -36,18 +36,11 @@ import {
   EmojiEventsOutlined as TrophyIcon,
 } from '@mui/icons-material';
 
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card)(() => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  [theme.breakpoints.up('md')]: {
-    transition: 'transform 0.2s ease-in-out',
-    '&:hover': {
-      // transform: 'scale(1.025)',
-      transform: 'translateY(-8px)',
-    },
-  },
 }));
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
@@ -320,17 +313,17 @@ function LeetCodeProgressText({
 }) {
   return (
     <Grid container>
-      <Grid xs={12} sm={4}>
+      <Grid xs={4}>
         <Typography sx={{ fontSize: '1rem' }} variant="h4">
           {difficulty}
         </Typography>
       </Grid>
-      <Grid xs={12} sm={4}>
+      <Grid xs={4}>
         <Typography sx={{ fontSize: '1rem' }} variant="h4">
           {solved} / {questions}
         </Typography>
       </Grid>
-      <Grid xs={12} sm={4} justifySelf="end">
+      <Grid xs={4} justifySelf="end">
         <Typography sx={{ fontSize: '1rem', textAlign: 'right' }} variant="h4">
           Beats {beats.toFixed(2)}%
         </Typography>
