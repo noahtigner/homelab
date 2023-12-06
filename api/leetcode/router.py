@@ -2,13 +2,14 @@ import requests
 from fastapi import APIRouter, HTTPException, Response, status
 
 from api.config import Settings
+from api.leetcode.models import LCProblemDifficultyModel, LCProblemsSolvedModel
 
 router = APIRouter(
     prefix='/leetcode',
     tags=['LeetCode'],
 )
 
-@router.get('/solved')
+@router.get('/solved', response_model=LCProblemsSolvedModel)
 def get_problems_solved(response: Response):
     url = f'https://leetcode.com/graphql/'
 
@@ -44,7 +45,33 @@ def get_problems_solved(response: Response):
     try:
         r = requests.post(url, json=request_body)
         response.status_code = r.status_code
-        return r.json()['data']
+        raw_data = r.json()['data']
+        response_data = LCProblemsSolvedModel(
+            all=LCProblemDifficultyModel(
+                total=raw_data['allQuestionsCount'][0]['count'],
+                solved=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][0]['count'],
+                solved_percent=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][0]['count'] / raw_data['allQuestionsCount'][0]['count'] * 100
+            ),
+            easy=LCProblemDifficultyModel(
+                total=raw_data['allQuestionsCount'][1]['count'],
+                solved=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][1]['count'],
+                solved_percent=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][1]['count'] / raw_data['allQuestionsCount'][1]['count'] * 100,
+                beats_percent=raw_data['matchedUser']['problemsSolvedBeatsStats'][0]['percentage']
+            ),
+            medium=LCProblemDifficultyModel(
+                total=raw_data['allQuestionsCount'][2]['count'],
+                solved=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][2]['count'],
+                solved_percent=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][2]['count'] / raw_data['allQuestionsCount'][2]['count'] * 100,
+                beats_percent=raw_data['matchedUser']['problemsSolvedBeatsStats'][1]['percentage']
+            ),
+            hard=LCProblemDifficultyModel(
+                total=raw_data['allQuestionsCount'][3]['count'],
+                solved=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][3]['count'],
+                solved_percent=raw_data['matchedUser']['submitStatsGlobal']['acSubmissionNum'][3]['count'] / raw_data['allQuestionsCount'][3]['count'] * 100,
+                beats_percent=raw_data['matchedUser']['problemsSolvedBeatsStats'][2]['percentage']
+            )
+        )
+        return response_data
     except requests.exceptions.ConnectionError as e:
         print(e)
         raise HTTPException(

@@ -2,10 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box,
-  Card,
-  CardContent,
   Chip,
-  LinearProgress,
   List,
   ListItem,
   ListItemIcon,
@@ -19,7 +16,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  styled,
   useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -33,28 +29,9 @@ import {
   MemoryOutlined as MemoryIcon,
   CircleOutlined as CircleIcon,
   ErrorOutlineOutlined as ErrorCircleIcon,
-  EmojiEventsOutlined as TrophyIcon,
 } from '@mui/icons-material';
-
-const StyledCard = styled(Card)(() => ({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(0.5),
-  margin: theme.spacing(2),
-  padding: theme.spacing(1),
-  paddingBottom: 0,
-  '&:last-child': {
-    padding: 0,
-  },
-}));
+import { StyledCard, StyledCardContent } from './components/StyledCard';
+import LeetCodeSummaryCard from './components/leetcode/LeetCodeSummaryCard';
 
 interface PiholeData {
   domains_being_blocked: number;
@@ -280,177 +257,6 @@ interface DockerData {
 const bitsToMegabits = (bits: number): string => (bits / 1000000).toFixed(2);
 const bitsToGigabytes = (bits: number): string =>
   (bits / 1000000000).toFixed(2);
-
-interface LeetCodeSolvedData {
-  allQuestionsCount: {
-    difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
-    count: number;
-  }[];
-  matchedUser: {
-    problemsSolvedBeatsStats: {
-      difficulty: 'Easy' | 'Medium' | 'Hard';
-      percentage: number;
-    }[];
-    submitStatsGlobal: {
-      acSubmissionNum: {
-        difficulty: 'All' | 'Easy' | 'Medium' | 'Hard';
-        count: number;
-      }[];
-    };
-  };
-}
-
-function LeetCodeProgressText({
-  difficulty,
-  solved,
-  questions,
-  beats,
-}: {
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  solved: number;
-  questions: number;
-  beats: number;
-}) {
-  return (
-    <Grid container>
-      <Grid xs={4}>
-        <Typography sx={{ fontSize: '1rem' }} variant="h4">
-          {difficulty}
-        </Typography>
-      </Grid>
-      <Grid xs={4}>
-        <Typography sx={{ fontSize: '1rem' }} variant="h4">
-          {solved} / {questions}
-        </Typography>
-      </Grid>
-      <Grid xs={4} justifySelf="end">
-        <Typography sx={{ fontSize: '1rem', textAlign: 'right' }} variant="h4">
-          Beats {beats.toFixed(2)}%
-        </Typography>
-      </Grid>
-    </Grid>
-  );
-}
-
-function LeetCodeSummary({
-  leetCodeData,
-}: {
-  leetCodeData: LeetCodeSolvedData;
-}) {
-  const theme = useTheme();
-
-  const totalQuestions = leetCodeData?.allQuestionsCount[0].count;
-  const easyQuestions = leetCodeData?.allQuestionsCount[1].count;
-  const mediumQuestions = leetCodeData?.allQuestionsCount[2].count;
-  const hardQuestions = leetCodeData?.allQuestionsCount[3].count;
-
-  const totalSolved =
-    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[0].count;
-  const easySolved =
-    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[1].count;
-  const mediumSolved =
-    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[2].count;
-  const hardSolved =
-    leetCodeData?.matchedUser.submitStatsGlobal.acSubmissionNum[3].count;
-
-  const easyBeats =
-    leetCodeData?.matchedUser.problemsSolvedBeatsStats[0].percentage;
-  const mediumBeats =
-    leetCodeData?.matchedUser.problemsSolvedBeatsStats[1].percentage;
-  const hardBeats =
-    leetCodeData?.matchedUser.problemsSolvedBeatsStats[2].percentage;
-
-  // const
-
-  return (
-    <>
-      {leetCodeData && (
-        <>
-          <Box
-            sx={{
-              display: 'flex',
-              flexGrow: 1,
-              justifyContent: 'space-between',
-              marginBottom: theme.spacing(2),
-            }}
-          >
-            <Typography
-              sx={{ fontSize: '2.5rem', marginBottom: theme.spacing(0.5) }}
-              variant="h3"
-            >
-              {totalSolved}/{totalQuestions}
-            </Typography>
-            <TrophyIcon color="success" sx={{ fontSize: 48 }} />
-          </Box>
-          <LeetCodeProgressText
-            difficulty="Easy"
-            solved={easySolved}
-            questions={easyQuestions}
-            beats={easyBeats}
-          />
-          <LinearProgress
-            variant="determinate"
-            value={(easySolved / easyQuestions) * 100}
-            color="success"
-          />
-          <LeetCodeProgressText
-            difficulty="Medium"
-            solved={mediumSolved}
-            questions={mediumQuestions}
-            beats={mediumBeats}
-          />
-          <LinearProgress
-            variant="determinate"
-            value={(mediumSolved / mediumQuestions) * 100}
-            color="warning"
-          />
-          <LeetCodeProgressText
-            difficulty="Hard"
-            solved={hardSolved}
-            questions={hardQuestions}
-            beats={hardBeats}
-          />
-          <LinearProgress
-            variant="determinate"
-            value={(hardSolved / hardQuestions) * 100}
-            color="error"
-          />
-        </>
-      )}
-    </>
-  );
-}
-
-function LeetCodeSummaryCard() {
-  const theme = useTheme();
-
-  const [leetCodeData, setLeetCodeData] = useState<LeetCodeSolvedData | null>(
-    null
-  );
-
-  useEffect(() => {
-    axios
-      .get('http://192.168.0.69:81/api/leetcode/solved')
-      .then((response) => {
-        setLeetCodeData(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  return (
-    <StyledCard variant="outlined">
-      <StyledCardContent>
-        <Typography
-          sx={{ fontSize: '1.25rem', marginBottom: theme.spacing(0.5) }}
-          variant="h2"
-        >
-          LeetCode
-        </Typography>
-        {leetCodeData && <LeetCodeSummary leetCodeData={leetCodeData} />}
-      </StyledCardContent>
-    </StyledCard>
-  );
-}
 
 function Diagnostics() {
   const [dockerData, setDockerData] = useState<DockerData | null>(null);
