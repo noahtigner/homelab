@@ -13,3 +13,8 @@ class LCProblemsSolvedModel(BaseModel):
     easy: LCProblemDifficultyModel
     medium: LCProblemDifficultyModel
     hard: LCProblemDifficultyModel
+
+
+class LCLanguageStatModel(BaseModel):
+    languageName: str
+    problemsSolved: int

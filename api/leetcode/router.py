@@ -2,7 +2,7 @@ import requests
 from fastapi import APIRouter, HTTPException, Response, status
 
 from api.config import Settings
-from api.leetcode.models import LCProblemDifficultyModel, LCProblemsSolvedModel
+from api.leetcode.models import LCLanguageStatModel, LCProblemDifficultyModel, LCProblemsSolvedModel
 
 router = APIRouter(
     prefix='/leetcode',
@@ -79,7 +79,7 @@ def get_problems_solved(response: Response):
             detail="Connection to LeetCode API Refused"
         )
 
-@router.get('/languages')
+@router.get('/languages', response_model=list[LCLanguageStatModel])
 def get_problems_solved_per_language(response: Response):
     url = f'https://leetcode.com/graphql/'
 
@@ -106,7 +106,27 @@ def get_problems_solved_per_language(response: Response):
         r = requests.post(url, json=request_body)
         response.status_code = r.status_code
         raw_data = r.json()['data']['matchedUser']['languageProblemCount']
-        sorted_data = sorted(raw_data, key=lambda x: x['problemsSolved'], reverse=True)
+
+        # convert list of dicts to dict
+        data_as_dict: dict[str, int] = {
+            language['languageName']: language['problemsSolved'] for language in raw_data
+        }
+
+        # combine 'Python' and 'Python3' into one entry
+        data_as_dict['Python'] = data_as_dict.get('Python', 0) + data_as_dict.get('Python3', 0)
+        data_as_dict.pop('Python3', None)
+        
+        # convert dict to list of models
+        data_as_models: list[LCLanguageStatModel] = [
+            LCLanguageStatModel(
+                languageName=language,
+                problemsSolved=data_as_dict[language]
+            ) for language in data_as_dict
+        ]
+
+        # sort list of models by problemsSolved
+        sorted_data = sorted(data_as_models, key=lambda x: x.problemsSolved, reverse=True)
+
         return sorted_data
     except requests.exceptions.ConnectionError as e:
         print(e)
