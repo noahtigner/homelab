@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, Response, status
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.config import Settings
@@ -16,12 +16,35 @@ async def lifespan(app: FastAPI):
     yield
     #cleanup
 
+tags_metadata = [
+    {
+        "name": "Ping",
+        "description": "Service Health Checks",
+    },
+    {
+        "name": "Diagnostics",
+        "description": "Host Diagnostics",
+    },
+    {
+        "name": "Docker",
+        "description": "Docker Stats",
+    },
+    {
+        "name": "Pi-hole",
+        "description": "Info for Pi-hole Ad Blocker",
+    },
+    {
+        "name": "LeetCode",
+        "description": "LeetCode Stats",
+    },
+]
+
 api = FastAPI(
     lifespan=lifespan,
     title="Homelab API",
     version="0.1.0",
     description="API for Homelab",
-    tags=["homelab"],
+    openapi_tags=tags_metadata,
 )
 
 origins = [
@@ -39,18 +62,11 @@ api.add_middleware(
     allow_headers=["*"],
 )
 
+api.include_router(docker_router)
 api.include_router(diagnostics_router)
 api.include_router(pihole_router)
-api.include_router(docker_router)
 api.include_router(leetcode_router)
 
-@api.get("/")
-@api.get("/ping")
-def get_health(request: Request):
+@api.get("/", tags=['Diagnostics', 'Ping'])
+def get_server_health(request: Request):
     return {"status": "ok", "root_path": request.scope.get("root_path")}
-
-# example
-@api.get('/params/{item_id}')
-def get_params(item_id: str):
-    return {"item_id": item_id}
-

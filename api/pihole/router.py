@@ -9,8 +9,7 @@ router = APIRouter(
     tags=['Pi-hole'],
 )
 
-@router.get('/')
-@router.get('/ping')
+@router.get('/', tags=['Ping'])
 def get_pihole_health():
     token = Settings.PIHOLE_API_TOKEN
     url1 = f'{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}'

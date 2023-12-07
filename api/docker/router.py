@@ -9,7 +9,7 @@ router = APIRouter(
     tags=['Docker'],
 )
 
-@router.get("/")
+@router.get("/", tags=['Ping'])
 def get_docker_health():
     status = ping_docker()
     return {"status": "ok" if status else "error"}
