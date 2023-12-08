@@ -16,9 +16,11 @@
   ],
   "scripts": {
     "format": "prettier --check . --ignore-path .gitignore",
-    "format:fix": "prettier --write . --ignore-path .gitignore"
+    "format:fix": "prettier --write . --ignore-path .gitignore",
+    "prepare": "husky install"
   },
   "devDependencies": {
-    "prettier": "^3.1.0"
+    "prettier": "^3.1.0",
+    "husky": "^8.0.0"
   }
 }
