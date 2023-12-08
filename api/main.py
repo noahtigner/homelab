@@ -8,6 +8,7 @@ from api.diagnostics.router import router as diagnostics_router
 from api.pihole.router import router as pihole_router
 from api.docker.router import router as docker_router
 from api.leetcode.router import router as leetcode_router
+from api.github.router import router as github_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -32,6 +33,10 @@ tags_metadata = [
     {
         "name": "Pi-hole",
         "description": "Info for Pi-hole Ad Blocker",
+    },
+    {
+        "name": "GitHub",
+        "description": "GitHub Activity",
     },
     {
         "name": "LeetCode",
@@ -66,6 +71,7 @@ api.include_router(docker_router)
 api.include_router(diagnostics_router)
 api.include_router(pihole_router)
 api.include_router(leetcode_router)
+api.include_router(github_router)
 
 @api.get("/", tags=['Diagnostics', 'Ping'])
 def get_server_health(request: Request):

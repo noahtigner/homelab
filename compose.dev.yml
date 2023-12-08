@@ -15,6 +15,7 @@ services:
     environment:
       PIHOLE_API_BASE: 'http://${IP}/admin'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
+      GITHUB_USERNAME: '${GITHUB_USERNAME}'
     secrets:
       - pihole_api_token
     labels:
