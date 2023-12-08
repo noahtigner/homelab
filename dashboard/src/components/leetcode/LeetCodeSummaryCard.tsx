@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Grid, LinearProgress, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Grid,
+  LinearProgress,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { EmojiEventsOutlined as TrophyIcon } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
@@ -20,6 +27,11 @@ interface LeetCodeSolvedData {
   easy: LCProblemDifficulty;
   medium: LCProblemDifficulty;
   hard: LCProblemDifficulty;
+}
+
+interface LeetCodeLanguage {
+  languageName: string;
+  problemsSolved: number;
 }
 
 function LeetCodeProgressText({
@@ -51,6 +63,53 @@ function LeetCodeProgressText({
         </Typography>
       </Grid>
     </Grid>
+  );
+}
+
+function LeetCodeLanguageChips() {
+  const { palette } = useTheme();
+  const [lcLanguageData, setLcLanguageData] = useState<LeetCodeLanguage[]>([]);
+
+  useEffect(() => {
+    axios
+      .get('http://127.0.0.1:81/api/leetcode/languages/')
+      .then((response) => {
+        setLcLanguageData(response.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'start',
+        alignContent: 'start',
+        listStyle: 'none',
+        m: 0,
+        marginTop: 1,
+        p: 0,
+        gap: 1,
+      }}
+      component="ul"
+    >
+      {lcLanguageData.map(({ languageName, problemsSolved }) => (
+        <li key={languageName}>
+          <Chip
+            size="small"
+            label={
+              <>
+                {languageName}{' '}
+                <strong style={{ color: palette.text.secondary }}>
+                  ({problemsSolved})
+                </strong>
+              </>
+            }
+          />
+        </li>
+      ))}
+    </Box>
   );
 }
 
@@ -135,11 +194,11 @@ function LeetCodeSummaryCard() {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:81/api/leetcode/solved')
+      .get('http://127.0.0.1:81/api/leetcode/solved/')
       .then((response) => {
         setLeetCodeData(response.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -152,6 +211,7 @@ function LeetCodeSummaryCard() {
           LeetCode
         </Typography>
         {leetCodeData && <LeetCodeSummary leetCodeData={leetCodeData} />}
+        <LeetCodeLanguageChips />
       </StyledCardContent>
     </StyledCard>
   );
