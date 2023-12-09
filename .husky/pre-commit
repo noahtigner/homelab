@@ -48,7 +48,7 @@ cd ..
 
 announceRule "(Py) format"
 cd ./api
-python3 -m black . --target-version=py311 --check --quiet | indent
+python3 -m black . --target-version=py311 --check | indent
 cd ..
 
 announceRule "(Py) lint"
