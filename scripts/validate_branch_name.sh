@@ -21,9 +21,14 @@ if [ ! $? -eq 0 ]; then
     exit 1
 fi
 
+echo "here 1"
+
 if [[ ! ${branch} =~ ${pattern} ]]; then
     echo "${C_ERROR}Branch name is invalid${C_CLEAR}"
     exit 1
 fi
 
+echo "here 2"
+
 echo "${C_OK}Branch name is valid${C_CLEAR}"
+exit 0
