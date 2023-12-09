@@ -1,6 +1,7 @@
-from docker import from_env as get_docker_client
-from docker.errors import APIError as DockerAPIError, DockerException
 from api.docker.models import DockerContainerStatsModel, DockerStatsModel
+from docker import from_env as get_docker_client
+from docker.errors import APIError as DockerAPIError
+from docker.errors import DockerException
 
 
 def ping_docker() -> bool:

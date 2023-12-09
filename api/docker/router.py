@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from api.docker.retrieval import get_container_stats, ping_docker
 from api.docker.models import DockerStatsModel
+from api.docker.retrieval import get_container_stats, ping_docker
 
 router = APIRouter(
     prefix="/docker",

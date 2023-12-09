@@ -48,12 +48,17 @@ cd ..
 
 announceRule "(Py) format"
 cd ./api
-python3 -m black . --target-version=py311 --check | indent
+python3 -m black . --target-version=py311 --check --quiet | indent
 cd ..
 
 announceRule "(Py) lint"
 cd ./api
-python3 -m flake8 --count --max-line-length 99 | indent
+python3 -m flake8 --max-line-length 99 | indent
+cd ..
+
+announceRule "(Py) isort"
+cd ./api
+python3 -m isort . --check-only --multi-line 3 | indent
 cd ..
 
 # end rules ----------------------------------------------------------------
