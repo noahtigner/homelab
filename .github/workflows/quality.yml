@@ -10,6 +10,7 @@ on:
 
 jobs:
     quality_checks_global:
+        name: 'Quality Checks (Global)'
         runs-on: ubuntu-latest
 
         steps:
@@ -26,6 +27,7 @@ jobs:
               run: npx validate-branch-name
 
     quality_checks_ts:
+        name: 'Quality Checks (TypeScript)'
         runs-on: ubuntu-latest
 
         steps:
@@ -44,6 +46,7 @@ jobs:
               run: cd ./dashboard && npm run typecheck
 
     quality_checks_py:
+        name: 'Quality Checks (Python)'
         runs-on: ubuntu-latest
 
         steps:
@@ -53,9 +56,9 @@ jobs:
                   python-version: 3.11
                   cache: 'pip'
             - run: cd ./api && pip install -r requirements.txt
+            - name: Check sorting with isort
+              run: cd ./api && python3 -m isort . --check-only --multi-line 3
             - name: Check formatting with Black
               run: cd ./api && python3 -m black . --target-version=py311 --check
             - name: Lint with Flake8
               run: cd ./api && python3 -m flake8 --max-line-length 99
-            - name: Check sorting with isort
-              run: cd ./api && python3 -m isort . --check-only --multi-line 3
