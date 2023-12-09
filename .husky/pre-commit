@@ -5,16 +5,44 @@ C_INFO='\033[0;34m'
 C_OK='\033[0;32m'
 C_ERROR='\033[0;31m'
 C_WARN='\033[0;33m'
-NC='\033[0m' # No Color
+C_CLEAR='\033[0m' # No Color
+
+indent() {
+  local indentSize=2
+  local indent=1
+  if [ -n "$1" ]; then indent=$1; fi
+  pr -to $(($indent * $indentSize))
+}
+
+announceRule() {
+    str="▶ [$1] ----------------------------------------------------------------"
+    echo "${C_INFO}${str:0:64}${C_CLEAR}"
+}
+
+announceDone() {
+    str="✔ [$1] ----------------------------------------------------------------"
+    echo "${C_OK}${str:0:64}${C_CLEAR}\n"
+}
 
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${NC}"\n"
-# echo "to" $(git branch --show-current)
+# echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${C_CLEAR}"\n"
  
-echo "${C_INFO}[format]${NC}"
-pnpm run format
+# rules ----------------------------------------------------------------
 
-echo "${C_INFO}[lint]${NC}"
+announceRule "format"
+pnpm run format | indent
+
+announceRule "(TS) lint"
 cd ./dashboard
-pnpm run lint
+pnpm run lint | indent
+cd ..
+
+announceRule "(TS) typecheck"
+cd ./dashboard
+pnpm run typecheck | indent
+cd ..
+
+# end rules ----------------------------------------------------------------
+
+announceDone "All checks passed"
