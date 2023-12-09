@@ -19,9 +19,6 @@
 		"format:fix": "prettier --write .",
 		"prepare": "husky install"
 	},
-	"validate-branch-name": {
-		"pattern": "^(master|main|develop){1}$|^(feature|fix|hotfix|release|dependabot)/.+$"
-	},
 	"devDependencies": {
 		"husky": "^8.0.0",
 		"prettier": "^3.1.0",
