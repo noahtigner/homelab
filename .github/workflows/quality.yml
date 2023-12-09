@@ -39,7 +39,7 @@ jobs:
                       - recursive: true
                         args: [--frozen-lockfile]
             - name: Check formatting with Prettier
-              run: npm run format
+              run: cd ./dashboard && npm run format
             - name: Lint with ESLint
               run: cd ./dashboard && npm run lint
             - name: Typecheck with TypeScript

@@ -160,8 +160,8 @@ cython_debug/
 #.idea/
 
 # Pi-Hole volumes
-etc-dnsmasq.d/
-etc-pihole/
+**/etc-dnsmasq.d/
+**/etc-pihole/
 
 # Docker secrets
 secrets/

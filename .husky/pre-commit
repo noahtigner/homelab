@@ -36,6 +36,11 @@ pnpm validate-branch-name | indent
 announceRule "format"
 pnpm run format | indent
 
+announceRule "(TS) format"
+cd ./dashboard
+pnpm run format | indent
+cd ..
+
 announceRule "(TS) lint"
 cd ./dashboard
 pnpm run lint | indent
