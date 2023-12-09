@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+# Colors
+C_INFO='\033[0;34m'
+C_OK='\033[0;32m'
+C_ERROR='\033[0;31m'
+C_WARN='\033[0;33m'
+NC='\033[0m' # No Color
+
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${NC}
+# echo "to" $(git branch --show-current)
+ 
+echo "${C_INFO}[format]${NC}"
+npm run format
+
+echo "${C_INFO}[lint]${NC}"
+cd ./dashboard
+npm run lint
