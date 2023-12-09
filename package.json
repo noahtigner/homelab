@@ -1,26 +1,26 @@
 {
-  "name": "homelab",
-  "version": "1.0.0",
-  "author": "Noah Tigner",
-  "description": "Noah Tigner's Home Server Setup",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/noahtigner/homelab.git"
-  },
-  "keywords": [
-    "homelab",
-    "pi-hole",
-    "pihole",
-    "docker",
-    "api"
-  ],
-  "scripts": {
-    "format": "prettier --check . --ignore-path .gitignore",
-    "format:fix": "prettier --write . --ignore-path .gitignore",
-    "prepare": "husky install"
-  },
-  "devDependencies": {
-    "prettier": "^3.1.0",
-    "husky": "^8.0.0"
-  }
+	"name": "homelab",
+	"version": "1.0.0",
+	"author": "Noah Tigner",
+	"description": "Noah Tigner's Home Server Setup",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/noahtigner/homelab.git"
+	},
+	"keywords": [
+		"homelab",
+		"pi-hole",
+		"pihole",
+		"docker",
+		"api"
+	],
+	"scripts": {
+		"format": "prettier --check . --ignore-path .gitignore",
+		"format:fix": "prettier --write . --ignore-path .gitignore",
+		"prepare": "husky install"
+	},
+	"devDependencies": {
+		"prettier": "^3.1.0",
+		"husky": "^8.0.0"
+	}
 }
