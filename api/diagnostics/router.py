@@ -7,7 +7,7 @@ from api.diagnostics.retrieval import (
     get_cpu_usage,
     get_disk_usage,
     get_mem_usage,
-    get_pids
+    get_pids,
 )
 
 router = APIRouter(

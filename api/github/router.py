@@ -6,7 +6,7 @@ from api.github.models import (
     ContributionsModel,
     EventModel,
     EventsResponseModel,
-    RepoModel
+    RepoModel,
 )
 
 router = APIRouter(

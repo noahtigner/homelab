@@ -5,7 +5,7 @@ from api.config import Settings
 from api.leetcode.models import (
     LCLanguageStatModel,
     LCProblemDifficultyModel,
-    LCProblemsSolvedModel
+    LCProblemsSolvedModel,
 )
 
 router = APIRouter(
