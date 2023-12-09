@@ -13,8 +13,8 @@ echo "${C_WARN}You are about to commit the following to" $(git branch --show-cur
 # echo "to" $(git branch --show-current)
  
 echo "${C_INFO}[format]${NC}"
-npm run format
+pnpm run format
 
 echo "${C_INFO}[lint]${NC}"
 cd ./dashboard
-npm run lint
+pnpm run lint
