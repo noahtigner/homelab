@@ -9,6 +9,22 @@ on:
         branches: ['*']
 
 jobs:
+    validate_branch_name:
+        name: 'Validate Branch Name'
+        runs-on: ubuntu-latest
+        if: github.actor != 'dependabot[bot]'
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: 8
+                  run_install: |
+                      - recursive: true
+                        args: [--frozen-lockfile]
+            - name: Validate Branch Name
+              run: pnpm validate-branch-name
+
     quality_checks_global:
         name: 'Quality Checks (Global)'
         runs-on: ubuntu-latest
@@ -23,8 +39,6 @@ jobs:
                         args: [--frozen-lockfile]
             - name: Check formatting with Prettier
               run: npm run format
-            - name: Validate Branch Name
-              run: pnpm validate-branch-name
 
     quality_checks_ts:
         name: 'Quality Checks (TypeScript)'
