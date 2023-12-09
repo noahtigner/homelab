@@ -61,6 +61,8 @@ cd ./api
 python3 -m isort . --check-only --multi-line 3 | indent
 cd ..
 
+# TODO: reconcile isort with flake8
+
 # end rules ----------------------------------------------------------------
 
 announceDone "All checks passed"
