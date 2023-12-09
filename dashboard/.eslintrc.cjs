@@ -4,15 +4,23 @@ module.exports = {
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
+		'plugin:react/recommended',
 		'plugin:react-hooks/recommended',
+		'plugin:import/recommended',
+		'plugin:import/typescript',
+		'plugin:jsx-a11y/recommended',
+		'plugin:prettier/recommended',
 	],
 	ignorePatterns: ['dist', '.eslintrc.cjs'],
 	parser: '@typescript-eslint/parser',
 	plugins: ['react-refresh'],
 	rules: {
+		'react/react-in-jsx-scope': 'off',
+		'react/jsx-props-no-spreading': 'off',
 		'react-refresh/only-export-components': [
 			'warn',
 			{ allowConstantExport: true },
 		],
+		'import/no-unresolved': [2, { ignore: ['\\.svg$'] }],
 	},
 };
