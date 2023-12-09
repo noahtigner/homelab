@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
+
 class LCProblemDifficultyModel(BaseModel):
     total: int
     solved: int

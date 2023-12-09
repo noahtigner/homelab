@@ -46,6 +46,16 @@ cd ./dashboard
 pnpm run typecheck | indent
 cd ..
 
+announceRule "(Py) format"
+cd ./api
+python3 -m black . --target-version=py311 --check | indent
+cd ..
+
+announceRule "(Py) lint"
+cd ./api
+python3 -m flake8 --count --max-line-length 99 | indent
+cd ..
+
 # end rules ----------------------------------------------------------------
 
 announceDone "All checks passed"

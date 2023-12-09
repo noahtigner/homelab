@@ -1,18 +1,19 @@
-from typing import Union
 from fastapi import APIRouter
 
 from api.docker.retrieval import get_container_stats, ping_docker
 from api.docker.models import DockerStatsModel
 
 router = APIRouter(
-    prefix='/docker',
-    tags=['Docker'],
+    prefix="/docker",
+    tags=["Docker"],
 )
 
-@router.get("/", tags=['Ping'])
+
+@router.get("/", tags=["Ping"])
 def get_docker_health():
     status = ping_docker()
     return {"status": "ok" if status else "error"}
+
 
 @router.get("/stats", response_model=DockerStatsModel)
 def get_docker_stats():

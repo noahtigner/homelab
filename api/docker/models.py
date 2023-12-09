@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class DockerContainerStatsModel(BaseModel):
     id: str
     name: str

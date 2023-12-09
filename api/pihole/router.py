@@ -1,19 +1,19 @@
-from typing import Union
 import requests
 from fastapi import APIRouter, HTTPException, Response, status
 
 from api.config import Settings
 
 router = APIRouter(
-    prefix='/pihole',
-    tags=['Pi-hole'],
+    prefix="/pihole",
+    tags=["Pi-hole"],
 )
 
-@router.get('/', tags=['Ping'])
+
+@router.get("/", tags=["Ping"])
 def get_pihole_health():
     token = Settings.PIHOLE_API_TOKEN
-    url1 = f'{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}'
-    url2 = f'{Settings.PIHOLE_API_BASE}/api_db.php?messages&auth={token}'
+    url1 = f"{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}"
+    url2 = f"{Settings.PIHOLE_API_BASE}/api_db.php?messages&auth={token}"
 
     try:
         r1 = requests.get(url1)
@@ -22,11 +22,11 @@ def get_pihole_health():
         if r1.status_code != 200 or r2.status_code != 200:
             raise HTTPException(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Connection to Pi-hole Refused"
+                detail="Connection to Pi-hole Refused",
             )
-        
-        enabled = r1.json().get('status') == 'enabled'
-        messages = r2.json().get('messages')
+
+        enabled = r1.json().get("status") == "enabled"
+        messages = r2.json().get("messages")
         service_status = "ok" if enabled and len(messages) == 0 else "warning"
 
         return {"status": service_status, "messages": messages}
@@ -34,13 +34,14 @@ def get_pihole_health():
         print(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Connection to Pi-hole Refused"
+            detail="Connection to Pi-hole Refused",
         )
 
-@router.get('/summary')
+
+@router.get("/summary")
 def get_pihole_summary(response: Response):
     token = Settings.PIHOLE_API_TOKEN
-    url = f'{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}'
+    url = f"{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}"
 
     try:
         r = requests.get(url)
@@ -50,8 +51,9 @@ def get_pihole_summary(response: Response):
         print(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Connection to Pi-hole Refused"
+            detail="Connection to Pi-hole Refused",
         )
+
 
 # TODO: Implement these endpoints
 # http://192.168.0.69/admin/api.php?topItems

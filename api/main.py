@@ -2,7 +2,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.config import Settings
 from api.diagnostics.retrieval import get_cpu_percent
 from api.diagnostics.router import router as diagnostics_router
 from api.pihole.router import router as pihole_router
@@ -10,12 +9,14 @@ from api.docker.router import router as docker_router
 from api.leetcode.router import router as leetcode_router
 from api.github.router import router as github_router
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    #startup
-    get_cpu_percent() # first call will always return 0
+    # startup
+    get_cpu_percent()  # first call will always return 0
     yield
-    #cleanup
+    # cleanup
+
 
 tags_metadata = [
     {
@@ -56,7 +57,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:5173",
-    'http://192.168.0.69:5173'
+    "http://192.168.0.69:5173",
 ]
 
 api.add_middleware(
@@ -73,6 +74,7 @@ api.include_router(pihole_router)
 api.include_router(leetcode_router)
 api.include_router(github_router)
 
-@api.get("/", tags=['Diagnostics', 'Ping'])
+
+@api.get("/", tags=["Diagnostics", "Ping"])
 def get_server_health(request: Request):
     return {"status": "ok", "root_path": request.scope.get("root_path")}
