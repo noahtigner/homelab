@@ -24,7 +24,7 @@ jobs:
             - name: Check formatting with Prettier
               run: npm run format
             - name: Validate Branch Name
-              run: npx validate-branch-name
+              run: pnpm validate-branch-name
 
     quality_checks_ts:
         name: 'Quality Checks (TypeScript)'
