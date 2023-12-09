@@ -30,8 +30,11 @@ announceDone() {
  
 # rules ----------------------------------------------------------------
 
-announceRule "branch name"
-pnpm validate-branch-name | indent
+announceRule "validate branch name"
+chmod +x ./scripts/validate_branch_name.sh
+./scripts/validate_branch_name.sh | indent
+
+
 
 announceRule "format"
 pnpm run format | indent
