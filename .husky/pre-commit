@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${NC}
+echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${NC}"\n"
 # echo "to" $(git branch --show-current)
  
 echo "${C_INFO}[format]${NC}"
