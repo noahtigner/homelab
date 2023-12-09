@@ -1,59 +1,59 @@
 name: 'Code Quality Checks'
 
 on:
-  push:
-    branches:
-      - '*'
-      - '!main'
-  pull_request:
-    branches: ['*']
+    push:
+        branches:
+            - '*'
+            - '!main'
+    pull_request:
+        branches: ['*']
 
 jobs:
-  quality_checks_global:
-    runs-on: ubuntu-latest
+    quality_checks_global:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
-      - run: npm ci
-      - name: Check formatting with Prettier
-        run: npm run format
-      - name: Validate Branch Name
-        run: npx validate-branch-name
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: 'npm'
+            - run: npm ci
+            - name: Check formatting with Prettier
+              run: npm run format
+            - name: Validate Branch Name
+              run: npx validate-branch-name
 
-  quality_checks_ts:
-    runs-on: ubuntu-latest
+    quality_checks_ts:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
-      - run: cd ./dashboard && npm ci
-      - name: Check formatting with Prettier
-        run: npm run format
-      - name: Lint with ESLint
-        run: cd ./dashboard && npm run lint
-      - name: Typecheck with TypeScript
-        run: cd ./dashboard && npm run typecheck
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: 'npm'
+            - run: cd ./dashboard && npm ci
+            - name: Check formatting with Prettier
+              run: npm run format
+            - name: Lint with ESLint
+              run: cd ./dashboard && npm run lint
+            - name: Typecheck with TypeScript
+              run: cd ./dashboard && npm run typecheck
 
-  quality_checks_py:
-    runs-on: ubuntu-latest
+    quality_checks_py:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
-          cache: 'pip'
-      - run: cd ./api && pip install -r requirements.txt
-      - name: Check formatting with Black
-        run: cd ./api && python3 -m black . --target-version=py311 --check
-      - name: Lint with Flake8
-        run: cd ./api && python3 -m flake8 --max-line-length 99
-      - name: Check sorting with isort
-        run: cd ./api && python3 -m isort . --check-only --multi-line 3
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: 3.11
+                  cache: 'pip'
+            - run: cd ./api && pip install -r requirements.txt
+            - name: Check formatting with Black
+              run: cd ./api && python3 -m black . --target-version=py311 --check
+            - name: Lint with Flake8
+              run: cd ./api && python3 -m flake8 --max-line-length 99
+            - name: Check sorting with isort
+              run: cd ./api && python3 -m isort . --check-only --multi-line 3
