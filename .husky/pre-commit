@@ -48,7 +48,7 @@ cd ..
 
 announceRule "(Py) isort"
 cd ./api
-python3 -m isort . --check-only --multi-line 3 | indent
+python3 -m isort . --check-only --multi-line 3 --profile black | indent
 cd ..
 
 announceRule "(Py) format"

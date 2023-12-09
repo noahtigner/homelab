@@ -57,7 +57,7 @@ jobs:
                   cache: 'pip'
             - run: cd ./api && pip install -r requirements.txt
             - name: Check sorting with isort
-              run: cd ./api && python3 -m isort . --check-only --multi-line 3
+              run: cd ./api && python3 -m isort . --check-only --multi-line 3 --profile black
             - name: Check formatting with Black
               run: cd ./api && python3 -m black . --target-version=py311 --check
             - name: Lint with Flake8
