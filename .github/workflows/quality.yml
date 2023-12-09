@@ -15,8 +15,8 @@ jobs:
         if: github.actor != 'dependabot[bot]'
 
         defaults:
-          run:
-            working-directory: ./scripts
+            run:
+                working-directory: ./scripts
 
         steps:
             - uses: actions/checkout@v4
