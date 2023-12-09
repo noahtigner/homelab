@@ -16,19 +16,15 @@ echo "Pattern: \"${pattern}\""
 
 # validate with git check-ref-format --branch <branchname>
 output=$(git check-ref-format --branch ${branch} 2>&1)
-if [ ! $? -eq 0 ]; then
+if [[ ! $? -eq 0 ]]; then
     echo "${C_ERROR}${output}${C_CLEAR}"
     exit 1
 fi
-
-echo "here 1"
 
 if [[ ! ${branch} =~ ${pattern} ]]; then
     echo "${C_ERROR}Branch name is invalid${C_CLEAR}"
     exit 1
 fi
-
-echo "here 2"
 
 echo "${C_OK}Branch name is valid${C_CLEAR}"
 exit 0
