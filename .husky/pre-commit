@@ -30,6 +30,9 @@ announceDone() {
  
 # rules ----------------------------------------------------------------
 
+announceRule "branch name"
+pnpm validate-branch-name | indent
+
 announceRule "format"
 pnpm run format | indent
 
