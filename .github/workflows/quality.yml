@@ -13,7 +13,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: pnpm/action-setup@v2
               with:
                   version: 8
@@ -29,14 +29,13 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: pnpm/action-setup@v2
               with:
                   version: 8
                   run_install: |
                       - recursive: true
                         args: [--frozen-lockfile]
-            - run: cd ./dashboard && npm ci
             - name: Check formatting with Prettier
               run: npm run format
             - name: Lint with ESLint
@@ -48,8 +47,8 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-python@v2
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
               with:
                   python-version: 3.11
                   cache: 'pip'
