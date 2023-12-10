@@ -1,100 +1,100 @@
 version: '3.9'
 
 services:
-    api:
-        container_name: api
-        build:
-            context: ./api
-        command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api --reload'
-        volumes:
-            - ./api:/app/api
-            - '/var/run/docker.sock:/var/run/docker.sock:ro'
-        expose:
-            - '8000'
-        restart: 'unless-stopped'
-        environment:
-            PIHOLE_API_BASE: 'http://${IP}/admin'
-            LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
-            GITHUB_USERNAME: '${GITHUB_USERNAME}'
-        secrets:
-            - pihole_api_token
-        labels:
-            - 'traefik.enable=true'
-            - 'traefik.http.routers.api.entrypoints=web'
-            - 'traefik.http.routers.api.rule=Host(`${IP}`) && PathPrefix(`/api`)'
-            - 'traefik.http.routers.api.middlewares=api-stripprefix'
-            - 'traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api'
+  api:
+    container_name: api
+    build:
+      context: ./api
+    command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api --reload'
+    volumes:
+      - ./api:/app/api
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    expose:
+      - '8000'
+    restart: 'unless-stopped'
+    environment:
+      PIHOLE_API_BASE: 'http://${IP}/admin'
+      LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
+      GITHUB_USERNAME: '${GITHUB_USERNAME}'
+    secrets:
+      - pihole_api_token
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api.entrypoints=web'
+      - 'traefik.http.routers.api.rule=Host(`${IP}`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.api.middlewares=api-stripprefix'
+      - 'traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api'
 
-    pihole:
-        container_name: pihole
-        image: pihole/pihole:latest
-        # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-        # network_mode: "host"
-        ports:
-            - '53:53/tcp'
-            - '53:53/udp'
-            - '67:67/udp' # Only required if you are using Pi-hole as your DHCP server
-            - '80:80/tcp'
-        environment:
-            TZ: 'America/Boise'
-            WEBPASSWORD_FILE: /run/secrets/pihole_password
-            CORS_HOSTS: 'localhost,127.0.0.1,${IP},localhost:80,localhost:8000,localhost:8080,localhost:5173'
-            WEBTHEME: 'default-dark'
-            TEMPERATUREUNIT: 'f'
-            # FTLCONF_LOCAL_IPV4: '${IP}'
-        # Volumes store your data between container upgrades
-        volumes:
-            - './etc-pihole:/etc/pihole'
-            - './etc-dnsmasq.d:/etc/dnsmasq.d'
-        #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-        # cap_add:
-        #  - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
-        security_opt:
-            - seccomp=unconfined
-        restart: unless-stopped
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    # network_mode: "host"
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '67:67/udp' # Only required if you are using Pi-hole as your DHCP server
+      - '80:80/tcp'
+    environment:
+      TZ: 'America/Boise'
+      WEBPASSWORD_FILE: /run/secrets/pihole_password
+      CORS_HOSTS: 'localhost,127.0.0.1,${IP},localhost:80,localhost:8000,localhost:8080,localhost:5173'
+      WEBTHEME: 'default-dark'
+      TEMPERATUREUNIT: 'f'
+      # FTLCONF_LOCAL_IPV4: '${IP}'
+    # Volumes store your data between container upgrades
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    # cap_add:
+    #  - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    security_opt:
+      - seccomp=unconfined
+    restart: unless-stopped
 
-    traefik:
-        container_name: 'reverse-proxy'
-        image: 'traefik:v2.10'
-        command:
-            # - "--log.level=DEBUG"
-            - '--log.level=INFO'
-            - '--api.insecure=true'
-            - '--api.dashboard=true'
-            - '--providers.docker=true'
-            - '--providers.docker.exposedbydefault=false'
-            - '--entrypoints.web.address=:81'
-        ports:
-            - '81:81'
-            - '8080:8080'
-        volumes:
-            - '/var/run/docker.sock:/var/run/docker.sock:ro'
+  traefik:
+    container_name: 'reverse-proxy'
+    image: 'traefik:v2.10'
+    command:
+      # - "--log.level=DEBUG"
+      - '--log.level=INFO'
+      - '--api.insecure=true'
+      - '--api.dashboard=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:81'
+    ports:
+      - '81:81'
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
-    whoami:
-        container_name: 'whoami'
-        image: 'traefik/whoami'
-        labels:
-            - 'traefik.enable=true'
-            - 'traefik.http.routers.whoami.rule=Host(`${IP}`) && PathPrefix(`/whoami`)'
-            - 'traefik.http.routers.whoami.entrypoints=web'
+  whoami:
+    container_name: 'whoami'
+    image: 'traefik/whoami'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami.rule=Host(`${IP}`) && PathPrefix(`/whoami`)'
+      - 'traefik.http.routers.whoami.entrypoints=web'
 
-    dashboard:
-        container_name: dashboard
-        build:
-            context: ./dashboard
-        command: 'pnpm run dev'
-        volumes:
-            - './dashboard:/app'
-            - 'exclude:/app/node_modules/'
-        ports:
-            - '5173:5173'
-        restart: 'unless-stopped'
+  dashboard:
+    container_name: dashboard
+    build:
+      context: ./dashboard
+    command: 'pnpm run dev'
+    volumes:
+      - './dashboard:/app'
+      - 'exclude:/app/node_modules/'
+    ports:
+      - '5173:5173'
+    restart: 'unless-stopped'
 
 volumes:
-    exclude:
+  exclude:
 
 secrets:
-    pihole_password:
-        file: './secrets/pihole_password.txt'
-    pihole_api_token:
-        file: './secrets/pihole_api_token.txt'
+  pihole_password:
+    file: './secrets/pihole_password.txt'
+  pihole_api_token:
+    file: './secrets/pihole_api_token.txt'

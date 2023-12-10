@@ -1,86 +1,86 @@
 name: 'Code Quality'
 
 on:
-    push:
-        branches:
-            - '*'
-            # - '!main'
-    pull_request:
-        branches: ['*']
+  push:
+    branches:
+      - '*'
+      # - '!main'
+  pull_request:
+    branches: ['*']
 
 jobs:
-    validate_branch_name:
-        name: 'Validate Branch Name'
-        runs-on: ubuntu-latest
-        if: github.actor != 'dependabot[bot]'
+  validate_branch_name:
+    name: 'Validate Branch Name'
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
 
-        defaults:
-            run:
-                working-directory: ./scripts
+    defaults:
+      run:
+        working-directory: ./scripts
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            - name: Make the script file executable
-              run: chmod +x validate_branch_name.sh
-            - name: Validate Branch Name
-              run: ./validate_branch_name.sh
-              shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Make the script file executable
+        run: chmod +x validate_branch_name.sh
+      - name: Validate Branch Name
+        run: ./validate_branch_name.sh
+        shell: bash
 
-    quality_checks_global:
-        name: 'Quality Checks (Global)'
-        runs-on: ubuntu-latest
+  quality_checks_global:
+    name: 'Quality Checks (Global)'
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            - name: Set up Node & pnpm
-              uses: pnpm/action-setup@v2
-              with:
-                  version: 8
-                  run_install: |
-                      - recursive: true
-                        args: [--frozen-lockfile]
-            - name: Check formatting with Prettier
-              run: npm run format
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node & pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
+      - name: Check formatting with Prettier
+        run: npm run format
 
-    quality_checks_ts:
-        name: 'Quality Checks (TypeScript)'
-        runs-on: ubuntu-latest
+  quality_checks_ts:
+    name: 'Quality Checks (TypeScript)'
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            - name: Set up Node & pnpm
-              uses: pnpm/action-setup@v2
-              with:
-                  version: 8
-                  run_install: |
-                      - recursive: true
-                        args: [--frozen-lockfile]
-            - name: Check formatting with Prettier
-              run: cd ./dashboard && npm run format
-            - name: Lint with ESLint
-              run: cd ./dashboard && npm run lint
-            - name: Typecheck with TypeScript
-              run: cd ./dashboard && npm run typecheck
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node & pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
+      - name: Check formatting with Prettier
+        run: cd ./dashboard && npm run format
+      - name: Lint with ESLint
+        run: cd ./dashboard && npm run lint
+      - name: Typecheck with TypeScript
+        run: cd ./dashboard && npm run typecheck
 
-    quality_checks_py:
-        name: 'Quality Checks (Python)'
-        runs-on: ubuntu-latest
+  quality_checks_py:
+    name: 'Quality Checks (Python)'
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            - name: Set up Python & Pip
-              uses: actions/setup-python@v4
-              with:
-                  python-version: 3.11
-                  cache: 'pip'
-            - run: cd ./api && pip install -r requirements.txt
-            - name: Check sorting with isort
-              run: cd ./api && python3 -m isort . --check-only --multi-line 3 --profile black
-            - name: Check formatting with Black
-              run: cd ./api && python3 -m black . --target-version=py311 --check
-            - name: Lint with Flake8
-              run: cd ./api && python3 -m flake8 --max-line-length 99
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+          cache: 'pip'
+      - run: cd ./api && pip install -r requirements.txt
+      - name: Check sorting with isort
+        run: cd ./api && python3 -m isort . --check-only --multi-line 3 --profile black
+      - name: Check formatting with Black
+        run: cd ./api && python3 -m black . --target-version=py311 --check
+      - name: Lint with Flake8
+        run: cd ./api && python3 -m flake8 --max-line-length 99
