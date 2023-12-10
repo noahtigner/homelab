@@ -2,29 +2,8 @@
 
 <p align="center">Docker services that I run at home to improve my QoL</p>
 
-<p align="center">
-  <!-- <a
-    aria-label="CI code quality checks status" 
-    href="https://github.com/noahtigner/homelab/actions/workflows/quality.yml"
-    style="text-decoration:none"
-  >
-    <img
-      alt=""
-      src="https://github.com/noahtigner/homelab/actions/workflows/quality.yml/badge.svg"
-    >
-  </a>
-  <a
-    aria-label="CI dependency scanning status"
-    href="https://github.com/noahtigner/homelab/actions/workflows/codeql.yml"
-    style="text-decoration:none"
-  >
-    <img alt="" src="https://github.com/noahtigner/homelab/actions/workflows/codeql.yml/badge.svg">
-  </a> -->
-
 [![Code Quality Checks](https://github.com/noahtigner/homelab/actions/workflows/quality.yml/badge.svg)](https://github.com/noahtigner/homelab/actions/workflows/quality.yml)
 [![CodeQL](https://github.com/noahtigner/homelab/actions/workflows/codeql.yml/badge.svg)](https://github.com/noahtigner/homelab/actions/workflows/codeql.yml)
-
-</p>
 
 # Services:
 
