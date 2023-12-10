@@ -1,3 +1,5 @@
+name: "Example JS Action"
+
 on: [push]
 
 jobs:
