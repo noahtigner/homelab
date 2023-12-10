@@ -3,10 +3,21 @@
 <p align="center">Docker services that I run at home to improve my QoL</p>
 
 <p align="center">
-  <a aria-label="CI code quality checks status" href="https://github.com/noahtigner/homelab/actions/workflows/quality.yml">
-    <img alt="" src="https://github.com/noahtigner/homelab/actions/workflows/quality.yml/badge.svg">
+  <a
+    aria-label="CI code quality checks status" 
+    href="https://github.com/noahtigner/homelab/actions/workflows/quality.yml"
+    style="text-decoration:none"
+  >
+    <img
+      alt=""
+      src="https://github.com/noahtigner/homelab/actions/workflows/quality.yml/badge.svg"
+    >
   </a>
-  <a aria-label="CI dependency scanning status" href="https://github.com/noahtigner/homelab/actions/workflows/codeql.yml">
+  <a
+    aria-label="CI dependency scanning status"
+    href="https://github.com/noahtigner/homelab/actions/workflows/codeql.yml"
+    style="text-decoration:none"
+  >
     <img alt="" src="https://github.com/noahtigner/homelab/actions/workflows/codeql.yml/badge.svg">
   </a>
 </p>
