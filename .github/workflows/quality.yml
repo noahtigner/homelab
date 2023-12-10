@@ -19,7 +19,8 @@ jobs:
                 working-directory: ./scripts
 
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
             - name: Make the script file executable
               run: chmod +x validate_branch_name.sh
             - name: Validate Branch Name
@@ -31,8 +32,10 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
-            - uses: pnpm/action-setup@v2
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Set up Node & pnpm
+              uses: pnpm/action-setup@v2
               with:
                   version: 8
                   run_install: |
@@ -46,8 +49,10 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
-            - uses: pnpm/action-setup@v2
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Set up Node & pnpm
+              uses: pnpm/action-setup@v2
               with:
                   version: 8
                   run_install: |
@@ -65,8 +70,10 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Set up Python & Pip
+              uses: actions/setup-python@v4
               with:
                   python-version: 3.11
                   cache: 'pip'
