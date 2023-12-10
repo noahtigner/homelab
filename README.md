@@ -25,3 +25,7 @@
 - [ ] Cache
 - [ ] DB
 - [ ] Slack Bot
+
+# Attribution
+
+[![Pi-hole](https://github.com/noahtigner/homelab/blob/main/dashboard/public/pihole.svg)](https://pi-hole.net/)
