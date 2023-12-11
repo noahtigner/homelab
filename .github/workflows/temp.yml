@@ -1,6 +1,9 @@
-name: 'Example JS Action'
+name: 'Example JS/TS Actions'
 
-on: [push]
+on:
+  push:
+    branches:
+      - '*'
 
 jobs:
   hello_world_job:
