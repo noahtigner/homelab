@@ -15,3 +15,21 @@ jobs:
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
+
+  test-ts:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Test Local Action
+        id: test-action
+        uses: noahtigner/example-typescript-action@v1 # Commit with the `v1` tag
+        with:
+          milliseconds: 1000
+
+      - name: Print Output
+        id: output
+        run: echo "${{ steps.test-action.outputs.time }}"
