@@ -25,17 +25,22 @@ announce_ok() {
 }
 
 handle_error() {
-    str="✖ [pre-commit failed] ----------------------------------------------------------------"
-    echo "${C_ERROR}${str:0:64}${C_CLEAR}"
+    echo "${C_ERROR}✖ [pre-commit failed] ------------------------------------------${C_CLEAR}"
     exit $1
+}
+
+handle_sigint() {
+    echo "${C_WARN}⚠ [pre-commit interrupted] -------------------------------------${C_CLEAR}"
+    exit 1
 }
 
 # source the husky sh file
 . "$(dirname -- "$0")/_/husky.sh"
 # make the pipeline exit if any command fails
 set -o pipefail
-# set the error trap
+# handle errors and signals
 trap 'handle_error $?' ERR
+trap handle_sigint SIGINT
 
 # echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${C_CLEAR}"\n"
  
