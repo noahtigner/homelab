@@ -23,13 +23,11 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
-
       - name: Test Local Action
         id: test-action
         uses: noahtigner/example-typescript-action # Commit with the `v1` tag
         with:
           milliseconds: 1000
-
       - name: Print Output
         id: output
         run: echo "${{ steps.test-action.outputs.time }}"
