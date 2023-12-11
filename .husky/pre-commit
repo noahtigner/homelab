@@ -7,68 +7,77 @@ C_ERROR='\033[0;31m'
 C_WARN='\033[0;33m'
 C_CLEAR='\033[0m' # No Color
 
-indent() {
+indent_output() {
   local indentSize=2
   local indent=1
   if [ -n "$1" ]; then indent=$1; fi
   pr -to $(($indent * $indentSize))
 }
 
-announceRule() {
+announce_rule() {
     str="▶ [$1] ----------------------------------------------------------------"
     echo "${C_INFO}${str:0:64}${C_CLEAR}"
 }
 
-announceDone() {
+announce_ok() {
     str="✔ [$1] ----------------------------------------------------------------"
     echo "${C_OK}${str:0:64}${C_CLEAR}\n"
 }
 
+handle_error() {
+    str="✖ [pre-commit failed] ----------------------------------------------------------------"
+    echo "${C_ERROR}${str:0:64}${C_CLEAR}"
+    exit $1
+}
+
+# source the husky sh file
 . "$(dirname -- "$0")/_/husky.sh"
+# make the pipeline exit if any command fails
+set -o pipefail
+# set the error trap
+trap 'handle_error $?' ERR
 
 # echo "${C_WARN}You are about to commit the following to" $(git branch --show-current)":" $(git diff --cached --name-only --diff-filter=ACM)${C_CLEAR}"\n"
  
 # rules ----------------------------------------------------------------
 
-announceRule "validate branch name"
+announce_rule "validate branch name"
 chmod +x ./scripts/validate_branch_name.sh
-./scripts/validate_branch_name.sh | indent
+./scripts/validate_branch_name.sh | indent_output
 
-announceRule "format"
-pnpm run format | indent
+announce_rule "format"
+pnpm run format | indent_output
 
-announceRule "(TS) format"
+announce_rule "(TS) format"
 cd ./dashboard
-pnpm run format | indent
+pnpm run format | indent_output
 cd ..
 
-announceRule "(TS) lint"
+announce_rule "(TS) lint"
 cd ./dashboard
-pnpm run lint | indent
+pnpm run lint | indent_output
 cd ..
 
-announceRule "(TS) typecheck"
+announce_rule "(TS) typecheck"
 cd ./dashboard
-pnpm run typecheck | indent
+pnpm run typecheck | indent_output
 cd ..
 
-announceRule "(Py) isort"
+announce_rule "(Py) isort"
 cd ./api
-python3 -m isort . --check-only --multi-line 3 --profile black | indent
+python3 -m isort . --check-only --multi-line 3 --profile black | indent_output
 cd ..
 
-announceRule "(Py) format"
+announce_rule "(Py) format"
 cd ./api
-python3 -m black . --target-version=py311 --check | indent
+python3 -m black . --target-version=py311 --check | indent_output
 cd ..
 
-announceRule "(Py) lint"
+announce_rule "(Py) lint"
 cd ./api
-python3 -m flake8 --max-line-length 99 | indent
+python3 -m flake8 --max-line-length 99 | indent_output
 cd ..
-
-# TODO: reconcile isort with flake8
 
 # end rules ----------------------------------------------------------------
 
-announceDone "All checks passed"
+announce_ok "All checks passed"
