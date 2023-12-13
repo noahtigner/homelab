@@ -77,7 +77,7 @@ function LeetCodeLanguageChips() {
 
 	useEffect(() => {
 		axios
-			.get('http://127.0.0.1:81/api/leetcode/languages/')
+			.get(`${import.meta.env.VITE_API_BASE}/leetcode/languages/`)
 			.then((response) => {
 				setLcLanguageData(response.data);
 			})
@@ -206,7 +206,7 @@ function LeetCodeSummaryCard() {
 
 	useEffect(() => {
 		axios
-			.get('http://127.0.0.1:81/api/leetcode/solved/')
+			.get(`${import.meta.env.VITE_API_BASE}/leetcode/solved/`)
 			.then((response) => {
 				setLeetCodeData(response.data);
 			})

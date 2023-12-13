@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 
-@router.get("/events", response_model=EventsResponseModel)
+@router.get("/events/", response_model=EventsResponseModel)
 def get_events(response: Response):
     url = f"https://api.github.com/users/{Settings.GITHUB_USERNAME}/events/public?per_page=100"
 

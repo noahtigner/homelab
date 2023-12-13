@@ -251,7 +251,7 @@ function Diagnostics() {
 
 	useEffect(() => {
 		axios
-			.get('http://192.168.0.69:81/api/diagnostics/')
+			.get(`${import.meta.env.VITE_API_BASE}/diagnostics/`)
 			.then(({ data }) => {
 				console.log(data);
 				setDiagnosticsData(data);
@@ -259,7 +259,7 @@ function Diagnostics() {
 			.catch((error) => console.log(error));
 
 		axios
-			.get('http://192.168.0.69:81/api/pihole/summary/')
+			.get(`${import.meta.env.VITE_API_BASE}/summary/`)
 			.then(({ data }) => {
 				console.log(data);
 				setPiholeData(data);
@@ -267,7 +267,7 @@ function Diagnostics() {
 			.catch((error) => console.log(error));
 
 		axios
-			.get('http://192.168.0.69:81/api/pihole/')
+			.get(`${import.meta.env.VITE_API_BASE}/pihole/`)
 			.then(({ data }) => {
 				console.log(data);
 				setPiholeHealth(data.status);

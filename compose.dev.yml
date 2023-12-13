@@ -83,6 +83,8 @@ services:
     build:
       context: ./dashboard
     command: 'pnpm run dev'
+    environment:
+      - API_BASE=http://${IP}:81/api
     volumes:
       - './dashboard:/app'
       - 'exclude:/app/node_modules/'

@@ -36,7 +36,7 @@ function DockerTable() {
 
 	useEffect(() => {
 		axios
-			.get('http://192.168.0.69:81/api/docker/stats/')
+			.get(`${import.meta.env.VITE_API_BASE}/docker/stats/`)
 			.then((response) => {
 				setDockerData(response.data);
 			})

@@ -29,7 +29,7 @@ def get_container_stats() -> DockerStatsModel:
             block_io_raw = stats_raw["blkio_stats"]["io_service_bytes_recursive"]
             block_in = block_io_raw[0]["value"] or 0
             block_out = block_io_raw[1]["value"] or 0
-        except (KeyError, IndexError):
+        except (KeyError, TypeError, IndexError):
             print("ERROR:\tCould not read block I/O")
             block_in = 0
             block_out = 0

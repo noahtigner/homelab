@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.get("/solved", response_model=LCProblemsSolvedModel)
+@router.get("/solved/", response_model=LCProblemsSolvedModel)
 def get_problems_solved(response: Response):
     url = "https://leetcode.com/graphql/"
 
@@ -113,7 +113,7 @@ def get_problems_solved(response: Response):
         )
 
 
-@router.get("/languages", response_model=list[LCLanguageStatModel])
+@router.get("/languages/", response_model=list[LCLanguageStatModel])
 def get_problems_solved_per_language(response: Response):
     url = "https://leetcode.com/graphql/"
 

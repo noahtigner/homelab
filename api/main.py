@@ -14,7 +14,7 @@ from api.pihole.router import router as pihole_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    get_cpu_percent()  # first call will always return 0
+    get_cpu_percent(None)  # first call will always return 0
     yield
     # cleanup
 

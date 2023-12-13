@@ -38,7 +38,7 @@ def get_pihole_health():
         )
 
 
-@router.get("/summary")
+@router.get("/summary/")
 def get_pihole_summary(response: Response):
     token = Settings.PIHOLE_API_TOKEN
     url = f"{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}"
