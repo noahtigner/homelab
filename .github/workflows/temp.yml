@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Test Local Action
         id: test-action
-        uses: noahtigner/example-typescript-action@v0.1.2
+        uses: noahtigner/example-typescript-action@v0.2.0
         with:
           milliseconds: 1000
       - name: Print Output
