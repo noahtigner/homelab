@@ -146,10 +146,11 @@ def get_problems_solved_per_language(response: Response):
         }
 
         # combine 'Python' and 'Python3' into one entry
-        data_as_dict["Python"] = data_as_dict.get("Python", 0) + data_as_dict.get(
-            "Python3", 0
-        )
-        data_as_dict.pop("Python3", None)
+        if "Python" in data_as_dict and "Python3" in data_as_dict:
+            data_as_dict["Python"] = max(
+                data_as_dict["Python"], data_as_dict["Python3"]
+            )
+            data_as_dict.pop("Python3", None)
 
         # convert dict to list of models
         data_as_models: list[LCLanguageStatModel] = [

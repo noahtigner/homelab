@@ -296,11 +296,11 @@ function Diagnostics() {
 						<StatusChip label="Traefik" status={'warning'} />
 						<StatusChip label="Cache" status={'loading'} />
 						<StatusChip label="Spotify API" status={'loading'} />
-						<StatusChip label="Nest API" status={'loading'} />
+						{/* <StatusChip label="Nest API" status={'loading'} />
 						<StatusChip
 							label="Weather Forecast"
 							status={'loading'}
-						/>
+						/> */}
 					</Stack>
 				</Grid>
 				{/* <Box

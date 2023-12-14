@@ -47,17 +47,17 @@ function LeetCodeProgressText({
 }) {
 	return (
 		<Grid container sx={{ marginBottom: 0.5 }}>
-			<Grid xs={4} alignItems="flex-end">
+			<Grid item xs={4} alignItems="flex-end">
 				<Typography sx={{ fontSize: '1rem' }} variant="h4">
 					{difficulty}
 				</Typography>
 			</Grid>
-			<Grid xs={4}>
+			<Grid item xs={4}>
 				<Typography sx={{ fontSize: '1rem' }} variant="h4">
 					{solved} / {questions}
 				</Typography>
 			</Grid>
-			<Grid xs={4} justifySelf="end">
+			<Grid item xs={4} justifySelf="end">
 				<Typography
 					sx={{ fontSize: '1rem', textAlign: 'right' }}
 					variant="h4"
