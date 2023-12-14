@@ -55,7 +55,7 @@ interface PiholeData {
 	};
 }
 
-interface DiangosticsData {
+interface DiagnosticsData {
 	cpu: {
 		count: number;
 		percent: number[];
@@ -246,7 +246,7 @@ function StatusChip({
 function Diagnostics() {
 	const [piholeData, setPiholeData] = useState<PiholeData | null>(null);
 	const [diagnosticsData, setDiagnosticsData] =
-		useState<DiangosticsData | null>(null);
+		useState<DiagnosticsData | null>(null);
 	const [piholeHealth, setPiholeHealth] = useState<ServiceStatus>('loading');
 
 	useEffect(() => {
