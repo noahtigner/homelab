@@ -259,7 +259,7 @@ function Diagnostics() {
 			.catch((error) => console.log(error));
 
 		axios
-			.get(`${import.meta.env.VITE_API_BASE}/summary/`)
+			.get(`${import.meta.env.VITE_API_BASE}/pihole/summary/`)
 			.then(({ data }) => {
 				console.log(data);
 				setPiholeData(data);
