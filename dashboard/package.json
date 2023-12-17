@@ -24,7 +24,7 @@
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
-		"@noahtigner/validate-env-vars": "0.1.2",
+		"@noahtigner/validate-env-vars": "0.1.3",
 		"@types/react": "^18.2.42",
 		"@types/react-dom": "^18.2.15",
 		"@typescript-eslint/eslint-plugin": "^6.13.2",
