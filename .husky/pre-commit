@@ -53,6 +53,9 @@ chmod +x ./scripts/validate_branch_name.sh
 announce_rule "format"
 pnpm run format | indent_output
 
+# announce_rule "validate env vars"
+# pnpm validate-env-vars -t .env.template | indent_output
+
 announce_rule "(TS) format"
 cd ./dashboard
 pnpm run format | indent_output
@@ -67,6 +70,9 @@ announce_rule "(TS) typecheck"
 cd ./dashboard
 pnpm run typecheck | indent_output
 cd ..
+
+announce_rule "(TS) validate env vars"
+pnpm validate-env-vars -t dashboard/.env.template -f dashboard/.env | indent_output
 
 announce_rule "(Py) isort"
 cd ./api

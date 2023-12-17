@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  '@noahtigner/validate-env-vars':
+    specifier: 0.1.1
+    version: 0.1.1
   husky:
     specifier: ^8.0.0
     version: 8.0.3
@@ -13,6 +16,11 @@ devDependencies:
     version: 3.1.0
 
 packages:
+
+  /@noahtigner/validate-env-vars@0.1.1:
+    resolution: {integrity: sha512-/c+LEGoYz+lweAChfz37jRDlubrSdfiRzSJUY1SpZTdjtcptZzqhz3Wc9vRcnZgnKkgQgm5a07O7qdtCkZS01g==, tarball: https://npm.pkg.github.com/download/@noahtigner/validate-env-vars/0.1.1/f064cc90640972b87f578102559bf859fca3b352}
+    hasBin: true
+    dev: true
 
   /husky@8.0.3:
     resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}

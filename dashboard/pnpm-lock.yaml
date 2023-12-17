@@ -28,6 +28,9 @@ dependencies:
     version: 18.2.0(react@18.2.0)
 
 devDependencies:
+  '@noahtigner/validate-env-vars':
+    specifier: 0.1.1
+    version: 0.1.1
   '@types/react':
     specifier: ^18.2.42
     version: 18.2.42
@@ -940,6 +943,11 @@ packages:
       react: 18.2.0
       react-is: 18.2.0
     dev: false
+
+  /@noahtigner/validate-env-vars@0.1.1:
+    resolution: {integrity: sha512-/c+LEGoYz+lweAChfz37jRDlubrSdfiRzSJUY1SpZTdjtcptZzqhz3Wc9vRcnZgnKkgQgm5a07O7qdtCkZS01g==, tarball: https://npm.pkg.github.com/download/@noahtigner/validate-env-vars/0.1.1/f064cc90640972b87f578102559bf859fca3b352}
+    hasBin: true
+    dev: true
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
