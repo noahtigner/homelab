@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@noahtigner/validate-env-vars':
-    specifier: 0.1.1
-    version: 0.1.1
+    specifier: 0.1.2
+    version: 0.1.2
   husky:
     specifier: ^8.0.0
     version: 8.0.3
@@ -17,8 +17,8 @@ devDependencies:
 
 packages:
 
-  /@noahtigner/validate-env-vars@0.1.1:
-    resolution: {integrity: sha512-/c+LEGoYz+lweAChfz37jRDlubrSdfiRzSJUY1SpZTdjtcptZzqhz3Wc9vRcnZgnKkgQgm5a07O7qdtCkZS01g==, tarball: https://npm.pkg.github.com/download/@noahtigner/validate-env-vars/0.1.1/f064cc90640972b87f578102559bf859fca3b352}
+  /@noahtigner/validate-env-vars@0.1.2:
+    resolution: {integrity: sha512-ClJqDUGTg3PSsJfiAQMpmWfNGpZH2YZtphglFcrIc4mgetQeqgkz2aRfNsps5bCwdjau70SvIXzVu4u3wCGUPw==, tarball: https://npm.pkg.github.com/download/@noahtigner/validate-env-vars/0.1.2/1fec278cce1eff74ad49cfe7e04c6edc81d7d797}
     hasBin: true
     dev: true
 
