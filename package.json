@@ -20,7 +20,7 @@
 		"prepare": "husky install"
 	},
 	"devDependencies": {
-		"@noahtigner/validate-env-vars": "0.1.7",
+		"@noahtigner/validate-env-vars": "0.1.8",
 		"husky": "^8.0.0",
 		"prettier": "^3.1.0"
 	}
