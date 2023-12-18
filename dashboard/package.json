@@ -27,7 +27,7 @@
 		"@noahtigner/validate-env-vars": "0.1.7",
 		"@types/react": "^18.2.42",
 		"@types/react-dom": "^18.2.15",
-		"@typescript-eslint/eslint-plugin": "^6.13.2",
+		"@typescript-eslint/eslint-plugin": "^6.15.0",
 		"@typescript-eslint/parser": "^6.13.2",
 		"@vitejs/plugin-react": "^4.2.1",
 		"eslint": "^8.55.0",
