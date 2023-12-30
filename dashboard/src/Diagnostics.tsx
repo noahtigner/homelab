@@ -264,7 +264,10 @@ function Diagnostics() {
 				console.log(data);
 				setPiholeData(data);
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => {
+				console.log(error);
+				setPiholeHealth('error');
+			});
 
 		axios
 			.get(`${import.meta.env.VITE_API_BASE}/pihole/`)
@@ -272,7 +275,10 @@ function Diagnostics() {
 				console.log(data);
 				setPiholeHealth(data.status);
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => {
+				console.log(error);
+				setPiholeHealth('error');
+			});
 	}, []);
 
 	return (

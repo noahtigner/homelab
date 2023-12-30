@@ -28,9 +28,6 @@ dependencies:
     version: 18.2.0(react@18.2.0)
 
 devDependencies:
-  '@noahtigner/validate-env-vars':
-    specifier: 0.1.7
-    version: 0.1.7
   '@types/react':
     specifier: ^18.2.42
     version: 18.2.42
@@ -943,11 +940,6 @@ packages:
       react: 18.2.0
       react-is: 18.2.0
     dev: false
-
-  /@noahtigner/validate-env-vars@0.1.7:
-    resolution: {integrity: sha512-i6ZUgY0Ze1t840uvPP9eDwXvcgCJ15bsJdrUAUryCZho6LwwsWb9eTiKKFauB3nLZNvR5WcRWauWyADqDRokrQ==}
-    hasBin: true
-    dev: true
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
