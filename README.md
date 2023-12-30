@@ -2,8 +2,12 @@
 
 <p align="center">Docker services that I run at home to improve my QoL</p>
 
+<div align="center">
+
 [![Code Quality Checks](https://github.com/noahtigner/homelab/actions/workflows/quality.yml/badge.svg)](https://github.com/noahtigner/homelab/actions/workflows/quality.yml)
 [![CodeQL](https://github.com/noahtigner/homelab/actions/workflows/codeql.yml/badge.svg)](https://github.com/noahtigner/homelab/actions/workflows/codeql.yml)
+
+</div>
 
 # Services:
 
