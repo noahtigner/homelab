@@ -5,23 +5,17 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
-  '@noahtigner/validate-env-vars':
-    specifier: ^0.1.13
-    version: 0.1.13
   husky:
     specifier: ^8.0.0
     version: 8.0.3
   prettier:
     specifier: ^3.1.1
     version: 3.1.1
+  validate-env-vars:
+    specifier: ^0.2.2
+    version: 0.2.2
 
 packages:
-
-  /@noahtigner/validate-env-vars@0.1.13:
-    resolution: {integrity: sha512-Plhjm51M8dNAtKVK7ZgrqyotPfxt8E1GGjq80+3WP8kXsJ6lbwFYIn1yfJzUCzXXTYx4MSk94ZPJCxc+B6tDMg==}
-    engines: {node: '>=20'}
-    hasBin: true
-    dev: true
 
   /husky@8.0.3:
     resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
@@ -32,5 +26,11 @@ packages:
   /prettier@3.1.1:
     resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
     engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /validate-env-vars@0.2.2:
+    resolution: {integrity: sha512-u1Nv9prvms+KZ8oYiOF+0hRI07Dde2gerA7Fr5a12lp7e0W5Al1KyVjxJnmbp1rQpAkx2KrYUMwl0/vB0uG91Q==}
+    engines: {node: '>=20'}
     hasBin: true
     dev: true

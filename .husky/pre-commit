@@ -54,8 +54,8 @@ announce_rule "format"
 pnpm run format | indent_output
 
 # TODO: handle whitespace lines in validate-env-vars package
-# announce_rule "validate env vars"
-# pnpm validate-env-vars -t .env.template | indent_output
+announce_rule "validate env vars"
+pnpm validate-env-vars -t .env.template | indent_output
 
 announce_rule "(TS) format"
 cd ./dashboard
