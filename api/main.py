@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+import requests
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.diagnostics.retrieval import get_cpu_percent
@@ -79,3 +80,29 @@ api.include_router(github_router)
 @api.get("/", tags=["Diagnostics", "Ping"])
 def get_server_health(request: Request):
     return {"status": "ok", "root_path": request.scope.get("root_path")}
+
+
+@api.get("/npm", tags=["Diagnostics", "Ping"])
+def get_npm_dl():
+    data = {}
+
+    try:
+        r1 = requests.get("https://registry.npmjs.org/validate-env-vars/latest")
+        r1.raise_for_status()
+        data = r1.json()
+    except requests.exceptions.RequestException as err:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Failed to fetch NPM package info: {err}",
+        )
+
+    try:
+        r2 = requests.get(
+            "https://api.npmjs.org/downloads/point/last-week/validate-env-vars"
+        )
+        r2.raise_for_status()
+        data["downloads"] = r2.json().get("downloads")
+    except requests.exceptions.RequestException:
+        data["downloads"] = None
+
+    return data
