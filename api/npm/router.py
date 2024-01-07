@@ -23,6 +23,8 @@ def get_problems_solved(package_name: str, response: Response):
             license=raw_data["license"],
             homepage=raw_data["homepage"],
             repository=raw_data["repository"]["url"],
+            issues=raw_data["bugs"]["url"],
+            pulls=raw_data["bugs"]["url"].replace("issues", "pulls"),
             downloads=NPMDownloads(
                 total=None,
                 per_day=[],

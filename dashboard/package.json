@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "validate-env-vars -t .env.template && vite --host 0.0.0.0",
+		"dev": "validate-env-vars -t .env.template && vite --force --host 0.0.0.0",
 		"build": "validate-env-vars -t .env.template && tsc && vite build",
 		"format": "prettier --check . --config ../.prettierrc.json --ignore-path ../.prettierignore --ignore-path ../.gitignore",
 		"format:fix": "prettier --write . --config ../.prettierrc.json --ignore-path ../.prettierignore --ignore-path ../.gitignore",
@@ -21,6 +21,7 @@
 		"axios": "^1.6.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"recharts": "^2.10.3",
 		"validate-env-vars": "^0.2.4"
 	},
 	"devDependencies": {
