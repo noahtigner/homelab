@@ -7,7 +7,7 @@ import {
 	Box,
 	Chip,
 } from '@mui/material';
-// import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import LinkIcon from '@mui/icons-material/Link';
 import axios from 'axios';
 
@@ -72,7 +72,7 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 			component="ul"
 		>
 			{chipData.map(({ label, value, href }) => (
-				<li key={value}>
+				<li key={value ?? href}>
 					<Chip
 						size="small"
 						label={
@@ -115,44 +115,38 @@ function NPMPackageSummary({
 
 	return (
 		<>
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-				<Box
-					sx={{
-						display: 'flex',
-						flexGrow: 1,
-						justifyContent: 'space-between',
-						marginBottom: theme.spacing(2),
-					}}
-				>
-					<Typography
-						sx={{
-							fontSize: '2.5rem',
-							marginBottom: theme.spacing(0.5),
-						}}
-						variant="h3"
-					>
-						{npmPackageInfo.downloads.total} / month
-					</Typography>
-					<DownloadOutlinedIcon
-						color="success"
-						sx={{ fontSize: 48 }}
-					/>
-				</Box>
-				{/* <LineChart
-				width={600}
-				height={300}
-				data={npmPackageInfo.downloads.per_day.map((downloadDay) => ({
-					day: downloadDay.day,
-					downloads: downloadDay.downloads,
-				}))}
-				margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+			<Box
+				sx={{
+					display: 'flex',
+					flexGrow: 1,
+					justifyContent: 'space-between',
+					marginBottom: theme.spacing(2),
+				}}
 			>
-				<Line type="monotone" dataKey="uv" stroke="#8884d8" />
-				<CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-				<XAxis dataKey="name" />
-				<YAxis />
-			</LineChart> */}
+				<Typography
+					sx={{
+						fontSize: '2.5rem',
+						marginBottom: theme.spacing(0.5),
+					}}
+					variant="h3"
+				>
+					{npmPackageInfo.downloads.total} / month
+				</Typography>
+				<DownloadOutlinedIcon color="success" sx={{ fontSize: 48 }} />
 			</Box>
+			<ResponsiveContainer width={'100%'} aspect={10}>
+				<AreaChart
+					data={npmPackageInfo.downloads.per_day}
+					margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+				>
+					<Area
+						type="monotone"
+						dataKey="downloads"
+						stroke={theme.palette.success.main}
+						fill={theme.palette.success.dark}
+					/>
+				</AreaChart>
+			</ResponsiveContainer>
 			<NPMChips npmPackageInfo={npmPackageInfo} />
 		</>
 	);
