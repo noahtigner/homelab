@@ -4,15 +4,14 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "pnpm validate-env-vars && vite --host 0.0.0.0",
-		"build": "pnpm validate-env-vars && tsc && vite build",
+		"dev": "validate-env-vars -t .env.template && vite --host 0.0.0.0",
+		"build": "validate-env-vars -t .env.template && tsc && vite build",
 		"format": "prettier --check . --config ../.prettierrc.json --ignore-path ../.prettierignore --ignore-path ../.gitignore",
 		"format:fix": "prettier --write . --config ../.prettierrc.json --ignore-path ../.prettierignore --ignore-path ../.gitignore",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
 		"typecheck": "tsc --noEmit",
-		"preview": "vite preview",
-		"validate-env-vars": "validate-env-vars -t .env.template"
+		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.11.3",
