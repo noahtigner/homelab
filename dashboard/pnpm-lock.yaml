@@ -74,8 +74,8 @@ devDependencies:
     specifier: ^5.3.3
     version: 5.3.3
   validate-env-vars:
-    specifier: ^0.2.2
-    version: 0.2.2
+    specifier: ^0.2.4
+    version: 0.2.4
   vite:
     specifier: ^5.0.10
     version: 5.0.10
@@ -3671,8 +3671,8 @@ packages:
       punycode: 2.3.1
     dev: true
 
-  /validate-env-vars@0.2.2:
-    resolution: {integrity: sha512-u1Nv9prvms+KZ8oYiOF+0hRI07Dde2gerA7Fr5a12lp7e0W5Al1KyVjxJnmbp1rQpAkx2KrYUMwl0/vB0uG91Q==}
+  /validate-env-vars@0.2.4:
+    resolution: {integrity: sha512-T2PSwFNEMabORxtmRC+38PhLru+9ojDALGneKGt8Hasni6ss4/5A9k2ICkmX17L6U08XfnCm6gA6OnfcnA22yg==}
     engines: {node: '>=20'}
     hasBin: true
     dev: true
