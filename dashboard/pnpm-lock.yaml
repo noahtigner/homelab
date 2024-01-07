@@ -26,6 +26,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  validate-env-vars:
+    specifier: ^0.2.4
+    version: 0.2.4
 
 devDependencies:
   '@types/react':
@@ -73,9 +76,6 @@ devDependencies:
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
-  validate-env-vars:
-    specifier: ^0.2.4
-    version: 0.2.4
   vite:
     specifier: ^5.0.10
     version: 5.0.10
@@ -3675,7 +3675,7 @@ packages:
     resolution: {integrity: sha512-T2PSwFNEMabORxtmRC+38PhLru+9ojDALGneKGt8Hasni6ss4/5A9k2ICkmX17L6U08XfnCm6gA6OnfcnA22yg==}
     engines: {node: '>=20'}
     hasBin: true
-    dev: true
+    dev: false
 
   /vite@5.0.10:
     resolution: {integrity: sha512-2P8J7WWgmc355HUMlFrwofacvr98DAjoE52BfdbwQtyLH06XKwaL/FMnmKM2crF0iX4MpmMKoDlNCB1ok7zHCw==}
