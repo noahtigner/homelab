@@ -48,11 +48,11 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 		},
 		{
 			label: 'Issues',
-			value: npmPackageInfo.issues,
+			href: npmPackageInfo.issues,
 		},
 		{
 			label: 'Pulls',
-			value: npmPackageInfo.pulls,
+			href: npmPackageInfo.pulls,
 		},
 	];
 
@@ -71,18 +71,32 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 			}}
 			component="ul"
 		>
-			{chipData.map(({ label, value }) => (
+			{chipData.map(({ label, value, href }) => (
 				<li key={value}>
 					<Chip
 						size="small"
 						label={
 							<>
 								{label}{' '}
-								<strong
-									style={{ color: palette.text.secondary }}
-								>
-									({value})
-								</strong>
+								{href ? (
+									<IconButton
+										component={Link}
+										href={href}
+										target="_blank"
+										rel="noopener"
+										sx={{ padding: 0 }}
+									>
+										<LinkIcon />
+									</IconButton>
+								) : (
+									<strong
+										style={{
+											color: palette.text.secondary,
+										}}
+									>
+										({value})
+									</strong>
+								)}
 							</>
 						}
 					/>
