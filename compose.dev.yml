@@ -84,7 +84,8 @@ services:
       context: ./dashboard
     command: 'pnpm run dev'
     environment:
-      - API_BASE=http://${IP}:81/api
+      API_BASE: 'http://${IP}:81/api'
+      LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
     volumes:
       - './dashboard:/app'
       - 'exclude:/app/node_modules/'

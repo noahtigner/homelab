@@ -7,7 +7,13 @@ import {
 	Box,
 	Chip,
 } from '@mui/material';
-import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import {
+	ResponsiveContainer,
+	AreaChart,
+	Area,
+	Tooltip,
+	TooltipProps,
+} from 'recharts';
 import LinkIcon from '@mui/icons-material/Link';
 import axios from 'axios';
 
@@ -106,6 +112,38 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 	);
 }
 
+const CustomTooltip = ({ active, payload }: TooltipProps<string, string>) => {
+	const theme = useTheme();
+	if (active && payload && payload.length) {
+		return (
+			<div
+				style={{
+					backgroundColor: theme.palette.background.paper,
+					color: theme.palette.text.primary,
+					borderColor: theme.palette.divider,
+					borderRadius: theme.shape.borderRadius,
+					borderWidth: 1,
+					borderStyle: 'solid',
+					padding: theme.spacing(0.5),
+					zIndex: 1,
+				}}
+			>
+				<Typography variant="subtitle2">
+					{payload[0].payload.day}
+				</Typography>
+				<Typography
+					variant="subtitle1"
+					style={{ color: theme.palette.success.main }}
+				>
+					downloads: {payload[0].value}
+				</Typography>
+			</div>
+		);
+	}
+
+	return null;
+};
+
 function NPMPackageSummary({
 	npmPackageInfo,
 }: {
@@ -145,6 +183,7 @@ function NPMPackageSummary({
 						stroke={theme.palette.success.main}
 						fill={theme.palette.success.dark}
 					/>
+					<Tooltip content={<CustomTooltip />} />
 				</AreaChart>
 			</ResponsiveContainer>
 			<NPMChips npmPackageInfo={npmPackageInfo} />
@@ -154,10 +193,6 @@ function NPMPackageSummary({
 
 function NPMPackageCard({ packageName }: { packageName: string }) {
 	const theme = useTheme();
-
-	// const [leetCodeData, setLeetCodeData] = useState<LeetCodeSolvedData | null>(
-	// 	null
-	// );
 
 	const [npmPackageInfo, setNPMPackageInfo] = useState<NPMPackageInfo | null>(
 		null
@@ -176,11 +211,6 @@ function NPMPackageCard({ packageName }: { packageName: string }) {
 		<StyledCard variant="outlined">
 			<StyledCardContent>
 				<Box display="flex" alignItems="start">
-					{/* <Link
-						href="https://www.npmjs.com/package/validate-env-vars"
-						target="_blank"
-						rel="noopener"
-					/> */}
 					<Typography
 						sx={{
 							fontSize: '1.25rem',
@@ -188,22 +218,18 @@ function NPMPackageCard({ packageName }: { packageName: string }) {
 						}}
 						variant="h2"
 					>
-						Validate-Env-Vars
+						{packageName}
 					</Typography>
 					<IconButton
 						component={Link}
-						href="https://www.npmjs.com/package/validate-env-vars"
+						href={npmPackageInfo?.homepage}
 						target="_blank"
-						// rel="noopener"
+						rel="noopener"
 						sx={{ padding: 0, marginLeft: theme.spacing(0.5) }}
 					>
 						<LinkIcon />
 					</IconButton>
 				</Box>
-				{/* {leetCodeData && (
-					<LeetCodeSummary leetCodeData={leetCodeData} />
-				)}
-				<LeetCodeLanguageChips /> */}
 				{npmPackageInfo && (
 					<NPMPackageSummary npmPackageInfo={npmPackageInfo} />
 				)}

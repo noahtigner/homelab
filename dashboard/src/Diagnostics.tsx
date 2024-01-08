@@ -26,7 +26,7 @@ import {
 import { StyledCard, StyledCardContent } from './components/StyledCard';
 import LeetCodeSummaryCard from './components/leetcode/LeetCodeSummaryCard';
 import DockerTable from './components/docker/DockerTable';
-import ValidateEnvVarsCard from './components/npm/ValidateEnvVarsCard';
+import NPMPackageCard from './components/npm/NPMPackageCard';
 
 interface PiholeData {
 	domains_being_blocked: number;
@@ -441,14 +441,14 @@ function Diagnostics() {
 						</>
 					)}
 				</Grid>
-				<Grid xs={12}>
-					<DockerTable />
-				</Grid>
 				<Grid xs={12} sm={6} lg={4}>
 					<LeetCodeSummaryCard />
 				</Grid>
 				<Grid xs={12} sm={6} lg={4}>
-					<ValidateEnvVarsCard packageName="validate-env-vars" />
+					<NPMPackageCard packageName="validate-env-vars" />
+				</Grid>
+				<Grid xs={12}>
+					<DockerTable />
 				</Grid>
 			</Grid>
 			<List dense>
