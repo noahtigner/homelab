@@ -210,11 +210,20 @@ function NPMPackageCard({ packageName }: { packageName: string }) {
 	return (
 		<StyledCard variant="outlined">
 			<StyledCardContent>
-				<Box display="flex" alignItems="start">
+				<Box
+					display="flex"
+					alignItems="center"
+					sx={{ marginBottom: theme.spacing(0.5) }}
+				>
+					<img
+						src="https://static-production.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png"
+						alt="NPM"
+						width={20}
+						style={{ marginRight: theme.spacing(1) }}
+					/>
 					<Typography
 						sx={{
 							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.5),
 						}}
 						variant="h2"
 					>

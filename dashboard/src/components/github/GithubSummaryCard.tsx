@@ -11,16 +11,23 @@ import LinkIcon from '@mui/icons-material/Link';
 import axios from 'axios';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
+import { CompareArrowsOutlined as CompareArrowsOutlinedIcon } from '@mui/icons-material';
 
 interface Contributions {
 	own_projects: number;
 	oss_projects: number;
 }
 
+interface Repo {
+	id: number;
+	name: string;
+	url: string;
+}
+
 interface GithubEvents {
 	events: []; // TODO:
 	events_seen: unknown;
-	repos_seen: []; // TODO
+	repos_seen: Repo[];
 	contributions: Contributions;
 }
 
@@ -29,11 +36,11 @@ function GithubChips({ githubEvents }: { githubEvents: GithubEvents }) {
 
 	const chipData = [
 		{
-			label: 'OSS Project Contributions',
+			label: 'OSS Contributions',
 			value: githubEvents.contributions.oss_projects,
 		},
 		{
-			label: 'Own Project Contributions',
+			label: 'Own Contributions',
 			value: githubEvents.contributions.own_projects,
 		},
 	];
@@ -77,11 +84,11 @@ function GithubChips({ githubEvents }: { githubEvents: GithubEvents }) {
 }
 
 function GithubSummary({ githubEvents }: { githubEvents: GithubEvents }) {
-	// const theme = useTheme();
+	const theme = useTheme();
 
 	return (
 		<>
-			{/* <Box
+			<Box
 				sx={{
 					display: 'flex',
 					flexGrow: 1,
@@ -96,24 +103,20 @@ function GithubSummary({ githubEvents }: { githubEvents: GithubEvents }) {
 					}}
 					variant="h3"
 				>
-					{npmPackageInfo.downloads.total} / month
+					Recent Contributions
 				</Typography>
-				<DownloadOutlinedIcon color="success" sx={{ fontSize: 48 }} />
+				<CompareArrowsOutlinedIcon
+					color="success"
+					sx={{ fontSize: 48 }}
+				/>
 			</Box>
-			<ResponsiveContainer width={'100%'} aspect={10}>
-				<AreaChart
-					data={npmPackageInfo.downloads.per_day}
-					margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-				>
-					<Area
-						type="monotone"
-						dataKey="downloads"
-						stroke={theme.palette.success.main}
-						fill={theme.palette.success.dark}
-					/>
-					<Tooltip content={<CustomTooltip />} />
-				</AreaChart>
-			</ResponsiveContainer> */}
+			<div>
+				{githubEvents.repos_seen.slice(3).map(({ id, name, url }) => (
+					<Link href={url} target="_blank" rel="noopener" key={id}>
+						<Typography color="text.primary">{name}</Typography>
+					</Link>
+				))}
+			</div>
 			<GithubChips githubEvents={githubEvents} />
 		</>
 	);
@@ -136,11 +139,20 @@ function GithubSummaryCard() {
 	return (
 		<StyledCard variant="outlined">
 			<StyledCardContent>
-				<Box display="flex" alignItems="start">
+				<Box
+					display="flex"
+					alignItems="center"
+					sx={{ marginBottom: theme.spacing(0.5) }}
+				>
+					<img
+						src="https://github.githubassets.com/favicons/favicon-dark.svg"
+						alt="Github"
+						width={20}
+						style={{ marginRight: theme.spacing(1) }}
+					/>
 					<Typography
 						sx={{
 							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.5),
 						}}
 						variant="h2"
 					>

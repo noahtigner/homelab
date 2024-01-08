@@ -221,11 +221,23 @@ function LeetCodeSummaryCard() {
 	return (
 		<StyledCard variant="outlined">
 			<StyledCardContent>
-				<Box display="flex" alignItems="start">
+				<Box
+					display="flex"
+					alignItems="center"
+					sx={{ marginBottom: theme.spacing(0.5) }}
+				>
+					<img
+						src="https://leetcode.com/favicon.ico"
+						alt="LeetCode"
+						width={20}
+						style={{
+							marginRight: theme.spacing(1),
+							marginBottom: 2,
+						}}
+					/>
 					<Typography
 						sx={{
 							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.5),
 						}}
 						variant="h2"
 					>

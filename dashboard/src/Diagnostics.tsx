@@ -303,7 +303,7 @@ function Diagnostics() {
 						<StatusChip label="Pihole" status={piholeHealth} />
 						<StatusChip label="Traefik" status={'warning'} />
 						<StatusChip label="Cache" status={'loading'} />
-						<StatusChip label="Spotify API" status={'loading'} />
+						<StatusChip label="Slack Bot" status={'loading'} />
 						{/* <StatusChip label="Nest API" status={'loading'} />
 						<StatusChip
 							label="Weather Forecast"
