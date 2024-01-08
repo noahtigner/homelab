@@ -30,6 +30,15 @@ def get_events(response: Response):
             response.status_code = r.status_code
             raw_data = r.json()
 
+            if (
+                "message" in raw_data
+                and "API rate limit exceeded" in raw_data["message"]
+            ):
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail="GitHub API Rate Limit Exceeded",
+                )
+
             for event in raw_data:
                 EventModel(
                     id=event["id"],
