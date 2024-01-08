@@ -112,7 +112,7 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 	);
 }
 
-const CustomTooltip = ({ active, payload }: TooltipProps<string, string>) => {
+function CustomTooltip({ active, payload }: TooltipProps<string, string>) {
 	const theme = useTheme();
 	if (active && payload && payload.length) {
 		return (
@@ -142,7 +142,7 @@ const CustomTooltip = ({ active, payload }: TooltipProps<string, string>) => {
 	}
 
 	return null;
-};
+}
 
 function NPMPackageSummary({
 	npmPackageInfo,
