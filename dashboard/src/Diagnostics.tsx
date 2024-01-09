@@ -14,9 +14,6 @@ import {
 import Grid from '@mui/material/Unstable_Grid2';
 import {
 	CheckCircle as CheckCircleIcon,
-	DnsOutlined as DnsIcon,
-	Block as BlockIcon,
-	AccessTime as AccessTimeIcon,
 	SaveOutlined as SaveIcon,
 	DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
 	MemoryOutlined as MemoryIcon,
@@ -28,34 +25,7 @@ import LeetCodeSummaryCard from './components/leetcode/LeetCodeSummaryCard';
 import DockerTable from './components/docker/DockerTable';
 import NPMPackageCard from './components/npm/NPMPackageCard';
 import GithubSummaryCard from './components/github/GithubSummaryCard';
-
-interface PiholeData {
-	domains_being_blocked: number;
-	dns_queries_today: number;
-	ads_blocked_today: number;
-	ads_percentage_today: number;
-	unique_domains: number;
-	queries_forwarded: number;
-	queries_cached: number;
-	clients_ever_seen: number;
-	unique_clients: number;
-	dns_queries_all_types: number;
-	reply_NODATA: number;
-	reply_NXDOMAIN: number;
-	reply_CNAME: number;
-	reply_IP: number;
-	privacy_level: number;
-	status: string;
-	gravity_last_updated: {
-		file_exists: boolean;
-		absolute: number;
-		relative: {
-			days: number;
-			hours: number;
-			minutes: number;
-		};
-	};
-}
+import PiholeStatus from './components/pihole/PiholeStatus';
 
 interface DiagnosticsData {
 	cpu: {
@@ -79,59 +49,6 @@ interface DiagnosticsData {
 }
 
 const celsiusToFahrenheit = (celsius: number): number => (celsius * 9) / 5 + 32;
-
-function PiholeSummaryCard({
-	title,
-	value1,
-	value2,
-	icon,
-}: {
-	title: string;
-	value1: string | number;
-	value2: string | number;
-	icon: ReactNode;
-}) {
-	const theme = useTheme();
-
-	return (
-		<Grid xs={12} sm={6} md={4}>
-			<StyledCard variant="outlined">
-				<StyledCardContent>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.5),
-						}}
-						variant="h2"
-					>
-						{title}
-					</Typography>
-					<Box
-						sx={{
-							display: 'flex',
-							flexGrow: 1,
-							justifyContent: 'space-between',
-						}}
-					>
-						<Typography
-							sx={{
-								fontSize: '2.5rem',
-								marginBottom: theme.spacing(0.5),
-							}}
-							variant="h3"
-						>
-							{value1}
-						</Typography>
-						{icon}
-					</Box>
-					<Typography sx={{ fontSize: '1rem' }} variant="h4">
-						{value2}
-					</Typography>
-				</StyledCardContent>
-			</StyledCard>
-		</Grid>
-	);
-}
 
 function DiagnosticsCard({
 	title,
@@ -246,7 +163,6 @@ function StatusChip({
 }
 
 function Diagnostics() {
-	const [piholeData, setPiholeData] = useState<PiholeData | null>(null);
 	const [diagnosticsData, setDiagnosticsData] =
 		useState<DiagnosticsData | null>(null);
 	const [piholeHealth, setPiholeHealth] = useState<ServiceStatus>('loading');
@@ -259,17 +175,6 @@ function Diagnostics() {
 				setDiagnosticsData(data);
 			})
 			.catch((error) => console.log(error));
-
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/pihole/summary/`)
-			.then(({ data }) => {
-				console.log(data);
-				setPiholeData(data);
-			})
-			.catch((error) => {
-				console.log(error);
-				setPiholeHealth('error');
-			});
 
 		axios
 			.get(`${import.meta.env.VITE_API_BASE}/pihole/`)
@@ -396,51 +301,7 @@ function Diagnostics() {
 							/>
 						</>
 					)}
-					{piholeData && (
-						<>
-							<PiholeSummaryCard
-								title="DNS Queries Today"
-								value1={Number(
-									piholeData.dns_queries_today
-								).toLocaleString()}
-								value2={`${piholeData.unique_clients} unique clients`}
-								icon={
-									<DnsIcon
-										color="success"
-										sx={{ fontSize: 48 }}
-									/>
-								}
-							/>
-							<PiholeSummaryCard
-								title="Ads Blocked Today"
-								value1={Number(
-									piholeData.ads_blocked_today
-								).toLocaleString()}
-								value2={`${Number(
-									piholeData.ads_percentage_today
-								).toFixed(2)}%`}
-								icon={
-									<AccessTimeIcon
-										color="success"
-										sx={{ fontSize: 48 }}
-									/>
-								}
-							/>
-							<PiholeSummaryCard
-								title="Domains Being Blocked"
-								value1={Number(
-									piholeData.domains_being_blocked
-								).toLocaleString()}
-								value2={`Updated ${piholeData.gravity_last_updated.relative.days} days, ${piholeData.gravity_last_updated.relative.hours} hours, ${piholeData.gravity_last_updated.relative.minutes} minutes ago`}
-								icon={
-									<BlockIcon
-										color="success"
-										sx={{ fontSize: 48 }}
-									/>
-								}
-							/>
-						</>
-					)}
+					<PiholeStatus />
 				</Grid>
 				<Grid xs={12} sm={6} lg={4}>
 					<LeetCodeSummaryCard />
