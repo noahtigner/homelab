@@ -20,3 +20,15 @@ class LCProblemsSolvedModel(BaseModel):
 class LCLanguageStatModel(BaseModel):
     languageName: str
     problemsSolved: int
+
+
+class LCTopicStatModel(BaseModel):
+    tagName: str
+    tagSlug: str
+    problemsSolved: int
+
+
+class LCTopicsSolvedModel(BaseModel):
+    advanced: list[LCTopicStatModel]
+    intermediate: list[LCTopicStatModel]
+    fundamental: list[LCTopicStatModel]

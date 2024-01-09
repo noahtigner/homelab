@@ -6,6 +6,7 @@ from api.leetcode.models import (
     LCLanguageStatModel,
     LCProblemDifficultyModel,
     LCProblemsSolvedModel,
+    LCTopicsSolvedModel,
 )
 
 router = APIRouter(
@@ -166,6 +167,64 @@ def get_problems_solved_per_language(response: Response):
         )
 
         return sorted_data
+    except requests.exceptions.ConnectionError as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Connection to LeetCode API Refused",
+        )
+
+
+@router.get("/topics/")
+def get_problems_solved_per_topic(
+    response: Response, responseModel=LCTopicsSolvedModel
+):
+    url = "https://leetcode.com/graphql/"
+
+    query = """
+        query skillStats($username: String!) {
+            matchedUser(username: $username) {
+                tagProblemCounts {
+                    advanced {
+                        tagName
+                        tagSlug
+                        problemsSolved
+                    }
+                    intermediate {
+                        tagName
+                        tagSlug
+                        problemsSolved
+                    }
+                    fundamental {
+                        tagName
+                        tagSlug
+                        problemsSolved
+                    }
+                }
+            }
+        }
+    """
+
+    request_body = {
+        "query": query,
+        "variables": {"username": Settings.LEETCODE_USERNAME},
+        "operationName": "skillStats",
+    }
+
+    print(request_body)
+
+    try:
+        r = requests.post(url, json=request_body)
+        response.status_code = r.status_code
+        raw_data = r.json()["data"]["matchedUser"]["tagProblemCounts"]
+
+        data = LCTopicsSolvedModel(
+            advanced=raw_data["advanced"],
+            intermediate=raw_data["intermediate"],
+            fundamental=raw_data["fundamental"],
+        )
+
+        return data
     except requests.exceptions.ConnectionError as e:
         print(e)
         raise HTTPException(
