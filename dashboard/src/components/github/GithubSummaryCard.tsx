@@ -103,7 +103,7 @@ function GithubSummary({ githubEvents }: { githubEvents: GithubEvents }) {
 					}}
 					variant="h3"
 				>
-					Recent Contributions
+					Contributions
 				</Typography>
 				<CompareArrowsOutlinedIcon
 					color="success"
@@ -111,11 +111,18 @@ function GithubSummary({ githubEvents }: { githubEvents: GithubEvents }) {
 				/>
 			</Box>
 			<div>
-				{githubEvents.repos_seen.slice(3).map(({ id, name, url }) => (
-					<Link href={url} target="_blank" rel="noopener" key={id}>
-						<Typography color="text.primary">{name}</Typography>
-					</Link>
-				))}
+				{githubEvents.repos_seen
+					.slice(0, 4)
+					.map(({ id, name, url }) => (
+						<Link
+							href={url}
+							target="_blank"
+							rel="noopener"
+							key={id}
+						>
+							<Typography color="text.primary">{name}</Typography>
+						</Link>
+					))}
 			</div>
 			<GithubChips githubEvents={githubEvents} />
 		</>
