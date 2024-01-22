@@ -12,8 +12,8 @@ dependencies:
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.3)(@types/react@18.2.47)(react@18.2.0)
   '@mui/icons-material':
-    specifier: ^5.15.3
-    version: 5.15.3(@mui/material@5.15.3)(@types/react@18.2.47)(react@18.2.0)
+    specifier: ^5.15.6
+    version: 5.15.6(@mui/material@5.15.3)(@types/react@18.2.47)(react@18.2.0)
   '@mui/material':
     specifier: ^5.15.3
     version: 5.15.3(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)
@@ -289,6 +289,13 @@ packages:
 
   /@babel/runtime@7.23.6:
     resolution: {integrity: sha512-zHd0eUrf5GZoOWVCXp6koAKQTfZV07eit6bGPmJgnZdnSAvvZee6zniW2XMF7Cmc4ISOOnPy3QaSiIJGJkVEDQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
+    dev: false
+
+  /@babel/runtime@7.23.8:
+    resolution: {integrity: sha512-Y7KbAP984rn1VGMbGqKmBLio9V7y5Je9GvU4rQPCPinCyNfUcToxIXl06d59URp/F3LwinvODxab5N/G6qggkw==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
@@ -795,8 +802,8 @@ packages:
     resolution: {integrity: sha512-sWeihiVyxdJjpLkp8SHkTy9kt2M/o11M60G1MzwljGL2BXdM3Ktzqv5QaQHdi00y7Y1ulvtI3GOSxP2xU8mQJw==}
     dev: false
 
-  /@mui/icons-material@5.15.3(@mui/material@5.15.3)(@types/react@18.2.47)(react@18.2.0):
-    resolution: {integrity: sha512-7LEs8AnO2Se/XYH+CcJndRsGAE+M8KAExiiQHf0V11poqmPVGcbbY82Ry2IUYf9+rOilCVnWI18ErghZ625BPQ==}
+  /@mui/icons-material@5.15.6(@mui/material@5.15.3)(@types/react@18.2.47)(react@18.2.0):
+    resolution: {integrity: sha512-GnkxMtlhs+8ieHLmCytg00ew0vMOiXGFCw8Ra9nxMsBjBqnrOI5gmXqUm+sGggeEU/HG8HyeqC1MX/IxOBJHzA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@mui/material': ^5.0.0
@@ -806,7 +813,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.23.8
       '@mui/material': 5.15.3(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)
       '@types/react': 18.2.47
       react: 18.2.0
