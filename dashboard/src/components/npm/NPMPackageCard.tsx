@@ -172,7 +172,11 @@ function NPMPackageSummary({
 				</Typography>
 				<DownloadOutlinedIcon color="success" sx={{ fontSize: 48 }} />
 			</Box>
-			<ResponsiveContainer width={'100%'} aspect={10}>
+			<ResponsiveContainer
+				width={'100%'}
+				aspect={10}
+				style={{ zIndex: 50 }}
+			>
 				<AreaChart
 					data={npmPackageInfo.downloads.per_day}
 					margin={{ top: 5, right: 20, bottom: 5, left: 0 }}

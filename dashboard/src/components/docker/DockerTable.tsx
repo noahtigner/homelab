@@ -6,9 +6,11 @@ import {
 	TableRow,
 	TableCell,
 	TableBody,
+	Skeleton,
 } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import type { RequestData } from '../../types';
 
 interface DockerData {
 	containers: {
@@ -32,15 +34,26 @@ const bitsToGigabytes = (bits: number): string =>
 	(bits / 1000000000).toFixed(2);
 
 function DockerTable() {
-	const [dockerData, setDockerData] = useState<DockerData | null>(null);
+	const [dockerData, setDockerData] = useState<RequestData<DockerData>>({
+		status: 'loading',
+	});
 
 	useEffect(() => {
 		axios
 			.get(`${import.meta.env.VITE_API_BASE}/docker/stats/`)
-			.then((response) => {
-				setDockerData(response.data);
+			.then(({ data }) => {
+				setDockerData({
+					status: 'ok',
+					data,
+				});
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => {
+				console.log(error);
+				setDockerData({
+					status: 'error',
+					errorMessage: error.message,
+				});
+			});
 	}, []);
 
 	return (
@@ -62,8 +75,19 @@ function DockerTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{dockerData &&
-						dockerData.containers.map((container) => (
+					{dockerData.status == 'loading' && (
+						<>
+							{[...Array(5)].map((_, index) => (
+								<TableRow key={index}>
+									<TableCell colSpan={999}>
+										<Skeleton variant="text" width="100%" />
+									</TableCell>
+								</TableRow>
+							))}
+						</>
+					)}
+					{dockerData.status == 'ok' &&
+						dockerData.data.containers.map((container) => (
 							<TableRow
 								key={container.name}
 								sx={{
@@ -79,7 +103,7 @@ function DockerTable() {
 								<TableCell>
 									{(
 										(container.cpu_usage /
-											dockerData.system_cpu_usage) *
+											dockerData.data.system_cpu_usage) *
 										100
 									).toFixed(2)}
 								</TableCell>
@@ -116,6 +140,13 @@ function DockerTable() {
 								<TableCell>{container.pids}</TableCell>
 							</TableRow>
 						))}
+					{dockerData.status == 'error' && (
+						<TableRow>
+							<TableCell colSpan={999} align="center">
+								{dockerData.errorMessage}
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 			</Table>
 		</TableContainer>

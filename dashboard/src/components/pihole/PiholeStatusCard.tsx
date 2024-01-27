@@ -97,7 +97,7 @@ function PiholeSummaryCardLoading({
 				<Skeleton
 					variant="text"
 					width="100%"
-					sx={{
+					style={{
 						fontSize: '2.5rem',
 					}}
 				/>
@@ -130,7 +130,10 @@ function PiholeSummaryCardError({
 				/>
 			}
 			child2={
-				<Typography sx={{ fontSize: '1rem' }} variant="h4">
+				<Typography
+					sx={{ fontSize: '1rem', marginTop: '10px' }}
+					variant="h4"
+				>
 					{errorMessage}
 				</Typography>
 			}
