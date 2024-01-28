@@ -43,9 +43,11 @@ def get_events(response: Response):
                 EventModel(
                     id=event["id"],
                     type=event["type"],
-                    commits=len(event["payload"]["commits"])
-                    if "commits" in event["payload"]
-                    else 0,
+                    commits=(
+                        len(event["payload"]["commits"])
+                        if "commits" in event["payload"]
+                        else 0
+                    ),
                     repo=event["repo"],
                     created_at=event["created_at"],
                 )
