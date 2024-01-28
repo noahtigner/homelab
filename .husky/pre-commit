@@ -53,7 +53,6 @@ chmod +x ./scripts/validate_branch_name.sh
 announce_rule "format"
 pnpm run format | indent_output
 
-# TODO: handle whitespace lines in validate-env-vars package
 announce_rule "validate env vars"
 pnpm validate-env-vars -t .env.template | indent_output
 
@@ -79,14 +78,23 @@ announce_rule "(Py) isort"
 cd ./api
 python3 -m isort . --check-only --multi-line 3 --profile black | indent_output
 cd ..
+cd ./slackbot
+python3 -m isort . --check-only --multi-line 3 --profile black | indent_output
+cd ..
 
 announce_rule "(Py) format"
 cd ./api
 python3 -m black . --target-version=py311 --check | indent_output
 cd ..
+cd ./slackbot
+python3 -m black . --target-version=py311 --check | indent_output
+cd ..
 
 announce_rule "(Py) lint"
 cd ./api
+python3 -m flake8 --max-line-length 99 | indent_output
+cd ..
+cd ./slackbot
 python3 -m flake8 --max-line-length 99 | indent_output
 cd ..
 
