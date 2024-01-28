@@ -27,7 +27,7 @@ class Commands:
                 "method": lambda: f"\nIt is currently {datetime.now().strftime('%H:%M:%S')}",
             },
             "greet": {
-                "description": "Greet the bot",
+                "description": "Greet a user",
                 "usage": "greet",
                 "method": lambda username: f"Hello <@{username}>!",
             },
