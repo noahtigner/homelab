@@ -1,1 +1,4 @@
-slack_sdk
+black>=23.11.0
+flake8>=6.1.0
+isort>=5.12.0
+slack_sdk>=3.26.2
