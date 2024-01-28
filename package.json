@@ -15,8 +15,8 @@
 		"api"
 	],
 	"scripts": {
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
+		"format": "prettier --check . '!./dashboard/**/*'",
+		"format:fix": "prettier --write . '!./dashboard/**/*'",
 		"prepare": "husky install"
 	},
 	"devDependencies": {
