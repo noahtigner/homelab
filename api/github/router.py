@@ -1,5 +1,8 @@
+import json
+import logging
+
 import requests
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Request, Response, status
 
 from api.config import Settings
 from api.github.models import (
@@ -9,6 +12,8 @@ from api.github.models import (
     RepoModel,
 )
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(
     prefix="/github",
     tags=["GitHub"],
@@ -16,8 +21,14 @@ router = APIRouter(
 
 
 @router.get("/events/", response_model=EventsResponseModel)
-def get_events(response: Response):
+async def get_events(request: Request, response: Response):
     url = f"https://api.github.com/users/{Settings.GITHUB_USERNAME}/events/public?per_page=100"
+
+    # Try to get the result from cache
+    cached_result = await request.app.state.redis.get("events")
+    if cached_result is not None:
+        logger.info("Cache hit")
+        return EventsResponseModel(**json.loads(cached_result))
 
     events: list[EventModel] = []
     events_seen: dict(str, int) = {}
@@ -72,12 +83,18 @@ def get_events(response: Response):
                 ):
                     contributions.oss_projects += 1
 
-        return EventsResponseModel(
+        output = EventsResponseModel(
             events=events,
             events_seen=events_seen,
             repos_seen=list(repos_seen),
             contributions=contributions,
         )
+
+        # Cache the results
+        await request.app.state.redis.set("events", output.model_dump_json())
+        await request.app.state.redis.expire("events", 3600)  # 1 hour
+
+        return output
     except requests.exceptions.ConnectionError as e:
         print(e)
         raise HTTPException(

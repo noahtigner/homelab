@@ -1,8 +1,11 @@
+import logging
 from contextlib import asynccontextmanager
 
+import redis.asyncio as redis
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.cache.router import router as cache_router
 from api.diagnostics.retrieval import get_cpu_percent
 from api.diagnostics.router import router as diagnostics_router
 from api.docker.router import router as docker_router
@@ -11,13 +14,20 @@ from api.leetcode.router import router as leetcode_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
     get_cpu_percent(None)  # first call will always return 0
+    # set up redis cache
+    app.state.redis = redis.Redis(host="cache", port=6379, db=0)
+    logger.info(f"Ping successful: {await app.state.redis.ping()}")
     yield
     # cleanup
+    await app.state.redis.close()
 
 
 tags_metadata = [
@@ -36,6 +46,10 @@ tags_metadata = [
     {
         "name": "Pi-hole",
         "description": "Info for Pi-hole Ad Blocker",
+    },
+    {
+        "name": "Redis Cache",
+        "description": "Redis Cache Stats",
     },
     {
         "name": "GitHub",
@@ -80,6 +94,7 @@ api.include_router(pihole_router)
 api.include_router(leetcode_router)
 api.include_router(github_router)
 api.include_router(npm_router)
+api.include_router(cache_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])

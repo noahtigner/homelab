@@ -170,6 +170,7 @@ function Diagnostics() {
 		useState<ServiceStatus>('loading');
 	const [traefikHealth, setTraefikHealth] =
 		useState<ServiceStatus>('loading');
+	const [redisHealth, setRedisHealth] = useState<ServiceStatus>('loading');
 
 	useEffect(() => {
 		axios
@@ -216,6 +217,17 @@ function Diagnostics() {
 				console.log(error);
 				setTraefikHealth('error');
 			});
+
+		axios
+			.get(`${import.meta.env.VITE_API_BASE}/cache/`)
+			.then(({ data }) => {
+				console.log(data);
+				setRedisHealth(data.status);
+			})
+			.catch((error) => {
+				console.log(error);
+				setRedisHealth('error');
+			});
 	}, []);
 
 	return (
@@ -238,7 +250,7 @@ function Diagnostics() {
 						<StatusChip label="Traefik" status={traefikHealth} />
 						<StatusChip label="Pihole" status={piholeHealth} />
 						<StatusChip label="Slack Bot" status={slackbotHealth} />
-						<StatusChip label="Cache" status={'loading'} />
+						<StatusChip label="Cache" status={redisHealth} />
 						{/* <StatusChip label="Nest API" status={'loading'} />
 						<StatusChip
 							label="Weather Forecast"

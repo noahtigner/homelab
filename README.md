@@ -27,7 +27,7 @@
 - [x] [Traefik](https://traefik.io/) - Reverse proxy
 - [x] [whoami](https://hub.docker.com/r/containous/whoami) - Simple HTTP service that prints OS info and HTTP request to output
 - [x] [Slack](https://slack.com/) Bot - Bot for interacting with homelab services
-- [ ] Cache
+- [x] [Redis Cache](https://redis.io/) - Cache for homelab services
 - [ ] DB
 
 # Attribution
