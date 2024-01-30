@@ -12,6 +12,14 @@ def ping_docker() -> bool:
         print("ERROR:\tCould not connect to Docker daemon")
         return False
 
+def is_container_running(container_name: str) -> bool:
+    client = get_docker_client()
+    try:
+        container = client.containers.get(container_name)
+        return container.status == 'running'
+    except DockerAPIError:
+        print(f"ERROR:\tCould not find container with name {container_name}")
+        return False
 
 def get_container_stats() -> DockerStatsModel:
     # connect to Docker daemon and fetch containers
