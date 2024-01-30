@@ -14,7 +14,7 @@ def get_service_statuses() -> str:
     services = [
         ["docker", ["docker", "api", "slackbot"]],
         ["pihole", ["pihole"]],
-        ["docker/container/reverse-proxy", ["reverse-proxy"]],
+        ["docker/container/reverse_proxy", ["reverse_proxy"]],
         ["docker/container/dashboard", ["dashboard"]],
     ]
 

@@ -54,7 +54,7 @@ services:
     restart: unless-stopped
 
   traefik:
-    container_name: 'reverse-proxy'
+    container_name: 'reverse_proxy'
     image: 'traefik:v2.10'
     command:
       # - "--log.level=DEBUG"
