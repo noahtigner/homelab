@@ -166,6 +166,10 @@ function Diagnostics() {
 	const [diagnosticsData, setDiagnosticsData] =
 		useState<DiagnosticsData | null>(null);
 	const [piholeHealth, setPiholeHealth] = useState<ServiceStatus>('loading');
+	const [slackbotHealth, setSlackbotHealth] =
+		useState<ServiceStatus>('loading');
+	const [traefikHealth, setTraefikHealth] =
+		useState<ServiceStatus>('loading');
 
 	useEffect(() => {
 		axios
@@ -186,6 +190,32 @@ function Diagnostics() {
 				console.log(error);
 				setPiholeHealth('error');
 			});
+
+		axios
+			.get(`${import.meta.env.VITE_API_BASE}/docker/container/slack_bot/`)
+			.then(({ data }) => {
+				console.log(data);
+				setSlackbotHealth(data.status);
+			})
+			.catch((error) => {
+				console.log(error);
+				setSlackbotHealth('error');
+			});
+
+		axios
+			.get(
+				`${
+					import.meta.env.VITE_API_BASE
+				}/docker/container/reverse_proxy/`
+			)
+			.then(({ data }) => {
+				console.log(data);
+				setTraefikHealth(data.status);
+			})
+			.catch((error) => {
+				console.log(error);
+				setTraefikHealth('error');
+			});
 	}, []);
 
 	return (
@@ -205,10 +235,10 @@ function Diagnostics() {
 							label="API"
 							status={diagnosticsData ? 'ok' : 'loading'}
 						/>
+						<StatusChip label="Traefik" status={traefikHealth} />
 						<StatusChip label="Pihole" status={piholeHealth} />
-						<StatusChip label="Traefik" status={'warning'} />
+						<StatusChip label="Slack Bot" status={slackbotHealth} />
 						<StatusChip label="Cache" status={'loading'} />
-						<StatusChip label="Slack Bot" status={'loading'} />
 						{/* <StatusChip label="Nest API" status={'loading'} />
 						<StatusChip
 							label="Weather Forecast"

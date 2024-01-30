@@ -18,17 +18,17 @@
   - [x] Interface for interacting with the GitHub API
   - [x] Interface for interacting with the LeetCode API
   - [ ] Internet Speed Test
-- [ ] Dashboard - Dashboard for homelab services, built with [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [Vite](https://vitejs.dev/)
+- [x] Dashboard - Dashboard for homelab services, built with [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [Vite](https://vitejs.dev/)
   - [x] displays Pi-hole stats
   - [x] displays hardware, network, and docker diagnostics
-  - [ ] displays GitHub stats
+  - [x] displays GitHub stats
   - [x] displays LeetCode stats
   - [ ] displays internet speed test results
 - [x] [Traefik](https://traefik.io/) - Reverse proxy
 - [x] [whoami](https://hub.docker.com/r/containous/whoami) - Simple HTTP service that prints OS info and HTTP request to output
+- [x] [Slack](https://slack.com/) Bot - Bot for interacting with homelab services
 - [ ] Cache
 - [ ] DB
-- [ ] Slack Bot
 
 # Attribution
 
