@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 from threading import Event
 
 from slack_sdk import WebClient
@@ -8,6 +7,7 @@ from slack_sdk.socket_mode import SocketModeClient
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode.response import SocketModeResponse
 
+from commands import get_docker_stats, get_time
 from config import Settings
 
 logging.basicConfig(level=logging.DEBUG)
@@ -24,12 +24,17 @@ class Commands:
             "time": {
                 "description": "Get the current time",
                 "usage": "time",
-                "method": lambda: f"\nIt is currently {datetime.now().strftime('%H:%M:%S')}",
+                "method": get_time,
             },
             "greet": {
                 "description": "Greet a user",
                 "usage": "greet",
                 "method": lambda username: f"Hello <@{username}>!",
+            },
+            "get_docker_stats": {
+                "description": "Get the current Homelab Docker stats",
+                "usage": "get_docker_stats",
+                "method": get_docker_stats,
             },
         }
 
@@ -98,24 +103,62 @@ class SlackBot:
                     timestamp=req.payload["event"]["ts"],
                 )
 
-                # respond with a message
-                text = event.get("text", "")
-                commands = Commands().commands
+                try:
 
-                if "help" in text:
-                    response_text = commands["help"]["method"]()
-                elif "time" in text:
-                    response_text = commands["time"]["method"]()
-                elif "hello" in text or "hi" in text:
-                    response_text = commands["greet"]["method"](user)
-                else:
+                    # respond with a message
+                    text = event.get("text", "")
+                    commands = Commands().commands
+
                     response_text = (
                         "Sorry, I don't understand. Try `help` to see what I can do."
                     )
 
-                client.web_client.chat_postMessage(
-                    channel=channel_id, text=response_text
-                )
+                    if "help" in text:
+                        response_text = commands["help"]["method"]()
+                    elif "time" in text:
+                        response_text = commands["time"]["method"]()
+                    elif "hello" in text or "hi" in text:
+                        response_text = commands["greet"]["method"](user)
+                    elif "docker" in text:
+                        initial_message = None
+                        for message in commands["get_docker_stats"]["method"]():
+                            if initial_message is None:
+                                initial_message = client.web_client.chat_postMessage(
+                                    channel=channel_id, text=message
+                                )
+                            else:
+                                client.web_client.chat_update(
+                                    channel=channel_id,
+                                    ts=initial_message["ts"],
+                                    text=message,
+                                )
+                        return
+
+                    client.web_client.chat_postMessage(
+                        channel=channel_id, text=response_text
+                    )
+                except SlackApiError as e:
+                    logging.error(e.response["error"])
+                    client.web_client.chat_postMessage(
+                        channel=channel_id,
+                        blocks=[
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": """An unexpected error occurred while
+                                        processing your request.""",
+                                },
+                            },
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": f"```{e.response['error']}```",
+                                },
+                            },
+                        ],
+                    )
 
 
 if __name__ == "__main__":
