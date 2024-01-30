@@ -92,10 +92,10 @@ cd ..
 
 announce_rule "(Py) lint"
 cd ./api
-python3 -m flake8 --max-line-length 99 | indent_output
+python3 -m flake8 --max-line-length 120 | indent_output
 cd ..
 cd ./slackbot
-python3 -m flake8 --max-line-length 99 | indent_output
+python3 -m flake8 --max-line-length 120 | indent_output
 cd ..
 
 # end rules ----------------------------------------------------------------

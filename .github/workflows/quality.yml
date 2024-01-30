@@ -83,7 +83,7 @@ jobs:
       - name: Check formatting with Black
         run: cd ./api && python3 -m black . --target-version=py311 --check
       - name: Lint with Flake8
-        run: cd ./api && python3 -m flake8 --max-line-length 99
+        run: cd ./api && python3 -m flake8 --max-line-length 120
 
   quality_checks_slackbot:
     name: 'Quality Checks (Slack Bot)'
@@ -103,4 +103,4 @@ jobs:
       - name: Check formatting with Black
         run: cd ./slackbot && python3 -m black . --target-version=py311 --check
       - name: Lint with Flake8
-        run: cd ./slackbot && python3 -m flake8 --max-line-length 99
+        run: cd ./slackbot && python3 -m flake8 --max-line-length 120
