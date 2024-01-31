@@ -78,6 +78,6 @@ async def get_problems_solved(request: Request, package_name: str, response: Res
     await request.app.state.redis.set(
         f"package:{package_name}", response_data.model_dump_json()
     )
-    await request.app.state.redis.expire(f"package:{package_name}", 3600)  # 1 hour
+    await request.app.state.redis.expire(f"package:{package_name}", 60 * 60)  # 1 hour
 
     return response_data

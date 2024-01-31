@@ -92,7 +92,7 @@ async def get_events(request: Request, response: Response):
 
         # Cache the results
         await request.app.state.redis.set("events", output.model_dump_json())
-        await request.app.state.redis.expire("events", 3600)  # 1 hour
+        await request.app.state.redis.expire("events", 60 * 60)  # 1 hour
 
         return output
     except requests.exceptions.ConnectionError as e:

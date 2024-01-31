@@ -38,6 +38,6 @@ async def get_docker_stats(request: Request):
 
     # Cache the results
     await request.app.state.redis.set("docker-stats", stats.model_dump_json())
-    await request.app.state.redis.expire("docker-stats", 3600)  # 1 hour
+    await request.app.state.redis.expire("docker-stats", 60 * 2)  # 2 minutes
 
     return stats
