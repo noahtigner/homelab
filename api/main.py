@@ -14,7 +14,9 @@ from api.leetcode.router import router as leetcode_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO, format="%(levelname)s\t%(funcName)s.%(lineno)d\t%(message)s"
+)
 logger = logging.getLogger(__name__)
 
 

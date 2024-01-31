@@ -1,3 +1,5 @@
+import logging
+
 import requests
 from fastapi import APIRouter, HTTPException, Response, status
 
@@ -8,6 +10,8 @@ from api.leetcode.models import (
     LCProblemsSolvedModel,
     LCTopicsSolvedModel,
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/leetcode",
@@ -107,7 +111,7 @@ def get_problems_solved(response: Response):
         )
         return response_data
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to LeetCode API Refused",
@@ -168,7 +172,7 @@ def get_problems_solved_per_language(response: Response):
 
         return sorted_data
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to LeetCode API Refused",
@@ -211,8 +215,6 @@ def get_problems_solved_per_topic(
         "operationName": "skillStats",
     }
 
-    print(request_body)
-
     try:
         r = requests.post(url, json=request_body)
         response.status_code = r.status_code
@@ -226,7 +228,7 @@ def get_problems_solved_per_topic(
 
         return data
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to LeetCode API Refused",

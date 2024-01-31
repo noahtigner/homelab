@@ -1,7 +1,11 @@
+import logging
+
 import requests
 from fastapi import APIRouter, HTTPException, Response, status
 
 from api.config import Settings
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/pihole",
@@ -31,7 +35,7 @@ def get_pihole_health():
 
         return {"status": service_status, "messages": messages}
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to Pi-hole Refused",
@@ -48,7 +52,7 @@ def get_pihole_summary(response: Response):
         response.status_code = r.status_code
         return r.json()
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to Pi-hole Refused",

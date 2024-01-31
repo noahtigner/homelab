@@ -44,7 +44,7 @@ async def get_problems_solved(request: Request, package_name: str, response: Res
             ),
         )
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to NPM API Refused",
@@ -56,7 +56,7 @@ async def get_problems_solved(request: Request, package_name: str, response: Res
         raw_data = r.json()
         response_data.downloads.total = raw_data["downloads"]
     except requests.exceptions.RequestException:
-        print("Failed to fetch NPM package downloads")
+        logger.error("Failed to fetch NPM package downloads")
 
     try:
         url = f"https://api.npmjs.org/downloads/range/last-month/{package_name}"
@@ -72,7 +72,7 @@ async def get_problems_solved(request: Request, package_name: str, response: Res
             for day in raw_data["downloads"]
         ]
     except requests.exceptions.RequestException:
-        print("Failed to fetch NPM package downloads per day")
+        logger.error("Failed to fetch NPM package downloads per day")
 
     # Cache the results
     await request.app.state.redis.set(

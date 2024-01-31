@@ -1,7 +1,11 @@
+import logging
+
 from api.docker.models import DockerContainerStatsModel, DockerStatsModel
 from docker import from_env as get_docker_client
 from docker.errors import APIError as DockerAPIError
 from docker.errors import DockerException
+
+logger = logging.getLogger(__name__)
 
 
 def ping_docker() -> bool:
@@ -9,7 +13,7 @@ def ping_docker() -> bool:
         client = get_docker_client()
         return client.ping()
     except (DockerAPIError, DockerException):
-        print("ERROR:\tCould not connect to Docker daemon")
+        logger.error("Could not connect to Docker daemon")
         return False
 
 
@@ -19,7 +23,7 @@ def is_container_running(container_name: str) -> bool:
         container = client.containers.get(container_name)
         return container.status == "running"
     except DockerAPIError:
-        print(f"ERROR:\tCould not find container with name {container_name}")
+        logger.error("Could not find container with name {container_name}")
         return False
 
 
@@ -40,7 +44,7 @@ def get_container_stats() -> DockerStatsModel:
             block_in = block_io_raw[0]["value"] or 0
             block_out = block_io_raw[1]["value"] or 0
         except (KeyError, TypeError, IndexError):
-            print("ERROR:\tCould not read block I/O")
+            logger.error("Could not read block I/O")
             block_in = 0
             block_out = 0
         # parse memory usage
@@ -50,7 +54,7 @@ def get_container_stats() -> DockerStatsModel:
             memory_usage = stats_raw["memory_stats"]["usage"]
             memory_limit = stats_raw["memory_stats"]["limit"]
         except KeyError:
-            print("ERROR:\tCould not read memory usage")
+            logger.error("Could not read memory usage")
             memory_usage = 0
             memory_limit = 0
 

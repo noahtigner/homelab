@@ -96,7 +96,7 @@ async def get_events(request: Request, response: Response):
 
         return output
     except requests.exceptions.ConnectionError as e:
-        print(e)
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to GitHub API Refused",

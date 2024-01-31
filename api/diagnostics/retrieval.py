@@ -1,6 +1,9 @@
+import logging
 from typing import Union
 
 import psutil
+
+logger = logging.getLogger(__name__)
 
 
 def get_cpu_temp() -> Union[float, None]:
@@ -11,8 +14,8 @@ def get_cpu_temp() -> Union[float, None]:
             raw_temp = f.readline().strip("\n")
         return float(raw_temp) / 1000
     except (FileNotFoundError, TypeError, ValueError) as e:
-        print(e)
-        print("Could not read CPU temperature")
+        logger.error(e)
+        logger.error("Could not read CPU temperature")
         return None
 
 
