@@ -8,4 +8,9 @@ services:
     build:
       context: ./dashboard
       target: pro
-    command: 'serve -l 5173 -l tcp://${IP:-0.0.0.0}:5173 -s dist'
+    # command: 'serve -l 5173 -l tcp://0.0.0.0:5173 -s dist'
+    command: |
+      sh -c "
+      pnpm build &&
+      serve -l 5173 -s dist
+      "

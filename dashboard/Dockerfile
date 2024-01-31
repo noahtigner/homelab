@@ -17,4 +17,4 @@ FROM dev as pro
 
 COPY . /app
 RUN pnpm install -g serve
-RUN pnpm build
+# RUN pnpm build
