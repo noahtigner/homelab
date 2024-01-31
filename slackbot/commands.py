@@ -16,6 +16,7 @@ def get_service_statuses() -> str:
         ["pihole", ["pihole"]],
         ["docker/container/reverse_proxy", ["reverse_proxy"]],
         ["docker/container/dashboard", ["dashboard"]],
+        ["cache", ["cache"]],
     ]
 
     for path, names in services:
