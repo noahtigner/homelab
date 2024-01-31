@@ -36,3 +36,6 @@
 <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/fastapi.svg" height="32" /></a>
 <a href="https://reactjs.org/"><img alt="React" src="https://github.com/noahtigner/homelab/blob/main/dashboard/src/assets/react.svg" height="32" /></a>
 <a href="https://vitejs.dev/"><img alt="Vite" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/vite.svg" height="32" /></a>
+<a href="https://traefik.io/"><img alt="Traefik" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/traefik.svg" height="32" /></a>
+<a href="https://slack.com/"><img alt="Slack" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/slack.svg" height="32" /></a>
+<a href="https://redis.io/"><img alt="Redis" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/redis.svg" height="32" /></a>
