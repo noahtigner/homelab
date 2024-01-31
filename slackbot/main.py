@@ -11,7 +11,7 @@ from slack_sdk.socket_mode.response import SocketModeResponse
 from commands import get_docker_stats, get_service_statuses, get_time
 from config import Settings
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 class Commands:
@@ -61,6 +61,7 @@ class Commands:
 
 class SlackBot:
     def __init__(self, app_token: str, bot_token: str):
+        logging.info("Initializing SlackBot...")
         self.web_client = WebClient(token=bot_token)
         self.socket_client = SocketModeClient(
             app_token=app_token, web_client=self.web_client
@@ -96,6 +97,8 @@ class SlackBot:
             ],
         )
 
+        logging.info("SlackBot initialization complete!")
+
     @staticmethod
     def process(client: SocketModeClient, req: SocketModeRequest):
         def handle_sync_command(channel: str, method, *args):
@@ -124,6 +127,8 @@ class SlackBot:
 
             event = req.payload["event"]
             if event["type"] == "app_mention":
+                logging.info(f"Received a mention in {event.get('channel')}")
+
                 channel_id = event.get("channel")
                 user = event.get("user")
 
@@ -169,6 +174,7 @@ class SlackBot:
                             channel=channel_id,
                             text="Sorry, I don't understand. Try `help` to see what I can do.",
                         )
+                        logging.warning(f"Unrecognized command: {text}")
 
                 except SlackApiError as e:
                     logging.error(e.response["error"])
