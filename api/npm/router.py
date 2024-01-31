@@ -1,7 +1,12 @@
+import json
+import logging
+
 import requests
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Request, Response, status
 
 from api.npm.models import NPMDownloads, NPMDownloadsDay, NPMPackageInfo
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/npm",
@@ -10,7 +15,13 @@ router = APIRouter(
 
 
 @router.get("/{package_name}/", response_model=NPMPackageInfo)
-def get_problems_solved(package_name: str, response: Response):
+async def get_problems_solved(request: Request, package_name: str, response: Response):
+    # Try to get the result from cache
+    cached_result = await request.app.state.redis.get(f"package:{package_name}")
+    if cached_result is not None:
+        logger.info("Cache hit")
+        return NPMPackageInfo(**json.loads(cached_result))
+
     try:
         url = f"https://registry.npmjs.org/{package_name}/latest"
         r = requests.get(url)
@@ -62,5 +73,11 @@ def get_problems_solved(package_name: str, response: Response):
         ]
     except requests.exceptions.RequestException:
         print("Failed to fetch NPM package downloads per day")
+
+    # Cache the results
+    await request.app.state.redis.set(
+        f"package:{package_name}", response_data.model_dump_json()
+    )
+    await request.app.state.redis.expire(f"package:{package_name}", 3600)  # 1 hour
 
     return response_data

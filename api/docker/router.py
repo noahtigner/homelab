@@ -1,7 +1,12 @@
-from fastapi import APIRouter
+import json
+import logging
+
+from fastapi import APIRouter, Request
 
 from api.docker.models import DockerStatsModel
 from api.docker.retrieval import get_container_stats, is_container_running, ping_docker
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/docker",
@@ -22,5 +27,17 @@ def get_container_health(container_name: str):
 
 
 @router.get("/stats/", response_model=DockerStatsModel)
-def get_docker_stats():
-    return get_container_stats()
+async def get_docker_stats(request: Request):
+    # Try to get the result from cache
+    cached_result = await request.app.state.redis.get("docker-stats")
+    if cached_result is not None:
+        logger.info("Cache hit")
+        return DockerStatsModel(**json.loads(cached_result))
+
+    stats = get_container_stats()
+
+    # Cache the results
+    await request.app.state.redis.set("docker-stats", stats.model_dump_json())
+    await request.app.state.redis.expire("docker-stats", 3600)  # 1 hour
+
+    return stats

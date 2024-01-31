@@ -28,6 +28,7 @@ const theme = createTheme({
 			contrastText: '#FAE190',
 		},
 	},
+	// spacing: 4,
 	shape: {
 		borderRadius: 8,
 	},
