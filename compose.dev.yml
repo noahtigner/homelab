@@ -82,6 +82,7 @@ services:
     container_name: dashboard
     build:
       context: ./dashboard
+      target: dev
     command: 'pnpm run dev'
     environment:
       API_BASE: 'http://${IP}:81/api'
