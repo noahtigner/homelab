@@ -8,9 +8,8 @@ import {
 	TableBody,
 	Skeleton,
 } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import type { RequestData } from '../../types';
 
 interface DockerData {
 	containers: {
@@ -34,27 +33,15 @@ const bitsToGigabytes = (bits: number): string =>
 	(bits / 1000000000).toFixed(2);
 
 function DockerTable() {
-	const [dockerData, setDockerData] = useState<RequestData<DockerData>>({
-		status: 'loading',
+	const { isPending, isSuccess, error, data } = useQuery({
+		queryKey: ['dockerStats'],
+		queryFn: () =>
+			axios
+				.get<DockerData>(
+					`${import.meta.env.VITE_API_BASE}/docker/stats/`
+				)
+				.then((res) => res.data),
 	});
-
-	useEffect(() => {
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/docker/stats/`)
-			.then(({ data }) => {
-				setDockerData({
-					status: 'ok',
-					data,
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-				setDockerData({
-					status: 'error',
-					errorMessage: error.message,
-				});
-			});
-	}, []);
 
 	return (
 		<TableContainer component={Paper}>
@@ -75,7 +62,7 @@ function DockerTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{dockerData.status == 'loading' && (
+					{isPending && (
 						<>
 							{[...Array(5)].map((_, index) => (
 								<TableRow key={index}>
@@ -86,8 +73,15 @@ function DockerTable() {
 							))}
 						</>
 					)}
-					{dockerData.status == 'ok' &&
-						dockerData.data.containers.map((container) => (
+					{error && (
+						<TableRow>
+							<TableCell colSpan={999} align="center">
+								{error.message}
+							</TableCell>
+						</TableRow>
+					)}
+					{isSuccess &&
+						data.containers.map((container) => (
 							<TableRow
 								key={container.name}
 								sx={{
@@ -103,7 +97,7 @@ function DockerTable() {
 								<TableCell>
 									{(
 										(container.cpu_usage /
-											dockerData.data.system_cpu_usage) *
+											data.system_cpu_usage) *
 										100
 									).toFixed(2)}
 								</TableCell>
@@ -140,13 +134,6 @@ function DockerTable() {
 								<TableCell>{container.pids}</TableCell>
 							</TableRow>
 						))}
-					{dockerData.status == 'error' && (
-						<TableRow>
-							<TableCell colSpan={999} align="center">
-								{dockerData.errorMessage}
-							</TableCell>
-						</TableRow>
-					)}
 				</TableBody>
 			</Table>
 		</TableContainer>
