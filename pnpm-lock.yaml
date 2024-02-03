@@ -4,7 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  zod:
+    specifier: ^3.22.4
+    version: 3.22.4
+
 devDependencies:
+  dotenv:
+    specifier: ^16.4.1
+    version: 16.4.1
+  dotenv-expand:
+    specifier: ^10.0.0
+    version: 10.0.0
   husky:
     specifier: ^9.0.7
     version: 9.0.7
@@ -12,10 +23,20 @@ devDependencies:
     specifier: ^3.2.4
     version: 3.2.4
   validate-env-vars:
-    specifier: ^0.2.4
-    version: 0.2.4
+    specifier: ^0.3.4
+    version: 0.3.4(dotenv-expand@10.0.0)(dotenv@16.4.1)(zod@3.22.4)
 
 packages:
+
+  /dotenv-expand@10.0.0:
+    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+    engines: {node: '>=12'}
+    dev: true
+
+  /dotenv@16.4.1:
+    resolution: {integrity: sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==}
+    engines: {node: '>=12'}
+    dev: true
 
   /husky@9.0.7:
     resolution: {integrity: sha512-vWdusw+y12DUEeoZqW1kplOFqk3tedGV8qlga8/SF6a3lOiWLqGZZQvfWvY0fQYdfiRi/u1DFNpudTSV9l1aCg==}
@@ -29,8 +50,18 @@ packages:
     hasBin: true
     dev: true
 
-  /validate-env-vars@0.2.4:
-    resolution: {integrity: sha512-T2PSwFNEMabORxtmRC+38PhLru+9ojDALGneKGt8Hasni6ss4/5A9k2ICkmX17L6U08XfnCm6gA6OnfcnA22yg==}
+  /validate-env-vars@0.3.4(dotenv-expand@10.0.0)(dotenv@16.4.1)(zod@3.22.4):
+    resolution: {integrity: sha512-VoM4P0IOrUuW+ovXlR8SmNnUGgASAMS8ga4COmOFaQUD0GgllL0BSN7ZAF4y8npZ9HqlRZ9d8HVOvggLXU61ew==}
     engines: {node: '>=20'}
-    hasBin: true
+    peerDependencies:
+      dotenv: ^16.4.0
+      dotenv-expand: ^10.0.0
+      zod: ^3.22.4
+    dependencies:
+      dotenv: 16.4.1
+      dotenv-expand: 10.0.0
+      zod: 3.22.4
     dev: true
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
