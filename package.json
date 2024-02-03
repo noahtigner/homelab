@@ -24,7 +24,7 @@
 		"dotenv-expand": "^10.0.0",
 		"husky": "^9.0.7",
 		"prettier": "^3.2.4",
-		"validate-env-vars": "^0.3.4"
+		"validate-env-vars": "^0.3.6"
 	},
 	"dependencies": {
 		"zod": "^3.22.4"
