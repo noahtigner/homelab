@@ -37,11 +37,7 @@ function DockerTable() {
 		queryKey: ['dockerStats'],
 		refetchInterval: 1000 * 60 * 2, // 2 minutes
 		queryFn: () =>
-			axios
-				.get<DockerData>(
-					`${import.meta.env.VITE_API_BASE}/docker/stats/`
-				)
-				.then((res) => res.data),
+			axios.get<DockerData>(`/docker/stats/`).then((res) => res.data),
 	});
 
 	return (

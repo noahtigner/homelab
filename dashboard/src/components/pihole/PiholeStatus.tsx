@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
 import {
 	DnsOutlined as DnsIcon,
 	Block as BlockIcon,
 	AccessTime as AccessTimeIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import type { RequestData } from '../../types';
+import { useQuery } from '@tanstack/react-query';
+
 import PiholeSummaryCard, {
 	PiholeSummaryCardError,
 	PiholeSummaryCardLoading,
@@ -40,30 +40,14 @@ interface PiholeData {
 }
 
 function PiholeStatus() {
-	const [piholeData, setPiholeData] = useState<RequestData<PiholeData>>({
-		status: 'loading',
+	const { isPending, error, data } = useQuery({
+		queryKey: ['piholeStats'],
+		refetchInterval: 1000 * 60 * 2, // 2 minutes
+		queryFn: () =>
+			axios.get<PiholeData>(`/pihole/summary/`).then((res) => res.data),
 	});
 
-	useEffect(() => {
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/pihole/summary/`)
-			.then(({ data }) => {
-				console.log(data);
-				setPiholeData({
-					status: 'ok',
-					data: data,
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-				setPiholeData({
-					status: 'error',
-					errorMessage: error.message,
-				});
-			});
-	}, []);
-
-	if (piholeData.status === 'loading') {
+	if (isPending) {
 		return (
 			<>
 				<PiholeSummaryCardLoading
@@ -84,7 +68,7 @@ function PiholeStatus() {
 		);
 	}
 
-	if (piholeData.status === 'error') {
+	if (error) {
 		return (
 			<>
 				<PiholeSummaryCardError
@@ -112,28 +96,20 @@ function PiholeStatus() {
 		<>
 			<PiholeSummaryCard
 				title="DNS Queries Today"
-				value1={Number(
-					piholeData.data.dns_queries_today
-				).toLocaleString()}
-				value2={`${piholeData.data.unique_clients} unique clients`}
+				value1={Number(data.dns_queries_today).toLocaleString()}
+				value2={`${data.unique_clients} unique clients`}
 				icon={<DnsIcon color="success" sx={{ fontSize: 48 }} />}
 			/>
 			<PiholeSummaryCard
 				title="Ads Blocked Today"
-				value1={Number(
-					piholeData.data.ads_blocked_today
-				).toLocaleString()}
-				value2={`${Number(piholeData.data.ads_percentage_today).toFixed(
-					2
-				)}%`}
+				value1={Number(data.ads_blocked_today).toLocaleString()}
+				value2={`${Number(data.ads_percentage_today).toFixed(2)}%`}
 				icon={<AccessTimeIcon color="success" sx={{ fontSize: 48 }} />}
 			/>
 			<PiholeSummaryCard
 				title="Domains Being Blocked"
-				value1={Number(
-					piholeData.data.domains_being_blocked
-				).toLocaleString()}
-				value2={`Updated ${piholeData.data.gravity_last_updated.relative.days} days, ${piholeData.data.gravity_last_updated.relative.hours} hours, ${piholeData.data.gravity_last_updated.relative.minutes} minutes ago`}
+				value1={Number(data.domains_being_blocked).toLocaleString()}
+				value2={`Updated ${data.gravity_last_updated.relative.days} days, ${data.gravity_last_updated.relative.hours} hours, ${data.gravity_last_updated.relative.minutes} minutes ago`}
 				icon={<BlockIcon color="success" sx={{ fontSize: 48 }} />}
 			/>
 		</>

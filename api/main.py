@@ -50,7 +50,7 @@ tags_metadata = [
         "description": "Info for Pi-hole Ad Blocker",
     },
     {
-        "name": "Redis Cache",
+        "name": "Cache",
         "description": "Redis Cache Stats",
     },
     {
@@ -79,6 +79,8 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5173/",
     "http://192.168.0.69:5173",
 ]
 
