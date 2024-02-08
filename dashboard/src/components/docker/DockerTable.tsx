@@ -35,6 +35,7 @@ const bitsToGigabytes = (bits: number): string =>
 function DockerTable() {
 	const { isPending, isSuccess, error, data } = useQuery({
 		queryKey: ['dockerStats'],
+		refetchInterval: 1000 * 60 * 2, // 2 minutes
 		queryFn: () =>
 			axios
 				.get<DockerData>(
