@@ -4,7 +4,6 @@ import {
 	envNonEmptyString,
 	envString,
 	envEnum,
-	// eslint-disable-next-line import/no-unresolved
 } from 'validate-env-vars';
 
 const envConfigSchema = envObject({
