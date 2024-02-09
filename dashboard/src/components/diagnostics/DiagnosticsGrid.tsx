@@ -30,6 +30,48 @@ interface DiagnosticsData {
 	pids: number[];
 }
 
+const cardItems = [
+	{
+		id: 0,
+		title: 'CPU',
+		values: (data: DiagnosticsData) => [
+			`${Math.max(...data.cpu.percent).toFixed(2)}% max`,
+			`${(
+				data.cpu.percent.reduce((acc, c) => acc + c, 0) /
+				data.cpu.percent.length
+			).toFixed(2)}% avg`,
+		],
+		icon: <MemoryIcon color="success" sx={{ fontSize: 48 }} />,
+	},
+	{
+		id: 1,
+		title: 'Memory',
+		values: (data: DiagnosticsData) => [
+			`${data.memory.percent.toFixed(1)}%`,
+		],
+		icon: <MemoryIcon color="success" sx={{ fontSize: 48 }} />,
+	},
+	{
+		id: 2,
+		title: 'Disk',
+		values: (data: DiagnosticsData) => [`${data.disk.percent.toFixed(1)}%`],
+		icon: <SaveIcon color="success" sx={{ fontSize: 48 }} />,
+	},
+	{
+		id: 3,
+		title: 'Temperature',
+		values: (data: DiagnosticsData) => [
+			`${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`,
+		],
+		icon: (
+			<DeviceThermostatOutlinedIcon
+				color="success"
+				sx={{ fontSize: 48 }}
+			/>
+		),
+	},
+];
+
 function DiagnosticsGrid() {
 	const { isPending, error, data } = useQuery({
 		queryKey: ['diagnostics'],
@@ -38,46 +80,21 @@ function DiagnosticsGrid() {
 			axios.get<DiagnosticsData>('/diagnostics/').then((res) => res.data),
 	});
 
-	if (isPending || error) {
-		return null;
-	}
-
 	return (
 		<>
-			<DiagnosticsCard
-				title="CPU"
-				// value1={diagnosticsData.cpu.percent
-				//   .map((percent) => `${percent}%`)
-				//   .join(', ')}
-				values={[
-					`${Math.max(...data.cpu.percent).toFixed(2)}% max`,
-					`${(
-						data.cpu.percent.reduce((acc, c) => acc + c, 0) /
-						data.cpu.percent.length
-					).toFixed(2)}% avg`,
-				]}
-				icon={<MemoryIcon color="success" sx={{ fontSize: 48 }} />}
-			/>
-			<DiagnosticsCard
-				title="Memory"
-				values={[`${data.memory.percent.toFixed(1)}%`]}
-				icon={<MemoryIcon color="success" sx={{ fontSize: 48 }} />}
-			/>
-			<DiagnosticsCard
-				title="Disk"
-				values={[`${data.disk.percent.toFixed(1)}%`]}
-				icon={<SaveIcon color="success" sx={{ fontSize: 48 }} />}
-			/>
-			<DiagnosticsCard
-				title="Temperature"
-				values={[`${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`]}
-				icon={
-					<DeviceThermostatOutlinedIcon
-						color="success"
-						sx={{ fontSize: 48 }}
-					/>
-				}
-			/>
+			{cardItems.map((item) => (
+				<DiagnosticsCard
+					key={item.id}
+					title={item.title}
+					values={
+						isPending || error
+							? ['An unexpected error occurred']
+							: item.values(data)
+					}
+					icon={item.icon}
+					loading={isPending}
+				/>
+			))}
 		</>
 	);
 }
