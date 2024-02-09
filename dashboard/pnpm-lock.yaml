@@ -92,8 +92,8 @@ devDependencies:
     specifier: ^5.3.3
     version: 5.3.3
   validate-env-vars:
-    specifier: ^0.3.9
-    version: 0.3.9(dotenv-expand@10.0.0)(dotenv@16.4.1)(zod@3.22.4)
+    specifier: ^0.3.10
+    version: 0.3.10(dotenv-expand@10.0.0)(dotenv@16.4.1)(zod@3.22.4)
   vite:
     specifier: ^5.0.12
     version: 5.0.12
@@ -3986,8 +3986,8 @@ packages:
       punycode: 2.3.1
     dev: true
 
-  /validate-env-vars@0.3.9(dotenv-expand@10.0.0)(dotenv@16.4.1)(zod@3.22.4):
-    resolution: {integrity: sha512-3CYO4Do3K7rQfvRGzcUGa8tMdP85tRDxmYmq5q2PWSgYniv6IOmLQCrG7vEEA/EviWxKVUXjy9FaNzXa72L16g==}
+  /validate-env-vars@0.3.10(dotenv-expand@10.0.0)(dotenv@16.4.1)(zod@3.22.4):
+    resolution: {integrity: sha512-BGwJqiJo9/7irJ2CSC4OsZRaHovkebLbfKpoQyaBBj6u2eU5GKjgrS5eZKmx8nhtSko2VR4C7FXTLRfBX2/r2g==}
     engines: {node: '>=20'}
     peerDependencies:
       dotenv: ^16.4.0

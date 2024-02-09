@@ -14,17 +14,19 @@
 		"docker",
 		"api"
 	],
+	"type": "module",
 	"scripts": {
 		"format": "prettier --check . '!./dashboard/**/*'",
 		"format:fix": "prettier --write . '!./dashboard/**/*'",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"validate-env-vars": "node validateEnvVars.js"
 	},
 	"devDependencies": {
 		"dotenv": "^16.4.1",
 		"dotenv-expand": "^10.0.0",
 		"husky": "^9.0.7",
 		"prettier": "^3.2.4",
-		"validate-env-vars": "^0.3.9"
+		"validate-env-vars": "^0.3.10"
 	},
 	"dependencies": {
 		"zod": "^3.22.4"
