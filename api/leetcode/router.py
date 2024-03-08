@@ -52,6 +52,7 @@ def get_problems_solved(response: Response):
 
     try:
         r = requests.post(url, json=request_body)
+        r.raise_for_status()
         response.status_code = r.status_code
         raw_data = r.json()["data"]
         response_data = LCProblemsSolvedModel(
@@ -116,6 +117,18 @@ def get_problems_solved(response: Response):
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to LeetCode API Refused",
         )
+    except requests.exceptions.JSONDecodeError as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="LeetCode API Response Could Not Be Decoded",
+        )
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=r.status_code,
+            detail=f"{e}",
+        )
 
 
 @router.get("/languages/", response_model=list[LCLanguageStatModel])
@@ -177,6 +190,18 @@ def get_problems_solved_per_language(response: Response):
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to LeetCode API Refused",
         )
+    except requests.exceptions.JSONDecodeError as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="LeetCode API Response Could Not Be Decoded",
+        )
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=r.status_code,
+            detail=f"{e}",
+        )
 
 
 @router.get("/topics/")
@@ -232,4 +257,16 @@ def get_problems_solved_per_topic(
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Connection to LeetCode API Refused",
+        )
+    except requests.exceptions.JSONDecodeError as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="LeetCode API Response Could Not Be Decoded",
+        )
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=r.status_code,
+            detail=f"{e}",
         )
