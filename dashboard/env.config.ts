@@ -11,6 +11,7 @@ const envConfigSchema = envObject({
 	VITE_API_BASE: envString().url(),
 	VITE_LEETCODE_USERNAME: envNonEmptyString(),
 	VITE_GITHUB_USERNAME: envNonEmptyString(),
+	VITE_OGP_IO_API_KEY: envNonEmptyString(),
 });
 
 declare global {
