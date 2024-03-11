@@ -2,13 +2,13 @@ import { Divider } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import Attribution from '../components/Attribution';
-
 import LeetCodeSummaryCard from '../components/leetcode/LeetCodeSummaryCard';
 // import DockerTable from './components/docker/DockerTable';
 import NPMPackageCard from '../components/npm/NPMPackageCard';
 import GithubSummaryCard from '../components/github/GithubSummaryCard';
 import PiholeStatus from '../components/pihole/PiholeStatus';
 import { DiagnosticsGrid, StatusStack } from '../components/diagnostics';
+import OGPPreview from '../components/portfolio/OGPPreview';
 
 function Index() {
 	return (
@@ -29,6 +29,9 @@ function Index() {
 				</Grid>
 				<Grid xs={12} sm={6} lg={4}>
 					<GithubSummaryCard />
+				</Grid>
+				<Grid xs={12}>
+					<OGPPreview />
 				</Grid>
 				{/* <Grid xs={12}>
 					<DockerTable />
