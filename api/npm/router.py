@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/{package_name}/", response_model=NPMPackageInfo)
-async def get_problems_solved(request: Request, package_name: str, response: Response):
+async def get_package_stats(request: Request, package_name: str, response: Response):
     # Try to get the result from cache
     cached_result = await request.app.state.redis.get(f"package:{package_name}")
     if cached_result is not None:

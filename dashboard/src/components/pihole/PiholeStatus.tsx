@@ -45,6 +45,7 @@ function PiholeStatus() {
 		refetchInterval: 1000 * 60 * 2, // 2 minutes
 		queryFn: () =>
 			axios.get<PiholeData>(`/pihole/summary/`).then((res) => res.data),
+		retry: false,
 	});
 
 	if (isPending) {
