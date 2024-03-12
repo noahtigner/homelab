@@ -13,6 +13,7 @@ from api.github.router import router as github_router
 from api.leetcode.router import router as leetcode_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
+from api.portfolio.router import router as portfolio_router
 
 logging.basicConfig(
     level=logging.INFO, format="%(levelname)s\t%(funcName)s.%(lineno)d\t%(message)s"
@@ -65,6 +66,10 @@ tags_metadata = [
         "name": "NPM",
         "description": "NPM Package Stats",
     },
+    {
+        "name": "Portfolio",
+        "description": "Portfolio Site Stats",
+    },
 ]
 
 api = FastAPI(
@@ -99,6 +104,7 @@ api.include_router(leetcode_router)
 api.include_router(github_router)
 api.include_router(npm_router)
 api.include_router(cache_router)
+api.include_router(portfolio_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])

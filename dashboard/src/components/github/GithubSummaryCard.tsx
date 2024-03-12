@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	useTheme,
-	Typography,
-	Link,
-	IconButton,
-	Box,
-	Chip,
-} from '@mui/material';
-import LinkIcon from '@mui/icons-material/Link';
+import { useTheme, Typography, Link, Box, Chip } from '@mui/material';
 import axios from 'axios';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
@@ -157,25 +149,23 @@ function GithubSummaryCard() {
 						width={20}
 						style={{ marginRight: theme.spacing(1) }}
 					/>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-						}}
-						variant="h2"
-					>
-						Github
-					</Typography>
-					<IconButton
-						component={Link}
+					<Link
 						href={`https://github.com/${
 							import.meta.env.VITE_GITHUB_USERNAME
 						}`}
 						target="_blank"
-						rel="noopener"
-						sx={{ padding: 0, marginLeft: theme.spacing(0.5) }}
+						rel="noreferrer"
+						sx={{ textDecoration: 'none', color: 'inherit' }}
 					>
-						<LinkIcon />
-					</IconButton>
+						<Typography
+							sx={{
+								fontSize: '1.25rem',
+							}}
+							variant="h2"
+						>
+							Github
+						</Typography>
+					</Link>
 				</Box>
 				{githubEvents && <GithubSummary githubEvents={githubEvents} />}
 			</StyledCardContent>

@@ -4,16 +4,12 @@ import {
 	Box,
 	Chip,
 	Grid,
-	IconButton,
 	LinearProgress,
 	Link,
 	Typography,
 	useTheme,
 } from '@mui/material';
-import {
-	EmojiEventsOutlined as TrophyIcon,
-	Link as LinkIcon,
-} from '@mui/icons-material';
+import { EmojiEventsOutlined as TrophyIcon } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
 interface LCProblemDifficulty {
@@ -235,25 +231,23 @@ function LeetCodeSummaryCard() {
 							marginBottom: 2,
 						}}
 					/>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-						}}
-						variant="h2"
-					>
-						LeetCode
-					</Typography>
-					<IconButton
-						component={Link}
+					<Link
 						href={`https://leetcode.com/${
 							import.meta.env.VITE_LEETCODE_USERNAME
 						}/`}
 						target="_blank"
-						rel="noopener"
-						sx={{ padding: 0, marginLeft: theme.spacing(0.5) }}
+						rel="noreferrer"
+						sx={{ textDecoration: 'none', color: 'inherit' }}
 					>
-						<LinkIcon />
-					</IconButton>
+						<Typography
+							sx={{
+								fontSize: '1.25rem',
+							}}
+							variant="h2"
+						>
+							LeetCode
+						</Typography>
+					</Link>
 				</Box>
 				{leetCodeData && (
 					<LeetCodeSummary leetCodeData={leetCodeData} />
