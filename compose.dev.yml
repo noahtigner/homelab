@@ -111,6 +111,7 @@ services:
   cache:
     container_name: cache
     image: redis:alpine
+    command: redis-server --save 60 1
     restart: 'unless-stopped'
     ports:
       - '6379:6379'
