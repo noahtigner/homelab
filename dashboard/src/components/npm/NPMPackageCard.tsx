@@ -225,23 +225,21 @@ function NPMPackageCard({ packageName }: { packageName: string }) {
 						width={20}
 						style={{ marginRight: theme.spacing(1) }}
 					/>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-						}}
-						variant="h2"
-					>
-						{packageName}
-					</Typography>
-					<IconButton
-						component={Link}
+					<Link
 						href={npmPackageInfo?.homepage}
 						target="_blank"
-						rel="noopener"
-						sx={{ padding: 0, marginLeft: theme.spacing(0.5) }}
+						rel="noreferrer"
+						sx={{ textDecoration: 'none', color: 'inherit' }}
 					>
-						<LinkIcon />
-					</IconButton>
+						<Typography
+							sx={{
+								fontSize: '1.25rem',
+							}}
+							variant="h2"
+						>
+							{packageName}
+						</Typography>
+					</Link>
 				</Box>
 				{npmPackageInfo && (
 					<NPMPackageSummary npmPackageInfo={npmPackageInfo} />

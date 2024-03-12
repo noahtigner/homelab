@@ -16,6 +16,7 @@ services:
       PIHOLE_API_BASE: 'http://${IP}/admin'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'
+      OGP_IO_API_KEY: '${OGP_IO_API_KEY}'
     secrets:
       - pihole_api_token
     labels:
@@ -88,7 +89,6 @@ services:
       API_BASE: 'http://${IP}:81/api'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'
-      OGP_IO_API_KEY: '${OGP_IO_API_KEY}'
     volumes:
       - './dashboard:/app'
       - 'exclude:/app/node_modules/'

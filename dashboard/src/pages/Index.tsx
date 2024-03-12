@@ -31,7 +31,7 @@ function Index() {
 					<GithubSummaryCard />
 				</Grid>
 				<Grid xs={12}>
-					<OGPPreview />
+					<OGPPreview url="https://noahtigner.com/" />
 				</Grid>
 				{/* <Grid xs={12}>
 					<DockerTable />

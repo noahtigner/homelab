@@ -30,3 +30,4 @@ class Settings:
     PIHOLE_API_TOKEN = get_secret("pihole_api_token")
     LEETCODE_USERNAME = get_env("LEETCODE_USERNAME")
     GITHUB_USERNAME = get_env("GITHUB_USERNAME")
+    OGP_IO_API_KEY = get_env("OGP_IO_API_KEY")
