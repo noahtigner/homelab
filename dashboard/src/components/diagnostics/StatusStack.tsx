@@ -42,6 +42,7 @@ function StatusStack() {
 			axios
 				.get<{ status: ServiceStatus }>('/pihole/')
 				.then((res) => res.data),
+		retry: false,
 	});
 
 	const traefikHealth = useQuery({

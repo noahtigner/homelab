@@ -9,6 +9,7 @@ function OGPPreview({ url }: { url: string }) {
 	const { isPending, error, data } = useQuery({
 		queryKey: ['ogpPreview'],
 		queryFn: () => axios.get(`/portfolio/ogp/`).then((res) => res.data),
+		retry: false,
 	});
 
 	if (isPending || error) {
