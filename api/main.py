@@ -21,18 +21,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # startup
-    get_cpu_percent(None)  # first call will always return 0
-    # set up redis cache
-    app.state.redis = redis.Redis(host="cache", port=6379, db=0)
-    logger.info(f"Ping successful: {await app.state.redis.ping()}")
-    yield
-    # cleanup
-    await app.state.redis.close()
-
-
 tags_metadata = [
     {
         "name": "Ping",
@@ -71,6 +59,17 @@ tags_metadata = [
         "description": "Portfolio Site Stats",
     },
 ]
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # startup
+    get_cpu_percent(None)  # first call will always return 0
+    # set up redis cache
+    app.state.redis = redis.Redis(host="cache", port=6379, db=0)
+    logger.info(f"Ping successful: {await app.state.redis.ping()}")
+    yield
+    # cleanup
+    await app.state.redis.close()
 
 api = FastAPI(
     lifespan=lifespan,

@@ -36,8 +36,8 @@ async def get_ogp_data(request: Request):
 
         # Cache the results
         await request.app.state.redis.set(
-            f"ogp:{site_url}", json.dumps(raw_data), ex=60 * 60
-        )  # 1 hour
+            f"ogp:{site_url}", json.dumps(raw_data), ex=60 * 60 * 3
+        )  # 3 hours
 
         return raw_data
     except requests.exceptions.ConnectionError as e:

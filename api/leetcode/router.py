@@ -1,7 +1,8 @@
+import json
 import logging
 
 import requests
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Response, Request, status
 
 from api.config import Settings
 from api.leetcode.models import (
@@ -20,8 +21,14 @@ router = APIRouter(
 
 
 @router.get("/solved/", response_model=LCProblemsSolvedModel)
-def get_problems_solved(response: Response):
+async def get_problems_solved(request: Request, response: Response):
     url = "https://leetcode.com/graphql/"
+
+    # Try to get the result from cache
+    cached_result = await request.app.state.redis.get("lc:solved")
+    if cached_result is not None:
+        logger.info("Cache hit")
+        return LCProblemsSolvedModel(**json.loads(cached_result))
 
     query = """
         query userProblemsSolved($username: String!) {
@@ -55,7 +62,8 @@ def get_problems_solved(response: Response):
         r.raise_for_status()
         response.status_code = r.status_code
         raw_data = r.json()["data"]
-        response_data = LCProblemsSolvedModel(
+
+        output = LCProblemsSolvedModel(
             all=LCProblemDifficultyModel(
                 total=raw_data["allQuestionsCount"][0]["count"],
                 solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][
@@ -110,7 +118,13 @@ def get_problems_solved(response: Response):
                 ],
             ),
         )
-        return response_data
+
+        # Cache the results
+        await request.app.state.redis.set(
+            "lc:solved", output.model_dump_json(), ex=60 * 60  # 1 hour
+        )
+
+        return output
     except requests.exceptions.ConnectionError as e:
         logger.error(e)
         raise HTTPException(
@@ -132,8 +146,14 @@ def get_problems_solved(response: Response):
 
 
 @router.get("/languages/", response_model=list[LCLanguageStatModel])
-def get_problems_solved_per_language(response: Response):
+async def get_problems_solved_per_language(request: Request, response: Response):
     url = "https://leetcode.com/graphql/"
+
+    # Try to get the result from cache
+    cached_result = await request.app.state.redis.get("lc:languages")
+    if cached_result is not None:
+        logger.info("Cache hit")
+        return [LCLanguageStatModel(**language) for language in json.loads(cached_result)]
 
     query = """
         query languageStats($username: String!) {
@@ -179,11 +199,16 @@ def get_problems_solved_per_language(response: Response):
         ]
 
         # sort list of models by problemsSolved
-        sorted_data = sorted(
+        output = sorted(
             data_as_models, key=lambda x: x.problemsSolved, reverse=True
         )
 
-        return sorted_data
+        # Cache the results
+        await request.app.state.redis.set(
+            "lc:languages", json.dumps([language.model_dump() for language in output]), ex=60 * 60  # 1 hour
+        )
+
+        return output
     except requests.exceptions.ConnectionError as e:
         logger.error(e)
         raise HTTPException(
@@ -205,10 +230,16 @@ def get_problems_solved_per_language(response: Response):
 
 
 @router.get("/topics/")
-def get_problems_solved_per_topic(
-    response: Response, responseModel=LCTopicsSolvedModel
+async def get_problems_solved_per_topic(
+    request: Request, response: Response, responseModel=LCTopicsSolvedModel
 ):
     url = "https://leetcode.com/graphql/"
+
+    # Try to get the result from cache
+    cached_result = await request.app.state.redis.get("lc:topics")
+    if cached_result is not None:
+        logger.info("Cache hit")
+        return LCTopicsSolvedModel(**json.loads(cached_result))
 
     query = """
         query skillStats($username: String!) {
@@ -245,13 +276,18 @@ def get_problems_solved_per_topic(
         response.status_code = r.status_code
         raw_data = r.json()["data"]["matchedUser"]["tagProblemCounts"]
 
-        data = LCTopicsSolvedModel(
+        output = LCTopicsSolvedModel(
             advanced=raw_data["advanced"],
             intermediate=raw_data["intermediate"],
             fundamental=raw_data["fundamental"],
         )
 
-        return data
+        # Cache the results
+        await request.app.state.redis.set(
+            "lc:topics", output.model_dump_json(), ex=60 * 60  # 1 hour
+        )
+
+        return output
     except requests.exceptions.ConnectionError as e:
         logger.error(e)
         raise HTTPException(

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Skeleton, Typography, useTheme } from '@mui/material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
 function OGPPreview({ url }: { url: string }) {
@@ -90,13 +90,25 @@ function OGPPreview({ url }: { url: string }) {
 					gap: 2,
 				}}
 			>
-				<Link href={url} target="_blank" rel="noreferrer">
+				<a
+					href={url}
+					target="_blank"
+					rel="noreferrer"
+					style={{
+						all: 'unset',
+						textDecoration: 'none',
+						height: 100,
+					}}
+				>
 					<img
 						src={data.hybridGraph.image}
 						alt={data.hybridGraph.title}
 						width={100}
+						style={{
+							display: 'block',
+						}}
 					/>
-				</Link>
+				</a>
 				<Box
 					sx={{
 						display: 'flex',
