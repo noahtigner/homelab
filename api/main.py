@@ -60,6 +60,7 @@ tags_metadata = [
     },
 ]
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
@@ -70,6 +71,7 @@ async def lifespan(app: FastAPI):
     yield
     # cleanup
     await app.state.redis.close()
+
 
 api = FastAPI(
     lifespan=lifespan,

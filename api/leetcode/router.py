@@ -153,7 +153,9 @@ async def get_problems_solved_per_language(request: Request, response: Response)
     cached_result = await request.app.state.redis.get("lc:languages")
     if cached_result is not None:
         logger.info("Cache hit")
-        return [LCLanguageStatModel(**language) for language in json.loads(cached_result)]
+        return [
+            LCLanguageStatModel(**language) for language in json.loads(cached_result)
+        ]
 
     query = """
         query languageStats($username: String!) {
@@ -199,13 +201,13 @@ async def get_problems_solved_per_language(request: Request, response: Response)
         ]
 
         # sort list of models by problemsSolved
-        output = sorted(
-            data_as_models, key=lambda x: x.problemsSolved, reverse=True
-        )
+        output = sorted(data_as_models, key=lambda x: x.problemsSolved, reverse=True)
 
         # Cache the results
         await request.app.state.redis.set(
-            "lc:languages", json.dumps([language.model_dump() for language in output]), ex=60 * 60  # 1 hour
+            "lc:languages",
+            json.dumps([language.model_dump() for language in output]),
+            ex=60 * 60,  # 1 hour
         )
 
         return output
