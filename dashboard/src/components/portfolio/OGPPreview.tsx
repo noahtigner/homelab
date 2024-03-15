@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Box, Skeleton, Typography, useTheme } from '@mui/material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
+// TODO: type response
+
 function OGPPreview({ url }: { url: string }) {
 	const theme = useTheme();
 
