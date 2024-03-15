@@ -9,6 +9,8 @@ import GithubSummaryCard from '../components/github/GithubSummaryCard';
 import PiholeStatus from '../components/pihole/PiholeStatus';
 import { DiagnosticsGrid, StatusStack } from '../components/diagnostics';
 import OGPPreview from '../components/portfolio/OGPPreview';
+import InvestmentSummaryCard from '../components/money/InvestmentSummary';
+import NetWorthSummaryCard from '../components/money/NetWorthSummary';
 
 function Index() {
 	return (
@@ -29,6 +31,12 @@ function Index() {
 				</Grid>
 				<Grid xs={12} sm={6} lg={4}>
 					<GithubSummaryCard />
+				</Grid>
+				<Grid xs={12} md={3}>
+					<InvestmentSummaryCard />
+				</Grid>
+				<Grid xs={12} md={3}>
+					<NetWorthSummaryCard />
 				</Grid>
 				<Grid xs={12}>
 					<OGPPreview url="https://noahtigner.com/" />
