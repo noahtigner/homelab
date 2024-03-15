@@ -14,6 +14,7 @@ from api.leetcode.router import router as leetcode_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
 from api.portfolio.router import router as portfolio_router
+from api.monarchmoney.router import router as monarchmoney_router
 
 logging.basicConfig(
     level=logging.INFO, format="%(levelname)s\t%(funcName)s.%(lineno)d\t%(message)s"
@@ -57,6 +58,10 @@ tags_metadata = [
     {
         "name": "Portfolio",
         "description": "Portfolio Site Stats",
+    },
+    {
+        "name": "Monarch Money",
+        "description": "Monarch Money Data",
     },
 ]
 
@@ -106,6 +111,7 @@ api.include_router(github_router)
 api.include_router(npm_router)
 api.include_router(cache_router)
 api.include_router(portfolio_router)
+api.include_router(monarchmoney_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])
