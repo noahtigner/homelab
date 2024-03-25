@@ -23,8 +23,8 @@ devDependencies:
     specifier: ^3.2.5
     version: 3.2.5
   validate-env-vars:
-    specifier: ^0.3.11
-    version: 0.3.11(dotenv-expand@10.0.0)(dotenv@16.4.5)(zod@3.22.4)
+    specifier: ^0.4.0
+    version: 0.4.0(dotenv-expand@10.0.0)(dotenv@16.4.5)(zod@3.22.4)
 
 packages:
 
@@ -50,8 +50,8 @@ packages:
     hasBin: true
     dev: true
 
-  /validate-env-vars@0.3.11(dotenv-expand@10.0.0)(dotenv@16.4.5)(zod@3.22.4):
-    resolution: {integrity: sha512-RVCV6CRnePxripyI9JrUPuodWFdaGYLg+xLyVovHQHwUGFsyddVwqJhYW8ju1+NGui7qCsCSVwDJElCkYelOHA==}
+  /validate-env-vars@0.4.0(dotenv-expand@10.0.0)(dotenv@16.4.5)(zod@3.22.4):
+    resolution: {integrity: sha512-6Cw/5mUYBtdKmx1mCcb/i86M/ITweSXzg/sIFgUySfs4HO/2zyh21B7tBDz0DJeDqztN0c7q4C88b+zy4t+/MQ==}
     engines: {node: '>=20'}
     peerDependencies:
       dotenv: ^16.4.0
