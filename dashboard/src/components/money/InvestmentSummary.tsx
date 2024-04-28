@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
@@ -26,9 +25,7 @@ function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
 	const roundedChangePercent = (Math.round(changePercent * 10) / 10).toFixed(
 		1
 	);
-	const percentDisplayValue = `(${
-		isTrendingUp ? '+' : '-'
-	}${roundedChangePercent}%)`;
+	const percentDisplayValue = `(${roundedChangePercent}%)`;
 
 	return (
 		<div>
@@ -62,7 +59,7 @@ function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
 			>
 				<span
 					style={{
-						color: isTrendingUp
+						backgroundColor: isTrendingUp
 							? theme.palette.success.main
 							: theme.palette.error.main,
 					}}

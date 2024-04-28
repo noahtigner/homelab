@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
 	Box,
@@ -6,11 +5,13 @@ import {
 	Grid,
 	LinearProgress,
 	Link,
+	Skeleton,
 	Typography,
 	useTheme,
 } from '@mui/material';
 import { EmojiEventsOutlined as TrophyIcon } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
+import { useQuery } from '@tanstack/react-query';
 
 interface LCProblemDifficulty {
 	total: number;
@@ -70,20 +71,69 @@ function LeetCodeProgressText({
 	);
 }
 
+function LeetCodeProgressSkeleton({
+	difficulty,
+}: {
+	difficulty: 'Easy' | 'Medium' | 'Hard';
+}) {
+	return (
+		<Typography sx={{ fontSize: '1rem', marginBottom: 0.5 }} variant="h4">
+			{difficulty}
+		</Typography>
+	);
+}
+
 function LeetCodeLanguageChips() {
 	const { palette } = useTheme();
-	const [lcLanguageData, setLcLanguageData] = useState<LeetCodeLanguage[]>(
-		[]
-	);
 
-	useEffect(() => {
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/leetcode/languages/`)
-			.then((response) => {
-				setLcLanguageData(response.data);
-			})
-			.catch((error) => console.error(error));
-	}, []);
+	const { isPending, error, data } = useQuery({
+		queryKey: ['lcLanguageData'],
+		queryFn: () =>
+			axios
+				.get<LeetCodeLanguage[]>(`/leetcode/languages/`)
+				.then((res) => res.data),
+	});
+
+	if (error) {
+		return <div>Error: {error.message}</div>;
+	}
+
+	if (isPending) {
+		return (
+			<Box
+				sx={{
+					display: 'flex',
+					flexWrap: 'wrap',
+					justifyContent: 'start',
+					alignContent: 'start',
+					listStyle: 'none',
+					m: 0,
+					marginTop: 1,
+					p: 0,
+					gap: 1,
+				}}
+				component="ul"
+			>
+				{Array.from({ length: 3 }, (_, i) => (
+					<li key={i}>
+						<Chip
+							size="small"
+							label={
+								<>
+									<Skeleton
+										variant="text"
+										width={100}
+										height={24}
+										sx={{ borderRadius: 1 }}
+									/>
+								</>
+							}
+						/>
+					</li>
+				))}
+			</Box>
+		);
+	}
 
 	return (
 		<Box
@@ -100,7 +150,7 @@ function LeetCodeLanguageChips() {
 			}}
 			component="ul"
 		>
-			{lcLanguageData.map(({ languageName, problemsSolved }) => (
+			{data.map(({ languageName, problemsSolved }) => (
 				<li key={languageName}>
 					<Chip
 						size="small"
@@ -121,98 +171,131 @@ function LeetCodeLanguageChips() {
 	);
 }
 
-function LeetCodeSummary({
-	leetCodeData,
-}: {
-	leetCodeData: LeetCodeSolvedData;
-}) {
+function LeetCodeSummary() {
 	const theme = useTheme();
 
-	return (
-		<>
-			{leetCodeData && (
+	const { isPending, error, data } = useQuery({
+		queryKey: ['leetCodeSummary'],
+		queryFn: () =>
+			axios
+				.get<LeetCodeSolvedData>(`/leetcode/solved/`)
+				.then((res) => res.data),
+	});
+
+	if (error) {
+		return <div>Error: {error.message}</div>;
+	}
+
+	if (isPending) {
+		return (
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
 				<Box
-					sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}
+					sx={{
+						display: 'flex',
+						flexGrow: 1,
+						justifyContent: 'space-between',
+						marginBottom: theme.spacing(2),
+					}}
 				>
-					<Box
+					<Typography
 						sx={{
-							display: 'flex',
-							flexGrow: 1,
-							justifyContent: 'space-between',
-							marginBottom: theme.spacing(2),
+							fontSize: '2.5rem',
+							marginBottom: theme.spacing(0.5),
 						}}
+						variant="h3"
 					>
-						<Typography
-							sx={{
-								fontSize: '2.5rem',
-								marginBottom: theme.spacing(0.5),
-							}}
-							variant="h3"
-						>
-							{leetCodeData.all.solved} / {leetCodeData.all.total}
-						</Typography>
-						<TrophyIcon color="success" sx={{ fontSize: 48 }} />
-					</Box>
-					<span>
-						<LeetCodeProgressText
-							difficulty="Easy"
-							solved={leetCodeData.easy.solved}
-							questions={leetCodeData.easy.total}
-							beats={leetCodeData.easy.beats_percent}
-						/>
-						<LinearProgress
-							variant="determinate"
-							value={leetCodeData.easy.solved_percent}
-							color="success"
-						/>
-					</span>
-					<span>
-						<LeetCodeProgressText
-							difficulty="Medium"
-							solved={leetCodeData.medium.solved}
-							questions={leetCodeData.medium.total}
-							beats={leetCodeData.medium.beats_percent}
-						/>
-						<LinearProgress
-							variant="determinate"
-							value={leetCodeData.medium.solved_percent}
-							color="warning"
-						/>
-					</span>
-					<span>
-						<LeetCodeProgressText
-							difficulty="Hard"
-							solved={leetCodeData.hard.solved}
-							questions={leetCodeData.hard.total}
-							beats={leetCodeData.hard.beats_percent}
-						/>
-						<LinearProgress
-							variant="determinate"
-							value={leetCodeData.hard.solved_percent}
-							color="error"
-						/>
-					</span>
+						Loading...
+					</Typography>
+					<TrophyIcon color="success" sx={{ fontSize: 48 }} />
 				</Box>
-			)}
-		</>
+				<LeetCodeProgressSkeleton difficulty="Easy" />
+				<LinearProgress
+					variant="determinate"
+					value={0.1}
+					color="success"
+				/>
+				<LeetCodeProgressSkeleton difficulty="Medium" />
+				<LinearProgress
+					variant="determinate"
+					value={0.1}
+					color="warning"
+				/>
+				<LeetCodeProgressSkeleton difficulty="Hard" />
+				<LinearProgress
+					variant="determinate"
+					value={0.1}
+					color="error"
+				/>
+			</Box>
+		);
+	}
+
+	return (
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+			<Box
+				sx={{
+					display: 'flex',
+					flexGrow: 1,
+					justifyContent: 'space-between',
+					marginBottom: theme.spacing(2),
+				}}
+			>
+				<Typography
+					sx={{
+						fontSize: '2.5rem',
+						marginBottom: theme.spacing(0.5),
+					}}
+					variant="h3"
+				>
+					{data.all.solved} / {data.all.total}
+				</Typography>
+				<TrophyIcon color="success" sx={{ fontSize: 48 }} />
+			</Box>
+			<span>
+				<LeetCodeProgressText
+					difficulty="Easy"
+					solved={data.easy.solved}
+					questions={data.easy.total}
+					beats={data.easy.beats_percent}
+				/>
+				<LinearProgress
+					variant="determinate"
+					value={data.easy.solved_percent}
+					color="success"
+				/>
+			</span>
+			<span>
+				<LeetCodeProgressText
+					difficulty="Medium"
+					solved={data.medium.solved}
+					questions={data.medium.total}
+					beats={data.medium.beats_percent}
+				/>
+				<LinearProgress
+					variant="determinate"
+					value={data.medium.solved_percent}
+					color="warning"
+				/>
+			</span>
+			<span>
+				<LeetCodeProgressText
+					difficulty="Hard"
+					solved={data.hard.solved}
+					questions={data.hard.total}
+					beats={data.hard.beats_percent}
+				/>
+				<LinearProgress
+					variant="determinate"
+					value={data.hard.solved_percent}
+					color="error"
+				/>
+			</span>
+		</Box>
 	);
 }
 
 function LeetCodeSummaryCard() {
 	const theme = useTheme();
-
-	const [leetCodeData, setLeetCodeData] = useState<LeetCodeSolvedData | null>(
-		null
-	);
-
-	useEffect(() => {
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/leetcode/solved/`)
-			.then((response) => {
-				setLeetCodeData(response.data);
-			})
-			.catch((error) => console.error(error));
-	}, []);
 
 	return (
 		<StyledCard variant="outlined">
@@ -249,9 +332,7 @@ function LeetCodeSummaryCard() {
 						</Typography>
 					</Link>
 				</Box>
-				{leetCodeData && (
-					<LeetCodeSummary leetCodeData={leetCodeData} />
-				)}
+				<LeetCodeSummary />
 				<LeetCodeLanguageChips />
 			</StyledCardContent>
 		</StyledCard>

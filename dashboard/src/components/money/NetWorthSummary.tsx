@@ -82,19 +82,27 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 			>
 				{formatter.format(totalNetWorth)}
 			</Typography>
-			<Grid container>
+			<Grid container spacing={1}>
 				{['asset', 'liability'].map((group) => (
 					<Grid key={group} xs={12} sm={6}>
 						<Typography
 							sx={{
 								fontSize: '0.75rem',
+								display: 'flex',
+								justifyContent: 'space-between',
 							}}
 							variant="h4"
 						>
 							{group === 'asset' ? 'Assets' : 'Liabilities'}{' '}
 							<span
 								style={{
-									color:
+									// color:
+									// group === 'asset'
+									// 	? theme.palette.success.main
+									// 	: theme.palette.error.main,
+									// underline
+									// textDecoration: 'underline',
+									backgroundColor:
 										group === 'asset'
 											? theme.palette.success.main
 											: theme.palette.error.main,
@@ -127,13 +135,17 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 									key={accountTypeSummary.type.name}
 									sx={{
 										fontSize: '0.75rem',
+										display: 'flex',
+										justifyContent: 'space-between',
 									}}
 									variant="body1"
 								>
 									{accountTypeSummary.type.display}{' '}
 									<span
 										style={{
-											color: isAsset(accountTypeSummary)
+											backgroundColor: isAsset(
+												accountTypeSummary
+											)
 												? theme.palette.success.main
 												: theme.palette.error.main,
 										}}

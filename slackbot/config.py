@@ -2,7 +2,7 @@ import os
 
 
 def get_secret(name: str) -> str:
-    existing = os.getenv("pihole_api_token")
+    existing = os.getenv(name)
     if existing:
         return existing
 
