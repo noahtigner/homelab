@@ -12,4 +12,4 @@ const envSchema = envObject({
 	GITHUB_USERNAME: envNonEmptyString(),
 });
 
-validateEnvVars(envSchema);
+validateEnvVars({ schema: envSchema });

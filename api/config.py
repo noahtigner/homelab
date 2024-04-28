@@ -2,7 +2,7 @@ import os
 
 
 def get_secret(name: str) -> str:
-    existing = os.getenv("pihole_api_token")
+    existing = os.getenv(name)
     if existing:
         return existing
 
@@ -31,3 +31,5 @@ class Settings:
     LEETCODE_USERNAME = get_env("LEETCODE_USERNAME")
     GITHUB_USERNAME = get_env("GITHUB_USERNAME")
     OGP_IO_API_KEY = get_env("OGP_IO_API_KEY")
+    GA4_PROPERTY_ID = get_env("GA4_PROPERTY_ID")
+    GA4_CREDENTIALS = get_secret("ga4_credentials")

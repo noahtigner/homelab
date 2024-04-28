@@ -10,11 +10,12 @@ from api.diagnostics.retrieval import get_cpu_percent
 from api.diagnostics.router import router as diagnostics_router
 from api.docker.router import router as docker_router
 from api.github.router import router as github_router
+from api.google_analytics.router import router as google_analytics_router
 from api.leetcode.router import router as leetcode_router
+from api.monarchmoney.router import router as monarchmoney_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
 from api.portfolio.router import router as portfolio_router
-from api.monarchmoney.router import router as monarchmoney_router
 
 logging.basicConfig(
     level=logging.INFO, format="%(levelname)s\t%(funcName)s.%(lineno)d\t%(message)s"
@@ -62,6 +63,10 @@ tags_metadata = [
     {
         "name": "Monarch Money",
         "description": "Monarch Money Data",
+    },
+    {
+        "name": "Google Analytics",
+        "description": "Google Analytics Data",
     },
 ]
 
@@ -112,6 +117,7 @@ api.include_router(npm_router)
 api.include_router(cache_router)
 api.include_router(portfolio_router)
 api.include_router(monarchmoney_router)
+api.include_router(google_analytics_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])
