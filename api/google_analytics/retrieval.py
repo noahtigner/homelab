@@ -1,7 +1,7 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
-import polars as pl
+import pandas as pd
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
     DateRange,
@@ -43,33 +43,34 @@ def get_active_users_per_day() -> ActiveUsersPerDay:
 
     response = client.run_report(request)
 
+    data = [
+        (row.dimension_values[0].value, int(row.metric_values[0].value))
+        for row in response.rows
+    ]
+
     # Convert the data into a DataFrame
-    df = pl.DataFrame(
-        {
-            "date": [row.dimension_values[0].value for row in response.rows],
-            "active_users": [int(row.metric_values[0].value) for row in response.rows],
-        }
-    )
+    df = pd.DataFrame(data, columns=["date", "active_users"])
 
     # Convert the date column to datetime
-    df = df.with_columns(df["date"].str.strptime(pl.Date, "%Y%m%d").alias("date"))
+    df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
 
     # Create a date range for the last year
-    end_date = datetime.now().date()
-    date_range = [end_date - timedelta(days=i) for i in range(366, -1, -1)]
+    start_date = datetime.strptime("2020-03-31", "%Y-%m-%d")
+    end_date = datetime.strptime("2021-03-31", "%Y-%m-%d")
+    date_range = pd.date_range(start_date, end_date)
 
-    # Convert the date range into a DataFrame
-    date_df = pl.DataFrame({"date": date_range})
+    # Reindex the DataFrame to include all dates in the date range
+    df.set_index("date", inplace=True)
+    df = df.reindex(date_range, fill_value=0)
 
-    # Join the data DataFrame and the date range DataFrame
-    df = date_df.join(df, on="date", how="left")
+    # Reset the index
+    df.reset_index(inplace=True)
+    df.rename(columns={"index": "date"}, inplace=True)
 
-    # Fill in missing values
-    df = df.fill_null(0)
+    # Convert the DataFrame to a list of dictionaries
+    data = df.to_dict("records")
+    print(data)
 
-    # Sort the DataFrame by date
-    json_data = df.rows(named=True)
-
-    response_data = ActiveUsersPerDay(per_day=json_data)
+    response_data = ActiveUsersPerDay(per_day=data)
 
     return response_data
