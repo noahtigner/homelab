@@ -5,7 +5,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONBUFFERED 1
 
-# requirements for psutil
+# install requirements for psutil
 RUN apt-get update --yes && \
     apt-get upgrade --yes && \
     apt-get install --yes --no-install-recommends \
@@ -13,6 +13,9 @@ RUN apt-get update --yes && \
     gcc && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# install requirements for pyproject.toml-based projects
+RUN pip install --no-cache-dir --upgrade setuptools wheel
 
 
 # install python packages
