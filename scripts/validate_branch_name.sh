@@ -19,12 +19,14 @@ output=$(git check-ref-format --branch ${branch} 2>&1)
 if [ ! $? -eq 0 ]; then
     echo "${C_ERROR}${output}${C_CLEAR}"
     # exit 1
+    exit 0 # TODO: remove once fixed
 fi
 
 test=$(echo ${branch} | grep -E ${pattern})
 if [ -z "${test}" ]; then
     echo "${C_ERROR}Branch name is invalid${C_CLEAR}"
     # exit 1
+    exit 0 # TODO: remove once fixed
 fi
 
 echo "${C_OK}Branch name is valid${C_CLEAR}"
