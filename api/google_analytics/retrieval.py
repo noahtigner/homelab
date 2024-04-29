@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
@@ -55,8 +55,8 @@ def get_active_users_per_day() -> ActiveUsersPerDay:
     df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
 
     # Create a date range for the last year
-    start_date = datetime.strptime("2020-03-31", "%Y-%m-%d")
-    end_date = datetime.strptime("2021-03-31", "%Y-%m-%d")
+    end_date = datetime.now().strftime("%Y-%m-%d")
+    start_date = datetime.strptime(end_date, "%Y-%m-%d") - timedelta(days=365)
     date_range = pd.date_range(start_date, end_date)
 
     # Reindex the DataFrame to include all dates in the date range
