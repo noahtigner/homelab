@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.get("/active_users", response_model=ActiveUsersPerDay)
+@router.get("/active_users/", response_model=ActiveUsersPerDay)
 async def get_active_users_per_day(request: Request):
     # Try to get the result from cache
     cached_result = await request.app.state.redis.get("active_users_per_day")
