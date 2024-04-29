@@ -14,8 +14,8 @@ devDependencies:
     specifier: ^16.4.5
     version: 16.4.5
   dotenv-expand:
-    specifier: ^10.0.0
-    version: 10.0.0
+    specifier: ^11.0.6
+    version: 11.0.6
   husky:
     specifier: ^9.0.11
     version: 9.0.11
@@ -24,13 +24,15 @@ devDependencies:
     version: 3.2.5
   validate-env-vars:
     specifier: 0.4.2
-    version: 0.4.2(dotenv-expand@10.0.0)(dotenv@16.4.5)(zod@3.22.4)
+    version: 0.4.2(dotenv-expand@11.0.6)(dotenv@16.4.5)(zod@3.22.4)
 
 packages:
 
-  /dotenv-expand@10.0.0:
-    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+  /dotenv-expand@11.0.6:
+    resolution: {integrity: sha512-8NHi73otpWsZGBSZwwknTXS5pqMOrk9+Ssrna8xCaxkzEpU9OTf9R5ArQGVw03//Zmk9MOwLPng9WwndvpAJ5g==}
     engines: {node: '>=12'}
+    dependencies:
+      dotenv: 16.4.5
     dev: true
 
   /dotenv@16.4.5:
@@ -50,7 +52,7 @@ packages:
     hasBin: true
     dev: true
 
-  /validate-env-vars@0.4.2(dotenv-expand@10.0.0)(dotenv@16.4.5)(zod@3.22.4):
+  /validate-env-vars@0.4.2(dotenv-expand@11.0.6)(dotenv@16.4.5)(zod@3.22.4):
     resolution: {integrity: sha512-0ltix5GfT3mOZ8m9doVQ+06m3R2X/WiAw7gG6H17nckYKzdoJxB9iA6nPjpmS5dxSxpO/LugIusDPQWnbvtwew==}
     engines: {node: '>=20'}
     peerDependencies:
@@ -59,7 +61,7 @@ packages:
       zod: ^3.22.4
     dependencies:
       dotenv: 16.4.5
-      dotenv-expand: 10.0.0
+      dotenv-expand: 11.0.6
       zod: 3.22.4
     dev: true
 
