@@ -10,8 +10,16 @@ RUN apt-get update --yes && \
     apt-get upgrade --yes && \
     apt-get install --yes --no-install-recommends \
     python3-dev \
-    gcc \
-    cmake && \
+    gcc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# install requirements for pandas
+RUN apt-get update --yes && \
+    apt-get upgrade --yes && \
+    apt-get install --yes --no-install-recommends \
+    cmake \
+    python3-numpy && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
