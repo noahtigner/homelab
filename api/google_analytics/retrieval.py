@@ -69,7 +69,6 @@ def get_active_users_per_day() -> ActiveUsersPerDay:
 
     # Convert the DataFrame to a list of dictionaries
     data = df.to_dict("records")
-    print(data)
 
     response_data = ActiveUsersPerDay(per_day=data)
 

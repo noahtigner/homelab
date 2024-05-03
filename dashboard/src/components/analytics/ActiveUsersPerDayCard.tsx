@@ -104,13 +104,13 @@ function CustomTooltip({ active, payload }: TooltipProps<string, string>) {
 				}}
 			>
 				<Typography variant="subtitle2">
-					{payload[0].payload.day}
+					{payload[0].payload.date}
 				</Typography>
 				<Typography
 					variant="subtitle1"
 					style={{ color: theme.palette.success.main }}
 				>
-					downloads: {payload[0].value}
+					users: {payload[0].value}
 				</Typography>
 			</div>
 		);

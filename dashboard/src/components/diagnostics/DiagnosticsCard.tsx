@@ -24,7 +24,7 @@ function DiagnosticsCard({
 					<Typography
 						sx={{
 							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.5),
+							marginBottom: theme.spacing(0.25),
 						}}
 						variant="h2"
 					>
@@ -43,7 +43,7 @@ function DiagnosticsCard({
 								<Skeleton
 									variant="text"
 									width={100}
-									height={40}
+									height={36}
 								/>
 							) : (
 								values.map((v) => (
@@ -52,8 +52,8 @@ function DiagnosticsCard({
 										sx={{
 											fontSize:
 												values.length > 1
-													? '1rem'
-													: '2.5rem',
+													? '0.75rem'
+													: '2rem',
 											wordBreak: 'break-word',
 										}}
 										variant={'h3'}
