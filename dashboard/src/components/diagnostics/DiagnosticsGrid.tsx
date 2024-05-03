@@ -13,7 +13,7 @@ interface DiagnosticsData {
 	cpu: {
 		count: number;
 		percent: number[];
-		temp: number;
+		temp: number | null;
 	};
 	memory: {
 		total: number;
@@ -41,7 +41,7 @@ const cardItems = [
 				data.cpu.percent.length
 			).toFixed(2)}% avg`,
 		],
-		icon: <MemoryIcon color="success" sx={{ fontSize: 48 }} />,
+		icon: <MemoryIcon color="success" sx={{ fontSize: 36 }} />,
 	},
 	{
 		id: 1,
@@ -49,24 +49,25 @@ const cardItems = [
 		values: (data: DiagnosticsData) => [
 			`${data.memory.percent.toFixed(1)}%`,
 		],
-		icon: <MemoryIcon color="success" sx={{ fontSize: 48 }} />,
+		icon: <MemoryIcon color="success" sx={{ fontSize: 36 }} />,
 	},
 	{
 		id: 2,
 		title: 'Disk',
 		values: (data: DiagnosticsData) => [`${data.disk.percent.toFixed(1)}%`],
-		icon: <SaveIcon color="success" sx={{ fontSize: 48 }} />,
+		icon: <SaveIcon color="success" sx={{ fontSize: 36 }} />,
 	},
 	{
 		id: 3,
 		title: 'Temperature',
-		values: (data: DiagnosticsData) => [
-			`${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`,
-		],
+		values: (data: DiagnosticsData) =>
+			data.cpu.temp
+				? [`${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`]
+				: [],
 		icon: (
 			<DeviceThermostatOutlinedIcon
 				color="success"
-				sx={{ fontSize: 48 }}
+				sx={{ fontSize: 36 }}
 			/>
 		),
 	},
