@@ -12,7 +12,7 @@ services:
       - '8000'
     restart: 'unless-stopped'
     environment:
-      PIHOLE_API_BASE: 'http://${IP}/admin'
+      PIHOLE_API_BASE: 'http://${PIHOLE_IP}/admin'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'
       OGP_IO_API_KEY: '${OGP_IO_API_KEY}'
@@ -23,7 +23,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.api.entrypoints=web'
-      - 'traefik.http.routers.api.rule=Host(`${IP}`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.api.rule=Host(`${PIHOLE_IP}`) && PathPrefix(`/api`)'
       - 'traefik.http.routers.api.middlewares=api-stripprefix'
       - 'traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api'
 
@@ -49,7 +49,7 @@ services:
     image: 'traefik/whoami'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami.rule=Host(`${IP}`) && PathPrefix(`/whoami`)'
+      - 'traefik.http.routers.whoami.rule=Host(`${PIHOLE_IP}`) && PathPrefix(`/whoami`)'
       - 'traefik.http.routers.whoami.entrypoints=web'
 
   dashboard:
@@ -59,7 +59,7 @@ services:
       target: dev
     command: 'pnpm run dev'
     environment:
-      API_BASE: 'http://${IP}:81/api'
+      API_BASE: 'http://${PIHOLE_IP}:81/api'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'
     volumes:

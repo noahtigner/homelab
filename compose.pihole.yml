@@ -14,10 +14,11 @@ services:
     environment:
       TZ: 'America/Boise'
       WEBPASSWORD_FILE: /run/secrets/pihole_password
-      CORS_HOSTS: 'localhost,127.0.0.1,${IP},localhost:80,localhost:8000,localhost:8080,localhost:5173'
+      # TODO: add main server's IP
+      CORS_HOSTS: 'localhost,127.0.0.1,${PIHOLE_IP},localhost:80,localhost:8000,localhost:8080,localhost:5173'
       WEBTHEME: 'default-dark'
       TEMPERATUREUNIT: 'f'
-      # FTLCONF_LOCAL_IPV4: '${IP}'
+      # FTLCONF_LOCAL_IPV4: '${PIHOLE_IP}'
     # Volumes store your data between container upgrades
     volumes:
       - './etc-pihole:/etc/pihole'
