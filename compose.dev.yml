@@ -23,7 +23,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.api.entrypoints=web'
-      - 'traefik.http.routers.api.rule=Host(`${PIHOLE_IP}`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.api.rule=Host(`${SERVER_IP}`) && PathPrefix(`/api`)'
       - 'traefik.http.routers.api.middlewares=api-stripprefix'
       - 'traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api'
 
@@ -49,7 +49,7 @@ services:
     image: 'traefik/whoami'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami.rule=Host(`${PIHOLE_IP}`) && PathPrefix(`/whoami`)'
+      - 'traefik.http.routers.whoami.rule=Host(`${SERVER_IP}`) && PathPrefix(`/whoami`)'
       - 'traefik.http.routers.whoami.entrypoints=web'
 
   dashboard:
@@ -59,7 +59,9 @@ services:
       target: dev
     command: 'pnpm run dev'
     environment:
-      API_BASE: 'http://${PIHOLE_IP}:81/api'
+      API_BASE: 'http://${SERVER_IP}:81/api'
+      PIHOLE_BASE: 'http://${PIHOLE_IP}/admin'
+      TRAEFIK_BASE: 'http://${SERVER_IP}:8080/dashboard'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'
     volumes:

@@ -1,4 +1,4 @@
-import { Chip } from '@mui/material';
+import { Chip, Link } from '@mui/material';
 import {
 	CheckCircle as CheckCircleIcon,
 	CircleOutlined as CircleIcon,
@@ -36,16 +36,29 @@ const statusToIcon = (status: ServiceStatus) => {
 function StatusChip({
 	label,
 	status,
+	url,
 }: {
 	label: string;
 	status: ServiceStatus;
+	url?: string;
 }) {
+	if (url) {
+		return (
+			<Link
+				href={url}
+				target="_blank"
+				sx={{ textDecoration: 'none', color: 'inherit' }}
+			>
+				<StatusChip label={label} status={status} />
+			</Link>
+		);
+	}
 	return (
 		<Chip
 			label={label}
 			color={statusToColor(status)}
 			icon={statusToIcon(status)}
-			sx={{ justifyContent: 'start' }}
+			sx={{ justifyContent: 'start', width: '100%' }}
 			// sx={{
 			//   paddingY: '4px',
 			//   justifyContent: 'start',
