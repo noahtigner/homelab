@@ -8,6 +8,7 @@ import validateEnvVars, {
 
 const envSchema = envObject({
 	PIHOLE_IP: envString().ip(),
+	SERVER_IP: envString().ip(),
 	LEETCODE_USERNAME: envNonEmptyString(),
 	GITHUB_USERNAME: envNonEmptyString(),
 	OGP_IO_API_KEY: envNonEmptyString(),

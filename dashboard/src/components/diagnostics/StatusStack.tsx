@@ -75,14 +75,20 @@ function StatusStack() {
 			spacing={1}
 		>
 			<StatusChip label="Dashboard" status="ok" />
-			<StatusChip label="API" status={getServiceStatus(apiHealth)} />
+			<StatusChip
+				label="API"
+				status={getServiceStatus(apiHealth)}
+				url={`${import.meta.env.VITE_API_BASE}/docs/`}
+			/>
 			<StatusChip
 				label="Pihole"
 				status={getServiceStatus(piholeHealth)}
+				url={import.meta.env.VITE_PIHOLE_BASE}
 			/>
 			<StatusChip
 				label="Traefik"
 				status={getServiceStatus(traefikHealth)}
+				url={import.meta.env.VITE_TRAEFIK_BASE}
 			/>
 			<StatusChip
 				label="Slack Bot"

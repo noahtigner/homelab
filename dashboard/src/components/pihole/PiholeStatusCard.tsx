@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { Box, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
@@ -18,15 +18,21 @@ function PiholeSummaryCardWrapper({
 		<Grid xs={12} sm={6} md={4}>
 			<StyledCard variant="outlined">
 				<StyledCardContent>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-							// marginBottom: 1,
-						}}
-						variant="h2"
+					<Link
+						href={import.meta.env.VITE_PIHOLE_BASE}
+						target="_blank"
+						sx={{ textDecoration: 'none', color: 'inherit' }}
 					>
-						{title}
-					</Typography>
+						<Typography
+							sx={{
+								fontSize: '1.25rem',
+								// marginBottom: 1,
+							}}
+							variant="h2"
+						>
+							{title}
+						</Typography>
+					</Link>
 					<Box
 						sx={{
 							display: 'flex',
