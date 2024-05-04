@@ -15,7 +15,7 @@ services:
       TZ: 'America/Boise'
       WEBPASSWORD_FILE: /run/secrets/pihole_password
       # TODO: add main server's IP
-      CORS_HOSTS: 'localhost,127.0.0.1,${PIHOLE_IP},localhost:80,localhost:8000,localhost:8080,localhost:5173'
+      CORS_HOSTS: 'localhost,127.0.0.1,${SERVER_IP},localhost:80,localhost:8000,localhost:8080,localhost:5173,127.0.0.1:5173,SERVER_IP:8080'
       WEBTHEME: 'default-dark'
       TEMPERATUREUNIT: 'f'
       # FTLCONF_LOCAL_IPV4: '${PIHOLE_IP}'
