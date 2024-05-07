@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material';
-import axios from 'axios';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import StatusChip from './StatusChip';
 import type { ServiceStatus } from '../../types';
+import { piholeClient, servicesClient } from '../../services/api';
 
 function getServiceStatus(
 	queryResult: UseQueryResult<{ status: ServiceStatus }>
@@ -18,52 +18,51 @@ function getServiceStatus(
 	return data?.status || 'error';
 }
 
-function StatusStack() {
-	const apiHealth = useQuery({
-		queryKey: ['apiHealth'],
+function StatusStackPrimary() {
+	// common services
+	const diagnosticsHealth = useQuery({
+		queryKey: ['primary', 'diagnosticsHealth'],
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
-			axios.get<{ status: ServiceStatus }>('/').then((res) => res.data),
-	});
-
-	const slackBotHealth = useQuery({
-		queryKey: ['slackBotHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			axios
-				.get<{ status: ServiceStatus }>(
-					'/diagnostics/docker/container/slack_bot/'
-				)
+			servicesClient
+				.get<{ status: ServiceStatus }>('/diagnostics/')
 				.then((res) => res.data),
 	});
-
-	const piholeHealth = useQuery({
-		queryKey: ['piholeHealth'],
-		refetchInterval: 1000 * 60 * 5, // 5 minutes
-		queryFn: () =>
-			axios
-				.get<{ status: ServiceStatus }>('/pihole/')
-				.then((res) => res.data),
-		retry: false,
-	});
-
 	const traefikHealth = useQuery({
-		queryKey: ['traefikHealth'],
+		queryKey: ['primary', 'traefikHealth'],
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
-			axios
+			servicesClient
 				.get<{ status: ServiceStatus }>(
 					'/diagnostics/docker/container/reverse_proxy/'
 				)
 				.then((res) => res.data),
 	});
-
 	const redisHealth = useQuery({
-		queryKey: ['redisHealth'],
+		queryKey: ['primary', 'redisHealth'],
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
-			axios
+			servicesClient
 				.get<{ status: ServiceStatus }>('/cache/')
+				.then((res) => res.data),
+	});
+	// unique services
+	const servicesHealth = useQuery({
+		queryKey: ['primary', 'servicesHealth'],
+		refetchInterval: 1000 * 60, // 1 minute
+		queryFn: () =>
+			servicesClient
+				.get<{ status: ServiceStatus }>('/')
+				.then((res) => res.data),
+	});
+	const slackBotHealth = useQuery({
+		queryKey: ['primary', 'slackBotHealth'],
+		refetchInterval: 1000 * 60, // 1 minute
+		queryFn: () =>
+			servicesClient
+				.get<{ status: ServiceStatus }>(
+					'/diagnostics/docker/container/slack_bot/'
+				)
 				.then((res) => res.data),
 	});
 
@@ -76,29 +75,98 @@ function StatusStack() {
 			alignItems="stretch"
 			spacing={1}
 		>
-			<StatusChip label="Dashboard" status="ok" />
-			<StatusChip
-				label="API"
-				status={getServiceStatus(apiHealth)}
-				url={`${import.meta.env.VITE_API_BASE}/docs/`}
-			/>
-			<StatusChip
-				label="Pihole"
-				status={getServiceStatus(piholeHealth)}
-				url={import.meta.env.VITE_PIHOLE_BASE}
-			/>
 			<StatusChip
 				label="Traefik"
 				status={getServiceStatus(traefikHealth)}
 				url={import.meta.env.VITE_TRAEFIK_BASE}
 			/>
+			<StatusChip label="Cache" status={getServiceStatus(redisHealth)} />
+			<StatusChip
+				label="API: Diagnostics"
+				status={getServiceStatus(diagnosticsHealth)}
+				url={`${import.meta.env.VITE_API_BASE}/docs/`}
+			/>
+			<StatusChip
+				label="API: Services"
+				status={getServiceStatus(servicesHealth)}
+				url={`${import.meta.env.VITE_API_BASE}/diagnostics/docs/`}
+			/>
+			<StatusChip label="Dashboard" status="ok" />
 			<StatusChip
 				label="Slack Bot"
 				status={getServiceStatus(slackBotHealth)}
 			/>
+		</Stack>
+	);
+}
+function StatusStackPihole() {
+	// common services
+	const diagnosticsHealth = useQuery({
+		queryKey: ['pihole', 'diagnosticsHealth'],
+		refetchInterval: 1000 * 60, // 1 minute
+		queryFn: () =>
+			piholeClient
+				.get<{ status: ServiceStatus }>('/')
+				.then((res) => res.data),
+	});
+	const traefikHealth = useQuery({
+		queryKey: ['pihole', 'traefikHealth'],
+		refetchInterval: 1000 * 60, // 1 minute
+		queryFn: () =>
+			piholeClient
+				.get<{ status: ServiceStatus }>(
+					'/docker/container/reverse_proxy/'
+				)
+				.then((res) => res.data),
+	});
+	const redisHealth = useQuery({
+		queryKey: ['pihole', 'redisHealth'],
+		refetchInterval: 1000 * 60, // 1 minute
+		queryFn: () =>
+			piholeClient
+				.get<{ status: ServiceStatus }>('/cache/')
+				.then((res) => res.data),
+	});
+	// unique services
+	const piholeHealth = useQuery({
+		queryKey: ['pihole', 'piholeHealth'],
+		refetchInterval: 1000 * 60 * 5, // 5 minutes
+		queryFn: () =>
+			servicesClient // TODO: make available from pihole server itself
+				.get<{ status: ServiceStatus }>('/pihole/')
+				.then((res) => res.data),
+		retry: false,
+	});
+
+	return (
+		<Stack
+			direction="column"
+			// direction="row"
+			justifyContent="flex-start"
+			// alignItems="flex-start"
+			alignItems="stretch"
+			spacing={1}
+		>
+			<StatusChip
+				label="Traefik"
+				status={getServiceStatus(traefikHealth)}
+				url={import.meta.env.VITE_TRAEFIK_BASE} // TODO: dynamic
+			/>
 			<StatusChip label="Cache" status={getServiceStatus(redisHealth)} />
+			<StatusChip
+				label="API: Diagnostics"
+				status={getServiceStatus(diagnosticsHealth)}
+				url={`http://${
+					import.meta.env.VITE_PIHOLE_IP
+				}:81/api/diagnostics/docs/`}
+			/>
+			<StatusChip
+				label="Pihole"
+				status={getServiceStatus(piholeHealth)}
+				url={`http://${import.meta.env.VITE_PIHOLE_IP}/admin`}
+			/>
 		</Stack>
 	);
 }
 
-export default StatusStack;
+export { StatusStackPrimary, StatusStackPihole };

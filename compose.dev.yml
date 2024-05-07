@@ -77,8 +77,9 @@ services:
       target: dev
     command: 'pnpm run dev'
     environment:
+      # TODO: refactor
       API_BASE: 'http://${SERVER_IP}:81/api'
-      PIHOLE_BASE: 'http://${PIHOLE_IP}/admin'
+      PIHOLE_IP: '${PIHOLE_IP}'
       TRAEFIK_BASE: 'http://${SERVER_IP}:8080/dashboard'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'

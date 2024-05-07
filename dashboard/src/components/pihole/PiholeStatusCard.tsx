@@ -19,7 +19,7 @@ function PiholeSummaryCardWrapper({
 			<StyledCard variant="outlined">
 				<StyledCardContent>
 					<Link
-						href={import.meta.env.VITE_PIHOLE_BASE}
+						href={import.meta.env.VITE_PIHOLE_IP}
 						target="_blank"
 						sx={{ textDecoration: 'none', color: 'inherit' }}
 					>

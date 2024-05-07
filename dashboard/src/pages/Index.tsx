@@ -7,21 +7,34 @@ import LeetCodeSummaryCard from '../components/leetcode/LeetCodeSummaryCard';
 import NPMPackageCard from '../components/npm/NPMPackageCard';
 import GithubSummaryCard from '../components/github/GithubSummaryCard';
 import PiholeStatus from '../components/pihole/PiholeStatus';
-import { DiagnosticsGrid, StatusStack } from '../components/diagnostics';
+import {
+	StatusStackPrimary,
+	StatusStackPihole,
+} from '../components/diagnostics/StatusStack';
 import OGPPreview from '../components/portfolio/OGPPreview';
 import InvestmentSummaryCard from '../components/money/InvestmentSummary';
 import NetWorthSummaryCard from '../components/money/NetWorthSummary';
 import ActiveUsersPerDayCard from '../components/analytics/ActiveUsersPerDayCard';
+import DashboardTable from '../components/diagnostics/DiagnosticsTable';
 
 function Index() {
 	return (
 		<>
 			<Grid container spacing={2}>
-				<Grid xs={12} sm={3} md={2}>
-					<StatusStack />
+				<Grid xs={12} sm={3} md={2.5} lg={2} xl={1}>
+					<StatusStackPihole />
 				</Grid>
-				<Grid container spacing={2} xs={12} sm={9} md={10}>
-					<DiagnosticsGrid />
+				<Grid xs={12} sm={3} md={2.5} lg={2} xl={1}>
+					<StatusStackPrimary />
+				</Grid>
+				<Grid xs={12} sm={6} md={7} lg={8} xl={10}>
+					<DashboardTable />
+				</Grid>
+				{/* <Grid container spacing={2} xs={12} sm={9} md={10}>
+					<DiagnosticsGrid client={piholeClient} />
+					<DiagnosticsGrid client={servicesClient} />
+				</Grid> */}
+				<Grid container spacing={2} xs={12}>
 					<PiholeStatus />
 				</Grid>
 				<Grid xs={12} md={3}>

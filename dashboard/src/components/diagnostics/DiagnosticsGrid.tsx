@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosInstance } from 'axios';
 import {
 	SaveOutlined as SaveIcon,
 	DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
@@ -7,7 +7,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 
 import DiagnosticsCard from './DiagnosticsCard';
-import { celsiusToFahrenheit } from '../../utils/unitConversion';
+import { celsiusToFahrenheit } from '../../services/unitConversion';
 
 interface DiagnosticsData {
 	cpu: {
@@ -73,13 +73,13 @@ const cardItems = [
 	},
 ];
 
-function DiagnosticsGrid() {
+function DiagnosticsGrid({ client }: { client: AxiosInstance }) {
 	const { isPending, error, data } = useQuery({
-		queryKey: ['diagnostics'],
+		queryKey: ['diagnostics', client.getUri()],
 		refetchInterval: 1000 * 5, // 5 seconds
 		queryFn: () =>
-			axios
-				.get<DiagnosticsData>('/diagnostics/diagnostics/')
+			client
+				.get<DiagnosticsData>(`/diagnostics/diagnostics/`)
 				.then((res) => res.data),
 	});
 
