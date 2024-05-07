@@ -26,4 +26,4 @@ if __name__ == '__main__':
         if result.stderr:
             logger.error(result.stderr)
 
-        time.sleep(60 * 5)
+        time.sleep(60 * 30) # run roughly every 30 minutes

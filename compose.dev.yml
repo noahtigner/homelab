@@ -27,6 +27,24 @@ services:
       - 'traefik.http.routers.api.middlewares=api-stripprefix'
       - 'traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api'
 
+  diagnostics_api:
+    container_name: 'diagnostics_api'
+    build:
+      context: ./api_diagnostics
+    command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api/diagnostics --reload'
+    volumes:
+      - ./api_diagnostics:/app/api
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    expose:
+      - '8000'
+    restart: 'unless-stopped'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.diagnostics_api.entrypoints=web'
+      - 'traefik.http.routers.diagnostics_api.rule=Host(`${SERVER_IP}`) && PathPrefix(`/api/diagnostics`)'
+      - 'traefik.http.routers.diagnostics_api.middlewares=diagnostics_api-stripprefix'
+      - 'traefik.http.middlewares.diagnostics_api-stripprefix.stripprefix.prefixes=/api/diagnostics'
+
   traefik:
     container_name: 'reverse_proxy'
     image: 'traefik:v2.10'
@@ -44,13 +62,13 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
-  whoami:
-    container_name: 'whoami'
-    image: 'traefik/whoami'
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.whoami.rule=Host(`${SERVER_IP}`) && PathPrefix(`/whoami`)'
-      - 'traefik.http.routers.whoami.entrypoints=web'
+  # whoami:
+  #   container_name: 'whoami'
+  #   image: 'traefik/whoami'
+  #   labels:
+  #     - 'traefik.enable=true'
+  #     - 'traefik.http.routers.whoami.rule=Host(`${SERVER_IP}`) && PathPrefix(`/whoami`)'
+  #     - 'traefik.http.routers.whoami.entrypoints=web'
 
   dashboard:
     container_name: dashboard
@@ -95,7 +113,7 @@ services:
     container_name: speedtest
     build:
       context: ./speedtest
-    command: 'python3 -u run.py'
+    command: 'python3 -u main.py'
 
 volumes:
   exclude:

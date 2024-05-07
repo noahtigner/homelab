@@ -5,4 +5,4 @@ ENV PYTHONBUFFERED 1
 
 RUN pip install speedtest-cli
 
-COPY ./run.py ./run.py
+COPY ./main.py ./main.py

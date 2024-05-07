@@ -78,7 +78,9 @@ function DiagnosticsGrid() {
 		queryKey: ['diagnostics'],
 		refetchInterval: 1000 * 5, // 5 seconds
 		queryFn: () =>
-			axios.get<DiagnosticsData>('/diagnostics/').then((res) => res.data),
+			axios
+				.get<DiagnosticsData>('/diagnostics/diagnostics/')
+				.then((res) => res.data),
 	});
 
 	return (

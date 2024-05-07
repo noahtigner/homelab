@@ -8,7 +8,7 @@ from slack_sdk.socket_mode import SocketModeClient
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode.response import SocketModeResponse
 
-from commands import get_docker_stats, get_service_statuses, get_time
+from commands import get_service_statuses, get_time
 from config import Settings
 
 logging.basicConfig(level=logging.INFO)
@@ -39,12 +39,6 @@ class Commands:
                 "description": "Get the current Homelab service statuses",
                 "usage": "get_service_statuses",
                 "method": get_service_statuses,
-                "sync": False,
-            },
-            "get_docker_stats": {
-                "description": "Get the current Homelab Docker stats",
-                "usage": "get_docker_stats",
-                "method": get_docker_stats,
                 "sync": False,
             },
         }
