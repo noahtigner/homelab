@@ -34,6 +34,9 @@ services:
     build:
       context: ./api_diagnostics
     command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api/diagnostics --reload'
+    environment:
+      PIHOLE_IP: '${PIHOLE_IP}'
+      SERVER_IP: '${SERVER_IP}'
     volumes:
       - ./api_diagnostics:/app/api
       - '/var/run/docker.sock:/var/run/docker.sock:ro'

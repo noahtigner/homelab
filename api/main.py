@@ -1,5 +1,6 @@
 import logging
 from contextlib import asynccontextmanager
+from itertools import product
 
 import redis.asyncio as redis
 from fastapi import FastAPI, Request
@@ -7,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.cache.router import router as cache_router
 from api.github.router import router as github_router
+from api.config import Settings
 from api.google_analytics.router import router as google_analytics_router
 from api.leetcode.router import router as leetcode_router
 from api.monarchmoney.router import router as monarchmoney_router
@@ -79,13 +81,27 @@ api = FastAPI(
     openapi_tags=tags_metadata,
 )
 
+ips = [
+    "localhost",
+    "127.0.0.1",
+    Settings.SERVER_IP,
+    Settings.PIHOLE_IP,
+]
+
+ports = ["8080", "5173"]
+
+protocols = [
+    "",
+    "http://",
+    "https://",
+]
+
+# Generate all combinations of ips, ports, and protocols
+combinations = product(ips, ports, protocols)
+
+# Create origins from combinations
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5173/",
-    "http://192.168.0.69:5173",
+    f"{protocol}{ip}:{port}" for ip, port, protocol in combinations
 ]
 
 api.add_middleware(
