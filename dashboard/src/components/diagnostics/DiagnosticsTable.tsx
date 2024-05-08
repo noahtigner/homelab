@@ -45,7 +45,12 @@ function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
 	});
 	if (isError) {
 		return (
-			<TableCell component="th" scope="row" colSpan={999}>
+			<TableCell
+				component="th"
+				scope="row"
+				colSpan={999}
+				sx={{ textAlign: 'center ' }}
+			>
 				An unexpected error occurred
 			</TableCell>
 		);

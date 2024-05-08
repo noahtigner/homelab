@@ -14,25 +14,38 @@ function PiholeSummaryCardWrapper({
 	child1: ReactNode;
 	child2: ReactNode;
 }) {
+	const theme = useTheme();
 	return (
 		<Grid xs={12} sm={6} md={4}>
 			<StyledCard variant="outlined">
 				<StyledCardContent>
-					<Link
-						href={import.meta.env.VITE_PIHOLE_IP}
-						target="_blank"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+					<Box
+						display="flex"
+						alignItems="center"
+						sx={{ marginBottom: theme.spacing(0.5) }}
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-								// marginBottom: 1,
-							}}
-							variant="h2"
+						<img
+							src="/pihole.svg"
+							alt="Monarch Money"
+							height={20}
+							style={{ marginRight: theme.spacing(1) }}
+						/>
+						<Link
+							href={import.meta.env.VITE_PIHOLE_IP}
+							target="_blank"
+							rel="noreferrer"
+							sx={{ textDecoration: 'none', color: 'inherit' }}
 						>
-							{title}
-						</Typography>
-					</Link>
+							<Typography
+								sx={{
+									fontSize: '1.25rem',
+								}}
+								variant="h2"
+							>
+								{title}
+							</Typography>
+						</Link>
+					</Box>
 					<Box
 						sx={{
 							display: 'flex',

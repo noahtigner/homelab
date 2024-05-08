@@ -28,7 +28,7 @@ def get_env(name: str) -> str:
 class Settings:
     PIHOLE_IP = get_env("PIHOLE_IP")
     SERVER_IP = get_env("SERVER_IP")
-    PIHOLE_API_BASE = f'http://{PIHOLE_IP}/admin'
+    PIHOLE_API_BASE = f"http://{PIHOLE_IP}/admin"
     PIHOLE_API_TOKEN = get_secret("pihole_api_token")
     LEETCODE_USERNAME = get_env("LEETCODE_USERNAME")
     GITHUB_USERNAME = get_env("GITHUB_USERNAME")

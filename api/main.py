@@ -7,8 +7,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.cache.router import router as cache_router
-from api.github.router import router as github_router
 from api.config import Settings
+from api.github.router import router as github_router
 from api.google_analytics.router import router as google_analytics_router
 from api.leetcode.router import router as leetcode_router
 from api.monarchmoney.router import router as monarchmoney_router
@@ -100,9 +100,7 @@ protocols = [
 combinations = product(ips, ports, protocols)
 
 # Create origins from combinations
-origins = [
-    f"{protocol}{ip}:{port}" for ip, port, protocol in combinations
-]
+origins = [f"{protocol}{ip}:{port}" for ip, port, protocol in combinations]
 
 api.add_middleware(
     CORSMiddleware,
