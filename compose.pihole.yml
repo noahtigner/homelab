@@ -66,11 +66,3 @@ services:
       - '8080:8080'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
-
-  cache:
-    container_name: cache
-    image: redis:alpine
-    command: redis-server --save 60 1
-    restart: 'unless-stopped'
-    ports:
-      - '6379:6379'
