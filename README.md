@@ -18,7 +18,7 @@
   - [x] Interface for interacting with the GitHub API
   - [x] Interface for interacting with the LeetCode API
   - [x] Interface for interacting with the Google Analytics API
-  - [ ] Internet Speed Test
+- [x] Internet Speed Test
 - [x] Dashboard - Dashboard for homelab services, built with [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [Vite](https://vitejs.dev/)
   - [x] displays Pi-hole stats
   - [x] displays hardware, network, and docker diagnostics

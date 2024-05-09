@@ -2,28 +2,88 @@ import subprocess
 import time
 import logging
 import json
+from pydantic import BaseModel
+import redis
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-if __name__ == '__main__':
-    logger.info('startup')
+class ServerModel(BaseModel):
+    url: str
+    lat: str
+    lon: str
+    name: str
+    country: str
+    cc: str
+    sponsor: str
+    id: str
+    host: str
+    d: float
+    latency: float
+
+
+class ClientModel(BaseModel):
+    ip: str
+    lat: str
+    lon: str
+    isp: str
+    isprating: str
+    rating: str
+    ispdlavg: str
+    ispulavg: str
+    loggedin: str
+    country: str
+
+
+class SpeedTestModel(BaseModel):
+    download: float
+    upload: float
+    ping: float
+    server: ServerModel
+    timestamp: str
+    bytes_sent: int
+    bytes_received: int
+    share: str | None
+    client: ClientModel
+
+def speedtest() -> SpeedTestModel:
+    result = subprocess.run(
+        ['speedtest', '--json'],
+        capture_output = True,
+        text = True
+    )
+
+    if result.stderr:
+        raise Exception(result.stderr)
+
+    json_data = json.loads(result.stdout)
+    return SpeedTestModel(**json_data)
+
+def main(interval: int) -> None:
+    logger.info("Starting up...")
+    cache = redis.Redis(host="cache", port=6379, db=0)
 
     while True:
-        result = subprocess.run(
-            ['speedtest', '--json'],
-            capture_output = True,
-            text = True
-        )
+        logger.info("Running speedtest...")
+    
 
         try:
-            data = json.loads(result.stdout)
-            logger.info(json.dumps(data))
-        except:
-            logger.error('Invalid JSON')
-        if result.stderr:
-            logger.error(result.stderr)
+            # run the speedtest
+            result = speedtest().model_dump_json()
 
-        time.sleep(60 * 30) # run roughly every 30 minutes
+            # log the results
+            logger.info(result)
+
+            # cache the results
+            cache.set("speedtest", result, ex=interval*2)
+
+        except Exception as e:
+            logger.error(e)
+            exit(1)
+            
+        time.sleep(interval)
+
+if __name__ == '__main__':
+    main(interval=60*5) # roughly every 5 minutes

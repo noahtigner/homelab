@@ -2,11 +2,9 @@ import logging
 from contextlib import asynccontextmanager
 from itertools import product
 
-import redis.asyncio as redis
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.cache.router import router as cache_router
 from api.config import Settings
 from api.diagnostics.retrieval import get_cpu_percent
 from api.diagnostics.router import router as diagnostics_router
@@ -31,10 +29,6 @@ tags_metadata = [
         "name": "Docker",
         "description": "Docker Stats",
     },
-    {
-        "name": "Cache",
-        "description": "Redis Cache Stats",
-    },
 ]
 
 
@@ -42,12 +36,8 @@ tags_metadata = [
 async def lifespan(app: FastAPI):
     # startup
     get_cpu_percent(None)  # first call will always return 0
-    # set up redis cache
-    app.state.redis = redis.Redis(host="cache", port=6379, db=0)
-    logger.info(f"Ping successful: {await app.state.redis.ping()}")
     yield
     # cleanup
-    await app.state.redis.close()
 
 
 api = FastAPI(
@@ -91,7 +81,6 @@ api.add_middleware(
 
 api.include_router(docker_router)
 api.include_router(diagnostics_router)
-api.include_router(cache_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])

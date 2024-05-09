@@ -1,0 +1,6 @@
+black>=23.11.0
+flake8>=6.1.0
+isort>=5.12.0
+pydantic>=1.8.0,<3.0.0
+redis>=5.0.1
+speedtest-cli>=2.1.3

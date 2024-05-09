@@ -119,14 +119,6 @@ function StatusStackPihole() {
 				)
 				.then((res) => res.data),
 	});
-	const redisHealth = useQuery({
-		queryKey: ['pihole', 'redisHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			piholeClient
-				.get<{ status: ServiceStatus }>('/cache/')
-				.then((res) => res.data),
-	});
 	// unique services
 	const piholeHealth = useQuery({
 		queryKey: ['pihole', 'piholeHealth'],
@@ -152,7 +144,6 @@ function StatusStackPihole() {
 				status={getServiceStatus(traefikHealth)}
 				url={import.meta.env.VITE_TRAEFIK_BASE} // TODO: dynamic
 			/>
-			<StatusChip label="Cache" status={getServiceStatus(redisHealth)} />
 			<StatusChip
 				label="API: Diagnostics"
 				status={getServiceStatus(diagnosticsHealth)}
