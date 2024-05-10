@@ -81,9 +81,8 @@ def main(interval: int) -> None:
 
         except Exception as e:
             logger.error(e)
-            exit(1)
             
         time.sleep(interval)
 
 if __name__ == '__main__':
-    main(interval=60*5) # roughly every 5 minutes
+    main(interval=60*10) # roughly every 10 minutes
