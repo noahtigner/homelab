@@ -42,33 +42,36 @@ function StatusChip({
 	status: ServiceStatus;
 	url?: string;
 }) {
-	if (url) {
-		return (
-			<Link
-				href={url}
-				target="_blank"
-				sx={{ textDecoration: 'none', color: 'inherit' }}
-			>
-				<StatusChip label={label} status={status} />
-			</Link>
-		);
-	}
+	// if (url) {
+	// 	return (
+	// 		<Link
+	// 			href={url}
+	// 			target="_blank"
+	// 			sx={{ textDecoration: 'none', color: 'inherit' }}
+	// 		>
+	// 			<StatusChip label={label} status={status} />
+	// 		</Link>
+	// 	);
+	// }
 	return (
 		<Chip
-			label={label}
+			label={
+				url ? (
+					<Link
+						href={url}
+						target="_blank"
+						sx={{ textDecoration: 'none', color: 'inherit' }}
+					>
+						{label}
+					</Link>
+				) : (
+					label
+				)
+			}
 			color={statusToColor(status)}
 			icon={statusToIcon(status)}
 			sx={{ justifyContent: 'start', width: '100%' }}
-			// size="small"
-			// sx={{
-			//   paddingY: '4px',
-			//   justifyContent: 'start',
-			//   // height: 'auto',
-			//   '& .MuiChip-label': {
-			//     display: 'block',
-			//     whiteSpace: 'normal',
-			//   },
-			// }}
+			size="small"
 		/>
 	);
 }
