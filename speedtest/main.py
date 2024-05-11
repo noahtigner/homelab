@@ -79,10 +79,12 @@ def main(interval: int) -> None:
             # cache the results
             cache.set("speedtest", result, ex=interval*2)
 
+            time.sleep(interval)
+
         except Exception as e:
             logger.error(e)
+            time.sleep(30)
             
-        time.sleep(interval)
 
 if __name__ == '__main__':
     main(interval=60*10) # roughly every 10 minutes

@@ -15,6 +15,7 @@ from api.monarchmoney.router import router as monarchmoney_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
 from api.portfolio.router import router as portfolio_router
+from api.speedtest.router import router as speedtest_router
 
 logging.basicConfig(
     level=logging.INFO, format="%(levelname)s\t%(funcName)s.%(lineno)d\t%(message)s"
@@ -58,6 +59,10 @@ tags_metadata = [
     {
         "name": "Google Analytics",
         "description": "Google Analytics Data",
+    },
+    {
+        "name": "Speed Test",
+        "description": "Internet Speed Test",
     },
 ]
 
@@ -118,6 +123,7 @@ api.include_router(cache_router)
 api.include_router(portfolio_router)
 api.include_router(monarchmoney_router)
 api.include_router(google_analytics_router)
+api.include_router(speedtest_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])
