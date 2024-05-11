@@ -14,6 +14,7 @@ import InvestmentSummaryCard from '../components/money/InvestmentSummary';
 import NetWorthSummaryCard from '../components/money/NetWorthSummary';
 import ActiveUsersPerDayCard from '../components/analytics/ActiveUsersPerDayCard';
 import DashboardTable from '../components/diagnostics/DiagnosticsTable';
+import SpeedTestSummaryCard from '../components/speedtest/SpeedTestSummary';
 
 function Index() {
 	return (
@@ -24,8 +25,13 @@ function Index() {
 			<Grid xs={12} sm={6} md={2.5} lg={2}>
 				<StatusStackPrimary />
 			</Grid>
-			<Grid xs={12} md={7} lg={8}>
-				<DashboardTable />
+			<Grid container spacing={2} xs={12} md={7} lg={8}>
+				<Grid xs={12}>
+					<DashboardTable />
+				</Grid>
+				<Grid xs={12}>
+					<SpeedTestSummaryCard />
+				</Grid>
 			</Grid>
 			<Grid container spacing={2} xs={12}>
 				<PiholeStatus />

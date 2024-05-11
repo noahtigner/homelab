@@ -65,6 +65,16 @@ function StatusStackPrimary() {
 				)
 				.then((res) => res.data),
 	});
+	const speedtestHealth = useQuery({
+		queryKey: ['primary', 'speedtestHealth'],
+		refetchInterval: 1000 * 60, // 1 minute
+		queryFn: () =>
+			servicesClient
+				.get<{ status: ServiceStatus }>(
+					'/diagnostics/docker/container/speedtest/'
+				)
+				.then((res) => res.data),
+	});
 
 	return (
 		<Stack
@@ -94,6 +104,10 @@ function StatusStackPrimary() {
 			<StatusChip
 				label="Slack Bot"
 				status={getServiceStatus(slackBotHealth)}
+			/>
+			<StatusChip
+				label="Speed Test"
+				status={getServiceStatus(speedtestHealth)}
 			/>
 			<StatusChip label="Dashboard" status="ok" />
 		</Stack>
