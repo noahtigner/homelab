@@ -33,9 +33,9 @@ function StatusStackPrimary() {
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
 			servicesClient
-				.get<{ status: ServiceStatus }>(
-					'/diagnostics/docker/container/reverse_proxy/'
-				)
+				.get<{
+					status: ServiceStatus;
+				}>('/diagnostics/docker/container/reverse_proxy/')
 				.then((res) => res.data),
 	});
 	const redisHealth = useQuery({
@@ -60,9 +60,9 @@ function StatusStackPrimary() {
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
 			servicesClient
-				.get<{ status: ServiceStatus }>(
-					'/diagnostics/docker/container/slack_bot/'
-				)
+				.get<{
+					status: ServiceStatus;
+				}>('/diagnostics/docker/container/slack_bot/')
 				.then((res) => res.data),
 	});
 	const speedtestHealth = useQuery({
@@ -70,9 +70,9 @@ function StatusStackPrimary() {
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
 			servicesClient
-				.get<{ status: ServiceStatus }>(
-					'/diagnostics/docker/container/speedtest/'
-				)
+				.get<{
+					status: ServiceStatus;
+				}>('/diagnostics/docker/container/speedtest/')
 				.then((res) => res.data),
 	});
 
@@ -128,9 +128,9 @@ function StatusStackPihole() {
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
 			piholeClient
-				.get<{ status: ServiceStatus }>(
-					'/docker/container/reverse_proxy/'
-				)
+				.get<{
+					status: ServiceStatus;
+				}>('/docker/container/reverse_proxy/')
 				.then((res) => res.data),
 	});
 	// unique services
