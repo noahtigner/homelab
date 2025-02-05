@@ -174,18 +174,19 @@ function NPMPackageSummary({
 			</Box>
 			<ResponsiveContainer
 				width={'100%'}
-				aspect={10}
+				height="min-height"
+				aspect={8}
 				style={{ zIndex: 50 }}
 			>
 				<AreaChart
 					data={npmPackageInfo.downloads.per_day}
-					margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+					margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
 				>
 					<Area
 						type="monotone"
 						dataKey="downloads"
-						stroke={theme.palette.success.main}
-						fill={theme.palette.success.dark}
+						stroke={theme.palette.primary.main}
+						fill={theme.palette.primary.dark}
 					/>
 					<Tooltip content={<CustomTooltip />} />
 				</AreaChart>

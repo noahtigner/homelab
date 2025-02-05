@@ -71,7 +71,7 @@ function StatusChip({
 			color={statusToColor(status)}
 			icon={statusToIcon(status)}
 			sx={{ justifyContent: 'start', width: '100%' }}
-			size="small"
+			// size="small"
 		/>
 	);
 }

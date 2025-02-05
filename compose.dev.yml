@@ -118,6 +118,20 @@ services:
       context: ./speedtest
     command: 'python3 -u main.py'
 
+  # plex:
+  #   container_name: plex
+  #   image: lscr.io/linuxserver/plex:latest
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - VERSION=docker
+  #     - TZ=Etc/UTC
+  #   volumes:
+  #     - 'C:\media\tv:/media/tv'
+  #   ports:
+  #     - '32400:32400'
+  #   restart: 'unless-stopped'
+
 volumes:
   exclude:
 

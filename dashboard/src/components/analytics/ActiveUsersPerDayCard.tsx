@@ -119,7 +119,7 @@ function CustomTooltip({ active, payload }: TooltipProps<string, string>) {
 	return null;
 }
 
-function NPMPackageSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
+function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 	const theme = useTheme();
 
 	return (
@@ -145,20 +145,36 @@ function NPMPackageSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 				</Typography>
 				<PersonIcon color="success" sx={{ fontSize: 48 }} />
 			</Box> */}
+			<Link
+				href="https://noahtigner.com"
+				target="_blank"
+				rel="noreferrer"
+				sx={{ textDecoration: 'none', color: 'inherit' }}
+			>
+				<Typography
+					sx={{
+						fontSize: '1.25rem',
+					}}
+					variant="h2"
+				>
+					noahtigner.com
+				</Typography>
+			</Link>
 			<ResponsiveContainer
 				width={'100%'}
+				height="min-height"
 				aspect={15}
 				style={{ zIndex: 50 }}
 			>
 				<AreaChart
 					data={activePerDay.per_day}
-					margin={{ top: 0, right: 20, bottom: 0, left: 0 }}
+					margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
 				>
 					<Area
 						type="monotone"
 						dataKey="active_users"
-						stroke={theme.palette.success.main}
-						fill={theme.palette.success.dark}
+						stroke={theme.palette.primary.main}
+						fill={theme.palette.primary.dark}
 					/>
 					<Tooltip content={<CustomTooltip />} />
 				</AreaChart>
@@ -192,7 +208,7 @@ function ActiveUsersPerDayCard() {
 				>
 					<img
 						src="https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg"
-						alt="NPM"
+						alt="GA"
 						width={20}
 						style={{ marginRight: theme.spacing(1) }}
 					/>
@@ -213,7 +229,7 @@ function ActiveUsersPerDayCard() {
 					</Link>
 				</Box>
 				{activePerDay && (
-					<NPMPackageSummary activePerDay={activePerDay} />
+					<AnalyticsSummary activePerDay={activePerDay} />
 				)}
 			</StyledCardContent>
 		</StyledCard>

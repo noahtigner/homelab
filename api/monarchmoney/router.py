@@ -60,11 +60,11 @@ async def get_portfolio(request: Request):
         )
 
         return response_data
-    except requests.exceptions.ConnectionError as e:
+    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
         logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Connection to Monarch Money Refused",
+            detail=f"Connection to Monarch Money Refused: {e}",
         )
 
 
@@ -146,9 +146,9 @@ async def get_accounts(request: Request):
 
         data = MoneyAccountsResponse(**r.json())
         return data
-    except requests.exceptions.ConnectionError as e:
+    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
         logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Connection to Monarch Money Refused",
+            detail=f"Connection to Monarch Money Refused: {e}",
         )

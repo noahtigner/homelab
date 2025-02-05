@@ -26,6 +26,7 @@ const theme = createTheme({
 		},
 		primary: {
 			main: '#6EDFCA',
+			// main: 'rgb(255, 105, 45)',
 		},
 		success: {
 			main: '#20503E',

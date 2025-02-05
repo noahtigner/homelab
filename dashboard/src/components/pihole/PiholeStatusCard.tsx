@@ -26,12 +26,12 @@ function PiholeSummaryCardWrapper({
 					>
 						<img
 							src="/pihole.svg"
-							alt="Monarch Money"
+							alt="Pihole Admin Dashboard"
 							height={20}
 							style={{ marginRight: theme.spacing(1) }}
 						/>
 						<Link
-							href={import.meta.env.VITE_PIHOLE_IP}
+							href={`http://${import.meta.env.VITE_PIHOLE_IP}/admin/`}
 							target="_blank"
 							rel="noreferrer"
 							sx={{ textDecoration: 'none', color: 'inherit' }}
