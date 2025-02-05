@@ -31,7 +31,9 @@ function PiholeSummaryCardWrapper({
 							style={{ marginRight: theme.spacing(1) }}
 						/>
 						<Link
-							href={`http://${import.meta.env.VITE_PIHOLE_IP}/admin/`}
+							href={`http://${
+								import.meta.env.VITE_PIHOLE_IP
+							}/admin/`}
 							target="_blank"
 							rel="noreferrer"
 							sx={{ textDecoration: 'none', color: 'inherit' }}
