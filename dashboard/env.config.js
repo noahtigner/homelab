@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import {
 	envObject,
 	envNonEmptyString,
@@ -14,9 +13,5 @@ const envConfigSchema = envObject({
 	VITE_LEETCODE_USERNAME: envNonEmptyString(),
 	VITE_GITHUB_USERNAME: envNonEmptyString(),
 });
-
-declare global {
-	type Env = z.infer<typeof envConfigSchema>;
-}
 
 export default envConfigSchema;
