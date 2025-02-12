@@ -14,7 +14,7 @@ function OGPPreview({ url }: { url: string }) {
 		retry: false,
 	});
 
-	if (isPending || error) {
+	if (isPending || error || data === null) {
 		return (
 			<StyledCard variant="outlined">
 				<StyledCardContent

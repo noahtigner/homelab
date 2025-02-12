@@ -64,13 +64,13 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
-  # whoami:
-  #   container_name: 'whoami'
-  #   image: 'traefik/whoami'
-  #   labels:
-  #     - 'traefik.enable=true'
-  #     - 'traefik.http.routers.whoami.rule=Host(`${SERVER_IP}`) && PathPrefix(`/whoami`)'
-  #     - 'traefik.http.routers.whoami.entrypoints=web'
+  whoami:
+    container_name: 'whoami'
+    image: 'traefik/whoami'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami.rule=Host(`${SERVER_IP}`) && PathPrefix(`/whoami`)'
+      - 'traefik.http.routers.whoami.entrypoints=web'
 
   dashboard:
     container_name: dashboard
