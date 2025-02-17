@@ -20,6 +20,7 @@ router = APIRouter(
 
 @router.get("/portfolio/", response_model=MoneyPortfolioOutgoing)
 async def get_portfolio(request: Request):
+    # TODO: read token from secret then fall back to redis
     token = await request.app.state.redis.get("monarchmoney_token")
     if token is None:
         raise HTTPException(

@@ -11,6 +11,7 @@
 
 # Services:
 
+- [x] [Plex](https://www.plex.tv/) - Media Streaming Service
 - [x] [Pi-hole](https://pi-hole.net/) - Network-wide ad blocking & tracking prevention
 - [x] REST API - API for homelab services, built with [FastAPI](https://fastapi.tiangolo.com/)
   - [x] Hardware, Network, and Docker Diagnostics
@@ -33,6 +34,7 @@
 
 # Attribution
 
+<a href="https://www.plex.tv/"><img alt="Pi-hole" src="https://www.plex.tv/wp-content/themes/plex/assets/img/favicons/favicon.ico" height="32" /></a>
 <a href="https://pi-hole.net/"><img alt="Pi-hole" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/pihole.svg" height="32" /></a>
 <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://github.com/noahtigner/homelab/blob/main/dashboard/public/fastapi.svg" height="32" /></a>
 <a href="https://reactjs.org/"><img alt="React" src="https://github.com/noahtigner/homelab/blob/main/dashboard/src/assets/react.svg" height="32" /></a>

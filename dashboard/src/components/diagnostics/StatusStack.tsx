@@ -94,12 +94,12 @@ function StatusStackPrimary() {
 			<StatusChip
 				label="API: Diagnostics"
 				status={getServiceStatus(diagnosticsHealth)}
-				url={`${import.meta.env.VITE_API_BASE}/docs/`}
-			/>
+				url={`${import.meta.env.VITE_API_BASE}/diagnostics/docs/`}
+				/>
 			<StatusChip
 				label="API: Services"
 				status={getServiceStatus(servicesHealth)}
-				url={`${import.meta.env.VITE_API_BASE}/diagnostics/docs/`}
+				url={`${import.meta.env.VITE_API_BASE}/docs/`}
 			/>
 			<StatusChip
 				label="Slack Bot"
