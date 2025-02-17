@@ -6,8 +6,8 @@
 	"scripts": {
 		"dev": "node -v && vite --host 0.0.0.0 --force",
 		"build": "tsc && vite build",
-		"format": "prettier --check . --config ../.prettierrc.json --ignore-path ../.prettierignore --ignore-path ../.gitignore",
-		"format:fix": "prettier --write . --config ../.prettierrc.json --ignore-path ../.prettierignore --ignore-path ../.gitignore",
+		"format": "prettier --check . --config .prettierrc.json --ignore-path .prettierignore",
+		"format:fix": "prettier --write . --config .prettierrc.json --ignore-path .prettierignore",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
 		"typecheck": "tsc --noEmit",
