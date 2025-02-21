@@ -12,6 +12,7 @@ from api.github.router import router as github_router
 from api.google_analytics.router import router as google_analytics_router
 from api.leetcode.router import router as leetcode_router
 from api.monarchmoney.router import router as monarchmoney_router
+from api.nas.router import router as nas_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
 from api.portfolio.router import router as portfolio_router
@@ -63,6 +64,10 @@ tags_metadata = [
     {
         "name": "Speed Test",
         "description": "Internet Speed Test",
+    },
+    {
+        "name": "NAS",
+        "description": "Synology NAS Info",
     },
 ]
 
@@ -124,6 +129,7 @@ api.include_router(portfolio_router)
 api.include_router(monarchmoney_router)
 api.include_router(google_analytics_router)
 api.include_router(speedtest_router)
+api.include_router(nas_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])
