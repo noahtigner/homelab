@@ -35,3 +35,17 @@ async def set_cache_value(
 ):
     await request.app.state.redis.set(key, value)
     return {"key": key, "value": value}
+
+
+@router.delete("/delete/{key}/")
+async def delete_cache_value(key: str, request: Request):
+    await request.app.state.redis.delete(key)
+    return
+
+
+@router.delete("/delete/")
+async def delete_cache_keys(request: Request):
+    keys = await request.app.state.redis.keys("*")
+    for key in keys:
+        await request.app.state.redis.delete(key)
+    return

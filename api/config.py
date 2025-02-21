@@ -35,3 +35,6 @@ class Settings:
     OGP_IO_API_KEY = get_env("OGP_IO_API_KEY")
     GA4_PROPERTY_ID = get_env("GA4_PROPERTY_ID")
     GA4_CREDENTIALS = get_secret("ga4_credentials")
+    NAS_API_USERNAME = get_env("NAS_API_USERNAME")
+    NAS_API_PASSWORD = get_env("NAS_API_PASSWORD")
+    NAS_API_BASE = f"http://{get_env('NAS_IP')}:{get_env('NAS_PORT')}/webapi/entry.cgi"
