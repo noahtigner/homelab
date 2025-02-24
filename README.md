@@ -19,7 +19,7 @@
   - [x] Interface for interacting with the GitHub API
   - [x] Interface for interacting with the LeetCode API
   - [x] Interface for interacting with the Google Analytics API
-  - [x] Interface for interacting with the Synology FileStation API
+  - [x] Interface for interacting with Synology's various APIs for their NAS devices
 - [x] Internet Speed Test
 - [x] Dashboard - Dashboard for homelab services, built with [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), and [Vite](https://vitejs.dev/)
   - [x] displays Pi-hole stats
