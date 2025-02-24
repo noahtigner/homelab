@@ -3,7 +3,8 @@ import logging
 from fastapi import APIRouter, Request
 
 from api.nas.authentication import retrieve_api_versions
-from api.nas.retrieval import get_volumes_info, retrieve_folders_info
+from api.nas.models import SynoApiVersions, SynoFoldersResponse, SynoSystemResponse
+from api.nas.retrieval import retrieve_folders_info, retrieve_system_info
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +20,16 @@ async def get_nas_health(request: Request):
     return {"status": "ok"}
 
 
-@router.get("/volumes/")
-async def get_nas_volumes(request: Request):
-    return await get_volumes_info(request)
+@router.get("/versions/", tags=["Ping"], response_model=SynoApiVersions)
+async def get_nas_versions(request: Request):
+    return await retrieve_api_versions(request)
 
 
-@router.get("/folders/")
+@router.get("/system/", response_model=SynoSystemResponse)
+async def get_nas_system_info(request: Request):
+    return await retrieve_system_info(request)
+
+
+@router.get("/folders/", response_model=SynoFoldersResponse)
 async def get_nas_folders(request: Request, folder: str | None = "/media"):
     return await retrieve_folders_info(request, folder=folder)
