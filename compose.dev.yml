@@ -96,18 +96,6 @@ services:
       - '5173:5173'
     restart: 'unless-stopped'
 
-  slack_bot:
-    container_name: slack_bot
-    build:
-      context: ./slackbot
-    command: 'python3 slackbot/main.py'
-    volumes:
-      - ./slackbot:/app/slackbot
-    restart: 'unless-stopped'
-    secrets:
-      - slack_bot_token
-      - slack_app_token
-
   cache:
     container_name: cache
     image: redis:alpine
@@ -115,30 +103,6 @@ services:
     restart: 'unless-stopped'
     ports:
       - '6379:6379'
-
-  speedtest:
-    container_name: speedtest
-    build:
-      context: ./speedtest
-    command: 'python3 -u main.py'
-
-  plex:
-    container_name: plex
-    image: lscr.io/linuxserver/plex:latest
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - VERSION=docker
-      - TZ=Etc/UTC
-      - PLEX_CLAIM=${PLEX_CLAIM}
-    volumes:
-      - ./plex:/config
-      - media:/media
-    devices:
-      - /dev/dri:/dev/dri
-    ports:
-      - '32400:32400'
-    restart: 'unless-stopped'
 
 volumes:
   media:
