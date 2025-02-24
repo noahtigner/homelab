@@ -168,6 +168,8 @@ secrets/
 
 # JS
 node_modules/
+dashboard/node_modules/
+dashboard/.pnpm-store/
 
 # Logs
 logs

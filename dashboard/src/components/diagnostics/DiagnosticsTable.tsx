@@ -10,8 +10,14 @@ import {
 	TableRow,
 } from '@mui/material';
 import { piholeClient, primaryClient } from '../../services/api';
-import { celsiusToFahrenheit } from '../../services/unitConversion';
+import {
+	celsiusToFahrenheit,
+	bytesToGigabytes,
+	bytesToTerabytes,
+} from '../../services/unitConversion';
 import { StyledCard } from '../StyledCard';
+import { getRequest } from '../../services/api/utils';
+import { nasDiagnosticsSchema } from '../../types/schemas';
 
 interface DiagnosticsData {
 	cpu: {
@@ -32,6 +38,68 @@ interface DiagnosticsData {
 		percent: number;
 	};
 	pids: number[];
+}
+
+function NasDiagnosticsTableRow() {
+	const { isLoading, isError, data } = useQuery({
+		queryKey: ['diagnostics', 'NAS'],
+		refetchInterval: 1000 * 30, // 30 seconds
+		queryFn: () =>
+			getRequest('/nas/system/', nasDiagnosticsSchema).then(
+				(res) => res.data
+			),
+	});
+
+	if (isError) {
+		return (
+			<TableCell
+				component="th"
+				scope="row"
+				colSpan={999}
+				sx={{ textAlign: 'center ' }}
+			>
+				An unexpected error occurred
+			</TableCell>
+		);
+	}
+	if (isLoading || !data) {
+		return (
+			<TableCell component="th" scope="row" colSpan={999}>
+				<Skeleton variant="text" width="100%" />
+			</TableCell>
+		);
+	}
+
+	const cpuMax: number = Math.max(...Object.values(data.utilization.cpu));
+	const cpuAvg: number =
+		Object.values(data.utilization.cpu).reduce((acc, c) => acc + c, 0) /
+		Object.values(data.utilization.cpu).length;
+	const memoryUsage: number = data.utilization.memory.real_usage;
+	const diskUsageBytes: number = data.storage.vol_info.reduce(
+		(acc, v) => acc + v.used_size,
+		0
+	);
+	const diskCapacityBytes: number = data.storage.vol_info.reduce(
+		(acc, v) => acc + v.total_size,
+		0
+	);
+	const diskUsageGB: string = `${bytesToGigabytes(diskUsageBytes).toFixed(0)} GB`;
+	const diskCapacityTB: string = `${bytesToTerabytes(diskCapacityBytes).toFixed(2)} TB`;
+	const diskUsagePercent: number = (diskUsageBytes / diskCapacityBytes) * 100;
+
+	return (
+		<>
+			<TableCell align="right">{`${cpuMax.toFixed(2)}%`}</TableCell>
+			<TableCell align="right">{`${cpuAvg.toFixed(2)}%`}</TableCell>
+			<TableCell align="right">{`${memoryUsage.toFixed(1)}%`}</TableCell>
+			<TableCell align="right">{`${diskUsageGB} / ${diskCapacityTB} (${diskUsagePercent.toFixed(
+				1
+			)}%)`}</TableCell>
+			<TableCell align="right">
+				{`${celsiusToFahrenheit(data.core.sys_temp).toFixed(1)}°F`}
+			</TableCell>
+		</>
+	);
 }
 
 function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
@@ -106,9 +174,15 @@ function DashboardTable() {
 					<TableBody>
 						<TableRow>
 							<TableCell component="th" scope="row">
-								Primary
+								Mini-PC
 							</TableCell>
 							<DiagnosticsTableRow client={primaryClient} />
+						</TableRow>
+						<TableRow>
+							<TableCell component="th" scope="row">
+								NAS
+							</TableCell>
+							<NasDiagnosticsTableRow />
 						</TableRow>
 						<TableRow>
 							<TableCell component="th" scope="row">

@@ -23,6 +23,9 @@ dependencies:
   axios:
     specifier: ^1.6.7
     version: 1.7.9
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -40,6 +43,9 @@ devDependencies:
   '@tanstack/eslint-plugin-query':
     specifier: ^5.18.1
     version: 5.66.0(eslint@8.57.1)(typescript@5.3.3)
+  '@types/lodash':
+    specifier: ^4.17.15
+    version: 4.17.15
   '@types/react':
     specifier: ^18.2.62
     version: 18.3.18
@@ -1143,6 +1149,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/lodash@4.17.15:
+    resolution: {integrity: sha512-w/P33JFeySuhN6JLkysYUK2gEmy9kHHFN7E8ro0tkfmlDOgxBDzWEZ/J8cWA+fHqFevpswDTFZnDx+R9lbL6xw==}
     dev: true
 
   /@types/parse-json@4.0.2:
