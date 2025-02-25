@@ -35,9 +35,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Set up Node & pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 10.4.1
           run_install: |
             - recursive: true
               args: [--frozen-lockfile]
@@ -52,9 +52,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Set up Node & pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 10.4.1
           run_install: |
             - recursive: true
               args: [--frozen-lockfile]
