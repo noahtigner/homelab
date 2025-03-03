@@ -103,8 +103,8 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
       validate-env-vars:
-        specifier: 0.4.2
-        version: 0.4.2(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2)
+        specifier: 0.4.3
+        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2)
       vite:
         specifier: ^6.1.1
         version: 6.1.1
@@ -2158,8 +2158,8 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  validate-env-vars@0.4.2:
-    resolution: {integrity: sha512-0ltix5GfT3mOZ8m9doVQ+06m3R2X/WiAw7gG6H17nckYKzdoJxB9iA6nPjpmS5dxSxpO/LugIusDPQWnbvtwew==}
+  validate-env-vars@0.4.3:
+    resolution: {integrity: sha512-xeFM4pGmZHdAcvkS1IwT8ACQYu+EcNby5H8ckrbaP4yWAlfFkwXpnzA14gXfJk0P639nAsJM1Fn4Oh0H2S5rZQ==}
     engines: {node: '>=20'}
     peerDependencies:
       dotenv: ^16.4.0
@@ -4526,7 +4526,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  validate-env-vars@0.4.2(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2):
+  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2):
     dependencies:
       dotenv: 16.4.7
       dotenv-expand: 11.0.7
