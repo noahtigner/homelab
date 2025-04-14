@@ -13,8 +13,8 @@ importers:
         version: 3.24.2
     devDependencies:
       dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
+        specifier: ^16.5.0
+        version: 16.5.0
       dotenv-expand:
         specifier: ^11.0.7
         version: 11.0.7
@@ -26,7 +26,7 @@ importers:
         version: 3.5.2
       validate-env-vars:
         specifier: 0.4.3
-        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2)
+        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@16.5.0)(zod@3.24.2)
 
 packages:
 
@@ -34,8 +34,8 @@ packages:
     resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
-  dotenv@16.4.7:
-    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+  dotenv@16.5.0:
+    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
 
   husky@9.1.7:
@@ -63,17 +63,17 @@ snapshots:
 
   dotenv-expand@11.0.7:
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.5.0
 
-  dotenv@16.4.7: {}
+  dotenv@16.5.0: {}
 
   husky@9.1.7: {}
 
   prettier@3.5.2: {}
 
-  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2):
+  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@16.5.0)(zod@3.24.2):
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.5.0
       dotenv-expand: 11.0.7
       zod: 3.24.2
 
