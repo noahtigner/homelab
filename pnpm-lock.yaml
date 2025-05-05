@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       zod:
-        specifier: ^3.24.2
-        version: 3.24.2
+        specifier: ^3.24.4
+        version: 3.24.4
     devDependencies:
       dotenv:
         specifier: ^16.4.7
@@ -26,7 +26,7 @@ importers:
         version: 3.5.2
       validate-env-vars:
         specifier: 0.4.3
-        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2)
+        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.4)
 
 packages:
 
@@ -56,8 +56,8 @@ packages:
       dotenv-expand: ^11.0.6
       zod: ^3.22.4
 
-  zod@3.24.2:
-    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
+  zod@3.24.4:
+    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
 snapshots:
 
@@ -71,10 +71,10 @@ snapshots:
 
   prettier@3.5.2: {}
 
-  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.2):
+  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.24.4):
     dependencies:
       dotenv: 16.4.7
       dotenv-expand: 11.0.7
-      zod: 3.24.2
+      zod: 3.24.4
 
-  zod@3.24.2: {}
+  zod@3.24.4: {}
