@@ -1,5 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import {
 	Box,
 	Divider,
@@ -10,45 +8,10 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import { StyledCard, StyledCardContent } from '../StyledCard';
-
-interface Account {
-	id: string;
-	syncDisabled: boolean;
-	isHidden: boolean;
-	isAsset: boolean;
-	includeInNetWorth: boolean;
-	type: {
-		name: string;
-		display: string;
-	};
-	displayName: string;
-	displayBalance: number;
-	signedBalance: number;
-	updatedAt: string;
-	icon: string;
-	logoUrl: string;
-	includeBalanceInNetWorth: boolean;
-	institution?: {
-		id: string;
-		name: string;
-	};
-}
-
-interface AccountTypeSummary {
-	type: {
-		display: string;
-		group: 'asset' | 'liability';
-		name: string;
-	};
-	accounts: Account[];
-	totalDisplayBalance: number;
-}
-
-interface NetWorthSummaryData {
-	data: {
-		accountTypeSummaries: AccountTypeSummary[];
-	};
-}
+import useQueryMoneyAccounts, {
+	AccountTypeSummary,
+	NetWorthSummaryData,
+} from '../../hooks/useQueryMoneyAccounts';
 
 const formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -164,14 +127,7 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 }
 
 function NetWorthSummary() {
-	const { isPending, error, data } = useQuery({
-		queryKey: ['NetWorthSummary'],
-		refetchInterval: 1000 * 60 * 15, // 15 minutes
-		queryFn: () =>
-			axios
-				.get<NetWorthSummaryData>(`/money/accounts/`)
-				.then((res) => res.data),
-	});
+	const { isPending, error, data } = useQueryMoneyAccounts();
 
 	if (isPending) {
 		return (

@@ -12,6 +12,7 @@ import {
 import OGPPreview from '../components/portfolio/OGPPreview';
 import InvestmentSummaryCard from '../components/money/InvestmentSummary';
 import NetWorthSummaryCard from '../components/money/NetWorthSummary';
+import EquitySummaryCard from '../components/money/EquitySummary';
 import ActiveUsersPerDayCard from '../components/analytics/ActiveUsersPerDayCard';
 import DashboardTable from '../components/diagnostics/DiagnosticsTable';
 import SpeedTestSummaryCard from '../components/speedtest/SpeedTestSummary';
@@ -36,13 +37,16 @@ function Index() {
 			<Grid container spacing={2} xs={12}>
 				<PiholeStatus />
 			</Grid>
-			<Grid xs={12} md={3}>
+			<Grid xs={12} md={3} lg={2}>
 				<InvestmentSummaryCard />
 			</Grid>
-			<Grid xs={12} md={3}>
+			<Grid xs={12} md={3} lg={2}>
+				<EquitySummaryCard />
+			</Grid>
+			<Grid xs={12} md={4}>
 				<NetWorthSummaryCard />
 			</Grid>
-			<Grid xs={12} md={6}>
+			<Grid xs={12} md={6} lg={4}>
 				<ActiveUsersPerDayCard />
 			</Grid>
 			<Grid xs={12} sm={6} lg={4}>
