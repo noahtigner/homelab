@@ -22,7 +22,7 @@
 		"validate-env-vars": "node validateEnvVars.js"
 	},
 	"devDependencies": {
-		"dotenv": "^16.4.7",
+		"dotenv": "^16.6.1",
 		"dotenv-expand": "^11.0.7",
 		"husky": "^9.1.7",
 		"prettier": "^3.5.2",
