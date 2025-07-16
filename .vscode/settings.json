@@ -1,9 +1,6 @@
 {
-    "files.associations": {
-        "*.ts": "typescript"
-    },
-    "cSpell.words": [
-        "blkio",
-        "pids"
-    ]
+	"files.associations": {
+		"*.ts": "typescript"
+	},
+	"cSpell.words": ["blkio", "pids"]
 }
