@@ -1,3 +1,4 @@
+import { type TypeOf } from 'zod';
 import {
 	envObject,
 	envNonEmptyString,
@@ -13,5 +14,9 @@ const envConfigSchema = envObject({
 	VITE_LEETCODE_USERNAME: envNonEmptyString(),
 	VITE_GITHUB_USERNAME: envNonEmptyString(),
 });
+
+declare global {
+	type Env = TypeOf<typeof envConfigSchema>;
+}
 
 export default envConfigSchema;
