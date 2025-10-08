@@ -55,6 +55,10 @@ export default [
 			'import-x/first': 'error',
 			'import-x/newline-after-import': 'warn',
 			'import-x/no-named-default': 'error',
+			// Override react-hooks rules to be errors instead of warnings
+			'react-hooks/exhaustive-deps': 'error',
+			'react-hooks/incompatible-library': 'error',
+			'react-hooks/unsupported-syntax': 'error',
 		},
 	},
 ];
