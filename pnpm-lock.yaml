@@ -9,12 +9,12 @@ importers:
   .:
     dependencies:
       zod:
-        specifier: ^3.25.28
-        version: 3.25.28
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
+        specifier: ^17.2.3
+        version: 17.2.3
       dotenv-expand:
         specifier: ^11.0.7
         version: 11.0.7
@@ -22,11 +22,11 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       prettier:
-        specifier: ^3.5.2
-        version: 3.5.2
+        specifier: ^3.6.2
+        version: 3.6.2
       validate-env-vars:
         specifier: 0.4.3
-        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.25.28)
+        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76)
 
 packages:
 
@@ -34,8 +34,12 @@ packages:
     resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
-  dotenv@16.4.7:
-    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
+
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
   husky@9.1.7:
@@ -43,8 +47,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  prettier@3.5.2:
-    resolution: {integrity: sha512-lc6npv5PH7hVqozBR7lkBNOGXV9vMwROAPlumdBkX0wTbbzPu/U1hk5yL8p2pt4Xoc+2mkT8t/sow2YrV/M5qg==}
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -56,25 +60,27 @@ packages:
       dotenv-expand: ^11.0.6
       zod: ^3.22.4
 
-  zod@3.25.28:
-    resolution: {integrity: sha512-/nt/67WYKnr5by3YS7LroZJbtcCBurDKKPBPWWzaxvVCGuG/NOsiKkrjoOhI8mJ+SQUXEbUzeB3S+6XDUEEj7Q==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
 snapshots:
 
   dotenv-expand@11.0.7:
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.6.1
 
-  dotenv@16.4.7: {}
+  dotenv@16.6.1: {}
+
+  dotenv@17.2.3: {}
 
   husky@9.1.7: {}
 
-  prettier@3.5.2: {}
+  prettier@3.6.2: {}
 
-  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@16.4.7)(zod@3.25.28):
+  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76):
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 17.2.3
       dotenv-expand: 11.0.7
-      zod: 3.25.28
+      zod: 3.25.76
 
-  zod@3.25.28: {}
+  zod@3.25.76: {}
