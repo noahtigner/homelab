@@ -103,8 +103,8 @@ importers:
         specifier: ^8.46.0
         version: 8.46.0(eslint@9.37.0)(typescript@5.9.3)
       validate-env-vars:
-        specifier: 0.4.4
-        version: 0.4.4(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76)
+        specifier: 1.0.0
+        version: 1.0.0(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76)
       vite:
         specifier: ^7.1.9
         version: 7.1.9
@@ -2204,13 +2204,13 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  validate-env-vars@0.4.4:
-    resolution: {integrity: sha512-xQGsNkGnwa7gmYSckT/AKgsCB3XpzHQrrfQFM9XIj8rTGQspT6QDKZpzZAmqaW+4goDMvzeUSP93E+aoyKtosw==}
+  validate-env-vars@1.0.0:
+    resolution: {integrity: sha512-jFNksvSefBQaTmx4EOfs3dyTC/l62RK1AcVgiGqabQyamQwX+Hv7oqBZ1kjHD/cLGmbqhHPK3KlbtnH9+jrBRw==}
     engines: {node: '>=20'}
     peerDependencies:
       dotenv: ^16.4.0
-      dotenv-expand: ^11.0.6
-      zod: ^3.22.4
+      dotenv-expand: ^12.0.3
+      zod: ^4.1.11
 
   victory-vendor@36.9.2:
     resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
@@ -4603,7 +4603,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  validate-env-vars@0.4.4(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76):
+  validate-env-vars@1.0.0(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76):
     dependencies:
       dotenv: 17.2.3
       dotenv-expand: 11.0.7
