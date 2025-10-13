@@ -25,8 +25,8 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
       validate-env-vars:
-        specifier: 0.4.3
-        version: 0.4.3(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76)
+        specifier: 1.0.0
+        version: 1.0.0(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76)
 
 packages:
 
@@ -52,13 +52,13 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  validate-env-vars@0.4.3:
-    resolution: {integrity: sha512-xeFM4pGmZHdAcvkS1IwT8ACQYu+EcNby5H8ckrbaP4yWAlfFkwXpnzA14gXfJk0P639nAsJM1Fn4Oh0H2S5rZQ==}
+  validate-env-vars@1.0.0:
+    resolution: {integrity: sha512-jFNksvSefBQaTmx4EOfs3dyTC/l62RK1AcVgiGqabQyamQwX+Hv7oqBZ1kjHD/cLGmbqhHPK3KlbtnH9+jrBRw==}
     engines: {node: '>=20'}
     peerDependencies:
       dotenv: ^16.4.0
-      dotenv-expand: ^11.0.6
-      zod: ^3.22.4
+      dotenv-expand: ^12.0.3
+      zod: ^4.1.11
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
@@ -77,7 +77,7 @@ snapshots:
 
   prettier@3.6.2: {}
 
-  validate-env-vars@0.4.3(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76):
+  validate-env-vars@1.0.0(dotenv-expand@11.0.7)(dotenv@17.2.3)(zod@3.25.76):
     dependencies:
       dotenv: 17.2.3
       dotenv-expand: 11.0.7
