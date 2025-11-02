@@ -50,14 +50,14 @@ export const nasDiagnosticsSchema = z.object({
 		),
 	}),
 	network: z.object({
-		dns: z.string().ip(),
+		dns: z.ipv4(),
 		enabled_domain: z.boolean(),
 		enabled_samba: z.boolean(),
-		gateway: z.string().ip(),
+		gateway: z.ipv4(),
 		hostname: z.string(),
 		nif: z.array(
 			z.object({
-				addr: z.string().ip(),
+				addr: z.ipv4(),
 				id: z.string(),
 				speed: z.number(),
 				status: z.string(),
