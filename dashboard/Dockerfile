@@ -1,4 +1,4 @@
-FROM node:20-slim as dev
+FROM node:20-slim AS dev
 
 # configure pnpm
 ENV PNPM_HOME="/pnpm"
