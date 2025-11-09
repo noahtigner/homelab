@@ -95,7 +95,6 @@ ips = [
     "localhost",
     "127.0.0.1",
     Settings.SERVER_IP,
-    Settings.PIHOLE_IP,
 ]
 
 ports = ["8080", "5173"]

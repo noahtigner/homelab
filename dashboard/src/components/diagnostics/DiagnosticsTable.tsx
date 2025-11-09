@@ -9,10 +9,9 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import { piholeClient, primaryClient } from '../../services/api';
+import { primaryClient } from '../../services/api';
 import {
 	celsiusToFahrenheit,
-	bytesToGigabytes,
 	bytesToTerabytes,
 } from '../../services/unitConversion';
 import { StyledCard } from '../StyledCard';
@@ -83,7 +82,7 @@ function NasDiagnosticsTableRow() {
 		(acc, v) => acc + v.total_size,
 		0
 	);
-	const diskUsageGB: string = `${bytesToGigabytes(diskUsageBytes).toFixed(0)} GB`;
+	const diskUsageTB: string = `${bytesToTerabytes(diskUsageBytes).toFixed(2)} TB`;
 	const diskCapacityTB: string = `${bytesToTerabytes(diskCapacityBytes).toFixed(2)} TB`;
 	const diskUsagePercent: number = (diskUsageBytes / diskCapacityBytes) * 100;
 
@@ -92,7 +91,7 @@ function NasDiagnosticsTableRow() {
 			<TableCell align="right">{`${cpuMax.toFixed(2)}%`}</TableCell>
 			<TableCell align="right">{`${cpuAvg.toFixed(2)}%`}</TableCell>
 			<TableCell align="right">{`${memoryUsage.toFixed(1)}%`}</TableCell>
-			<TableCell align="right">{`${diskUsageGB} / ${diskCapacityTB} (${diskUsagePercent.toFixed(
+			<TableCell align="right">{`${diskUsageTB} / ${diskCapacityTB} (${diskUsagePercent.toFixed(
 				1
 			)}%)`}</TableCell>
 			<TableCell align="right">
@@ -104,7 +103,7 @@ function NasDiagnosticsTableRow() {
 
 function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
 	const { isLoading, isError, data } = useQuery({
-		queryKey: ['piholeDiagnostics', client.getUri()],
+		queryKey: ['diagnostics', client.getUri()],
 		refetchInterval: 1000 * 5, // 5 seconds
 		queryFn: () =>
 			client
@@ -183,12 +182,6 @@ function DashboardTable() {
 								NAS
 							</TableCell>
 							<NasDiagnosticsTableRow />
-						</TableRow>
-						<TableRow>
-							<TableCell component="th" scope="row">
-								Pihole
-							</TableCell>
-							<DiagnosticsTableRow client={piholeClient} />
 						</TableRow>
 					</TableBody>
 				</Table>

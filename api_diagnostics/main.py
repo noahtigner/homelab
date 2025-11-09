@@ -52,7 +52,6 @@ ips = [
     "localhost",
     "127.0.0.1",
     Settings.SERVER_IP,
-    Settings.PIHOLE_IP,
 ]
 
 ports = ["8080", "5173"]
@@ -67,9 +66,7 @@ protocols = [
 combinations = product(ips, ports, protocols)
 
 # Create origins from combinations
-origins = [
-    f"{protocol}{ip}:{port}" for ip, port, protocol in combinations
-]
+origins = [f"{protocol}{ip}:{port}" for ip, port, protocol in combinations]
 
 api.add_middleware(
     CORSMiddleware,
