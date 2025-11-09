@@ -1,9 +1,9 @@
 import logging
 
 import requests
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Request, status
 
-from api.config import Settings
+from api.pihole.retrieval import retrieve_blocking, retrieve_recent_stats
 
 logger = logging.getLogger(__name__)
 
@@ -14,26 +14,14 @@ router = APIRouter(
 
 
 @router.get("/", tags=["Ping"])
-def get_pihole_health():
-    token = Settings.PIHOLE_API_TOKEN
-    url1 = f"{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}"
-    url2 = f"{Settings.PIHOLE_API_BASE}/api_db.php?messages&auth={token}"
-
+async def get_pihole_health(request: Request):
     try:
-        r1 = requests.get(url1)
-        r2 = requests.get(url2)
+        blocking_response = await retrieve_blocking(request)
 
-        if r1.status_code != 200 or r2.status_code != 200:
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Connection to Pi-hole Refused",
-            )
+        enabled = blocking_response.get("blocking") == "enabled"
+        service_status = "ok" if enabled else "warning"
 
-        enabled = r1.json().get("status") == "enabled"
-        messages = r2.json().get("messages")
-        service_status = "ok" if enabled and len(messages) == 0 else "warning"
-
-        return {"status": service_status, "messages": messages}
+        return {"status": service_status}
     except requests.exceptions.ConnectionError as e:
         logger.error(e)
         raise HTTPException(
@@ -43,24 +31,10 @@ def get_pihole_health():
 
 
 @router.get("/summary/")
-def get_pihole_summary(response: Response):
-    token = Settings.PIHOLE_API_TOKEN
-    url = f"{Settings.PIHOLE_API_BASE}/api.php?summaryRaw&auth={token}"
-
+async def get_pihole_summary(request: Request):
     try:
-        r = requests.get(url)
-        response.status_code = r.status_code
-        return r.json()
-    except requests.exceptions.ConnectionError as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Connection to Pi-hole Refused",
-        )
-
-
-# TODO: Implement these endpoints
-# http://192.168.0.69/admin/api.php?topItems
-# http://192.168.0.69/admin/api.php?getQuerySources&topClientsBlocked
-# http://192.168.0.69/admin/api.php?overTimeDataClients&getClientNames
-# http://192.168.0.69/admin/api.php?overTimeData10mins
+        recent_stats = await retrieve_recent_stats(request)
+        return recent_stats
+    except Exception as e:
+        logger.error(f"Error retrieving Pi-hole summary: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")

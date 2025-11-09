@@ -26,5 +26,4 @@ def get_env(name: str) -> str:
 
 
 class Settings:
-    PIHOLE_IP = get_env("PIHOLE_IP")
     SERVER_IP = get_env("SERVER_IP")

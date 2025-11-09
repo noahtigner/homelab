@@ -32,7 +32,7 @@ function PiholeSummaryCardWrapper({
 						/>
 						<Link
 							href={`http://${
-								import.meta.env.VITE_PIHOLE_IP
+								import.meta.env.VITE_SERVER_IP
 							}/admin/`}
 							target="_blank"
 							rel="noreferrer"

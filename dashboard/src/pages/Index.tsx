@@ -5,10 +5,7 @@ import LeetCodeSummaryCard from '../components/leetcode/LeetCodeSummaryCard';
 import NPMPackageCard from '../components/npm/NPMPackageCard';
 import GithubSummaryCard from '../components/github/GithubSummaryCard';
 import PiholeStatus from '../components/pihole/PiholeStatus';
-import {
-	StatusStackPrimary,
-	StatusStackPihole,
-} from '../components/diagnostics/StatusStack';
+import { StatusStackPrimary } from '../components/diagnostics/StatusStack';
 import OGPPreview from '../components/portfolio/OGPPreview';
 import InvestmentSummaryCard from '../components/money/InvestmentSummary';
 import NetWorthSummaryCard from '../components/money/NetWorthSummary';
@@ -20,13 +17,10 @@ import SpeedTestSummaryCard from '../components/speedtest/SpeedTestSummary';
 function Index() {
 	return (
 		<Grid container spacing={2}>
-			<Grid xs={12} sm={6} md={2.5} lg={2}>
-				<StatusStackPihole />
-			</Grid>
-			<Grid xs={12} sm={6} md={2.5} lg={2}>
+			<Grid xs={12} md={2} lg={3}>
 				<StatusStackPrimary />
 			</Grid>
-			<Grid container spacing={2} xs={12} md={7} lg={8}>
+			<Grid container spacing={2} xs={12} md={10} lg={9}>
 				<Grid xs={12}>
 					<DashboardTable />
 				</Grid>
