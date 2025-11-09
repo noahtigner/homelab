@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class PiholeRecentStats(BaseModel):
     sum_queries: int
     sum_blocked: int
@@ -13,6 +14,7 @@ class PiholeFTLSummary(BaseModel):
     uptime: float
     percent_mem: float
     percent_cpu: float
+
 
 class PiholeRecentStatsResponse(PiholeRecentStats, PiholeFTLSummary):
     pass

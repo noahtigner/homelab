@@ -1,15 +1,20 @@
 import logging
 import time
-from fastapi import Request
+
 import requests
+from fastapi import Request
 
 from api.config import Settings
 from api.pihole.authentication import pihole_session
-from api.pihole.models import PiholeFTLSummary, PiholeRecentStats, PiholeRecentStatsResponse
+from api.pihole.models import (
+    PiholeFTLSummary,
+    PiholeRecentStats,
+    PiholeRecentStatsResponse,
+)
 from api.utils.cache import cache
 
-
 logger = logging.getLogger(__name__)
+
 
 @cache("pihole:blocking", PiholeRecentStatsResponse, ttl=30)
 @pihole_session
@@ -23,16 +28,14 @@ async def retrieve_blocking(request: Request, sid: str):
 
 @cache("pihole:recent", PiholeRecentStatsResponse, ttl=30)
 @pihole_session
-async def retrieve_recent_stats(request: Request, sid: str) -> PiholeRecentStatsResponse:
+async def retrieve_recent_stats(
+    request: Request, sid: str
+) -> PiholeRecentStatsResponse:
     now = int(time.time())
     twenty_four_hours_ago = now - (24 * 60 * 60)
 
     # /api/stats/summary
-    stats_params = {
-        "from": twenty_four_hours_ago,
-        "until": now,
-        "sid": sid
-    }
+    stats_params = {"from": twenty_four_hours_ago, "until": now, "sid": sid}
     stats_url = f"{Settings.PIHOLE_API_BASE}/api/stats/database/summary"
     stats_r = requests.get(stats_url, params=stats_params, verify=False)
     stats_r.raise_for_status()
@@ -46,8 +49,8 @@ async def retrieve_recent_stats(request: Request, sid: str) -> PiholeRecentStats
 
     stats_data = PiholeRecentStats(**stats_r.json())
     ftl_data = PiholeFTLSummary(
-        gravity = ftl_data.get("database", {}).get("gravity"),
-        qps= ftl_data.get("query_frequency"),
+        gravity=ftl_data.get("database", {}).get("gravity"),
+        qps=ftl_data.get("query_frequency"),
         uptime=ftl_data.get("uptime"),
         percent_mem=ftl_data.get("%mem"),
         percent_cpu=ftl_data.get("%cpu"),

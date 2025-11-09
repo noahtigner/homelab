@@ -38,4 +38,3 @@ async def get_pihole_summary(request: Request):
     except Exception as e:
         logger.error(f"Error retrieving Pi-hole summary: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
-
