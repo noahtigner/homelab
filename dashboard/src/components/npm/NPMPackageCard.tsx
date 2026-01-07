@@ -7,13 +7,8 @@ import {
 	Box,
 	Chip,
 } from '@mui/material';
-import {
-	ResponsiveContainer,
-	AreaChart,
-	Area,
-	Tooltip,
-	TooltipProps,
-} from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
+import type { TooltipContentProps } from 'recharts';
 import LinkIcon from '@mui/icons-material/Link';
 import axios from 'axios';
 
@@ -112,7 +107,10 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 	);
 }
 
-function CustomTooltip({ active, payload }: TooltipProps<string, string>) {
+function CustomTooltip({
+	active,
+	payload,
+}: TooltipContentProps<string, string>) {
 	const theme = useTheme();
 	if (active && payload && payload.length) {
 		return (
@@ -174,7 +172,6 @@ function NPMPackageSummary({
 			</Box>
 			<ResponsiveContainer
 				width={'100%'}
-				height="min-height"
 				aspect={8}
 				style={{ zIndex: 50 }}
 			>
@@ -188,7 +185,7 @@ function NPMPackageSummary({
 						stroke={theme.palette.primary.main}
 						fill={theme.palette.primary.dark}
 					/>
-					<Tooltip content={<CustomTooltip />} />
+					<Tooltip content={CustomTooltip} />
 				</AreaChart>
 			</ResponsiveContainer>
 			<NPMChips npmPackageInfo={npmPackageInfo} />

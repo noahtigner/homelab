@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTheme, Typography, Link, Box, Chip } from '@mui/material';
-import {
-	ResponsiveContainer,
-	AreaChart,
-	Area,
-	Tooltip,
-	TooltipProps,
-} from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
+import type { TooltipContentProps } from 'recharts';
 import axios from 'axios';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
@@ -87,7 +82,10 @@ function ActiveUsersChips({ activePerDay }: { activePerDay: ActivePerDay }) {
 	);
 }
 
-function CustomTooltip({ active, payload }: TooltipProps<string, string>) {
+function CustomTooltip({
+	active,
+	payload,
+}: TooltipContentProps<string, string>) {
 	const theme = useTheme();
 	if (active && payload && payload.length) {
 		return (
@@ -162,7 +160,6 @@ function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 			</Link>
 			<ResponsiveContainer
 				width={'100%'}
-				height="min-height"
 				aspect={15}
 				style={{ zIndex: 50 }}
 			>
@@ -176,7 +173,7 @@ function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 						stroke={theme.palette.primary.main}
 						fill={theme.palette.primary.dark}
 					/>
-					<Tooltip content={<CustomTooltip />} />
+					<Tooltip content={CustomTooltip} />
 				</AreaChart>
 			</ResponsiveContainer>
 			<ActiveUsersChips activePerDay={activePerDay} />
