@@ -1,4 +1,4 @@
-FROM node:20-slim AS dev
+FROM node:24-slim AS dev
 
 # configure pnpm
 ENV PNPM_HOME="/pnpm"
@@ -16,7 +16,7 @@ WORKDIR /app
 # RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 RUN pnpm install
 
-FROM dev as pro
+FROM dev AS pro
 
 COPY . /app
 RUN pnpm install -g serve
