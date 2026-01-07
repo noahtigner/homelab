@@ -10,7 +10,12 @@ export default defineConfig({
 		react(),
 		{
 			name: 'validate-env-vars',
-			buildStart: () => validateEnvVars({ schema: envConfigSchema }),
+			buildStart: () =>
+				validateEnvVars({
+					schema: envConfigSchema,
+					envPath: './.env',
+					logVars: true,
+				}),
 		},
 	],
 });
