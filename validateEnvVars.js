@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 
-import validateEnvVars, {
-	envObject,
-	envString,
-	envNonEmptyString,
-} from 'validate-env-vars';
+import validateEnvVars from 'validate-env-vars';
+import { z } from 'zod';
 
-const envSchema = envObject({
-	SERVER_IP: envString().ipv4(),
-	LEETCODE_USERNAME: envNonEmptyString(),
-	GITHUB_USERNAME: envNonEmptyString(),
-	OGP_IO_API_KEY: envNonEmptyString(),
-	GA4_PROPERTY_ID: envNonEmptyString(),
+const envSchema = z.object({
+	SERVER_IP: z.ipv4(),
+	LEETCODE_USERNAME: z.string().min(1),
+	GITHUB_USERNAME: z.string().min(1),
+	OGP_IO_API_KEY: z.string().min(1),
+	GA4_PROPERTY_ID: z.string().min(1),
 });
 
-validateEnvVars({ schema: envSchema });
+validateEnvVars({ schema: envSchema, envPath: '.env' });
