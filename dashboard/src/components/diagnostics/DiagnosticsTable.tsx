@@ -1,5 +1,4 @@
 import { AxiosInstance } from 'axios';
-import { useQuery } from '@tanstack/react-query';
 import {
 	Skeleton,
 	Table,
@@ -16,27 +15,7 @@ import {
 } from '../../services/unitConversion';
 import { StyledCard } from '../StyledCard';
 import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
-
-interface DiagnosticsData {
-	cpu: {
-		count: number;
-		percent: number[];
-		temp: number | null;
-	};
-	memory: {
-		total: number;
-		used: number;
-		available: number;
-		percent: number;
-	};
-	disk: {
-		total: number;
-		used: number;
-		available: number;
-		percent: number;
-	};
-	pids: number[];
-}
+import { useDiagnostics } from '../../hooks/useDiagnostics';
 
 function NasDiagnosticsTableRow() {
 	const { isLoading, isError, data } = useNasDiagnostics();
@@ -94,14 +73,7 @@ function NasDiagnosticsTableRow() {
 }
 
 function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
-	const { isLoading, isError, data } = useQuery({
-		queryKey: ['diagnostics', client.getUri()],
-		refetchInterval: 1000 * 5, // 5 seconds
-		queryFn: () =>
-			client
-				.get<DiagnosticsData>(`/diagnostics/`)
-				.then((res) => res.data),
-	});
+	const { isLoading, isError, data } = useDiagnostics(client);
 	if (isError) {
 		return (
 			<TableCell

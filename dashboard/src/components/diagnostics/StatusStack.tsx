@@ -1,12 +1,14 @@
 import { Stack } from '@mui/material';
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { type UseQueryResult } from '@tanstack/react-query';
 
 import StatusChip from './StatusChip';
 import type { ServiceStatus } from '../../types';
-import { servicesClient } from '../../services/api';
+import { useServiceHealth } from '../../hooks/useServiceHealth';
+import type { z } from 'zod';
+import type { serviceStatusSchema } from '../../types/schemas';
 
 function getServiceStatus(
-	queryResult: UseQueryResult<{ status: ServiceStatus }>
+	queryResult: UseQueryResult<z.infer<typeof serviceStatusSchema>>
 ): ServiceStatus {
 	const { isLoading, isError, data } = queryResult;
 	if (isLoading) {
@@ -20,61 +22,25 @@ function getServiceStatus(
 
 function StatusStackPrimary() {
 	// common services
-	const diagnosticsHealth = useQuery({
-		queryKey: ['primary', 'diagnosticsHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			servicesClient
-				.get<{ status: ServiceStatus }>('/diagnostics/')
-				.then((res) => res.data),
-	});
-	const traefikHealth = useQuery({
-		queryKey: ['primary', 'traefikHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			servicesClient
-				.get<{
-					status: ServiceStatus;
-				}>('/diagnostics/docker/container/reverse_proxy/')
-				.then((res) => res.data),
-	});
-	const redisHealth = useQuery({
-		queryKey: ['primary', 'redisHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			servicesClient
-				.get<{ status: ServiceStatus }>('/cache/')
-				.then((res) => res.data),
-	});
+	const diagnosticsHealth = useServiceHealth('/diagnostics/', [
+		'primary',
+		'diagnosticsHealth',
+	]);
+	const traefikHealth = useServiceHealth(
+		'/diagnostics/docker/container/reverse_proxy/',
+		['primary', 'traefikHealth']
+	);
+	const redisHealth = useServiceHealth('/cache/', ['primary', 'redisHealth']);
 	// unique services
-	const servicesHealth = useQuery({
-		queryKey: ['primary', 'servicesHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			servicesClient
-				.get<{ status: ServiceStatus }>('/')
-				.then((res) => res.data),
-	});
-	const slackBotHealth = useQuery({
-		queryKey: ['primary', 'slackBotHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			servicesClient
-				.get<{
-					status: ServiceStatus;
-				}>('/diagnostics/docker/container/slack_bot/')
-				.then((res) => res.data),
-	});
-	const speedtestHealth = useQuery({
-		queryKey: ['primary', 'speedtestHealth'],
-		refetchInterval: 1000 * 60, // 1 minute
-		queryFn: () =>
-			servicesClient
-				.get<{
-					status: ServiceStatus;
-				}>('/diagnostics/docker/container/speedtest/')
-				.then((res) => res.data),
-	});
+	const servicesHealth = useServiceHealth('/', ['primary', 'servicesHealth']);
+	const slackBotHealth = useServiceHealth(
+		'/diagnostics/docker/container/slack_bot/',
+		['primary', 'slackBotHealth']
+	);
+	const speedtestHealth = useServiceHealth(
+		'/diagnostics/docker/container/speedtest/',
+		['primary', 'speedtestHealth']
+	);
 
 	return (
 		<Stack

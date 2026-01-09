@@ -1,16 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
 import {
 	TrendingUp as TrendingUpIcon,
 	TrendingDown as TrendingDownIcon,
 } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
+import { useInvestmentSummary } from '../../hooks/useInvestmentSummary';
+import type { z } from 'zod';
+import type { investmentSummaryDataSchema } from '../../types/schemas';
 
-interface InvestmentSummaryData {
-	totalValue: number;
-	oneDayChangeDollars: number;
-}
+type InvestmentSummaryData = z.infer<typeof investmentSummaryDataSchema>;
 
 const formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -74,14 +72,7 @@ function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
 }
 
 function InvestmentSummary() {
-	const { isPending, error, data } = useQuery({
-		queryKey: ['investmentSummary'],
-		refetchInterval: 1000 * 60 * 15, // 15 minutes
-		queryFn: () =>
-			axios
-				.get<InvestmentSummaryData>(`/money/portfolio/`)
-				.then((res) => res.data),
-	});
+	const { isPending, error, data } = useInvestmentSummary();
 
 	if (isPending) {
 		return (

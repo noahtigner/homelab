@@ -1,53 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { getRequest } from '../services/api/utils';
+import {
+	netWorthSummaryDataSchema,
+	accountTypeSummarySchema,
+} from '../types/schemas';
+import type { z } from 'zod';
 
-interface Account {
-	id: string;
-	syncDisabled: boolean;
-	isHidden: boolean;
-	isAsset: boolean;
-	includeInNetWorth: boolean;
-	type: {
-		name: string;
-		display: string;
-	};
-	displayName: string;
-	displayBalance: number;
-	signedBalance: number;
-	updatedAt: string;
-	icon: string;
-	logoUrl: string;
-	includeBalanceInNetWorth: boolean;
-	institution?: {
-		id: string;
-		name: string;
-	};
-}
-
-export interface AccountTypeSummary {
-	type: {
-		display: string;
-		group: 'asset' | 'liability';
-		name: string;
-	};
-	accounts: Account[];
-	totalDisplayBalance: number;
-}
-
-export interface NetWorthSummaryData {
-	data: {
-		accountTypeSummaries: AccountTypeSummary[];
-	};
-}
+export type AccountTypeSummary = z.infer<typeof accountTypeSummarySchema>;
+export type NetWorthSummaryData = z.infer<typeof netWorthSummaryDataSchema>;
 
 const useQueryMoneyAccounts = () => {
 	return useQuery({
 		queryKey: ['NetWorthSummary'],
 		refetchInterval: 1000 * 60 * 15, // 15 minutes
 		queryFn: () =>
-			axios
-				.get<NetWorthSummaryData>(`/money/accounts/`)
-				.then((res) => res.data),
+			getRequest('/money/accounts/', netWorthSummaryDataSchema).then(
+				(res) => res.data
+			),
 	});
 };
 

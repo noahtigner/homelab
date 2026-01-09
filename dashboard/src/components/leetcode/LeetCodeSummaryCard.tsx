@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
 	Box,
 	Chip,
@@ -11,30 +10,10 @@ import {
 } from '@mui/material';
 import { EmojiEventsOutlined as TrophyIcon } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
-import { useQuery } from '@tanstack/react-query';
-
-interface LCProblemDifficulty {
-	total: number;
-	solved: number;
-	solved_percent: number;
-	beats_percent: number;
-}
-
-interface LCProblemAll extends Omit<LCProblemDifficulty, 'beats_percent'> {
-	beats_percent: null;
-}
-
-interface LeetCodeSolvedData {
-	all: LCProblemAll;
-	easy: LCProblemDifficulty;
-	medium: LCProblemDifficulty;
-	hard: LCProblemDifficulty;
-}
-
-interface LeetCodeLanguage {
-	languageName: string;
-	problemsSolved: number;
-}
+import {
+	useLeetCodeSolved,
+	useLeetCodeLanguages,
+} from '../../hooks/useLeetCode';
 
 function LeetCodeProgressText({
 	difficulty,
@@ -86,13 +65,7 @@ function LeetCodeProgressSkeleton({
 function LeetCodeLanguageChips() {
 	const { palette } = useTheme();
 
-	const { isPending, error, data } = useQuery({
-		queryKey: ['lcLanguageData'],
-		queryFn: () =>
-			axios
-				.get<LeetCodeLanguage[]>(`/leetcode/languages/`)
-				.then((res) => res.data),
-	});
+	const { isPending, error, data } = useLeetCodeLanguages();
 
 	if (error) {
 		return <div>Error: {error.message}</div>;
@@ -174,13 +147,7 @@ function LeetCodeLanguageChips() {
 function LeetCodeSummary() {
 	const theme = useTheme();
 
-	const { isPending, error, data } = useQuery({
-		queryKey: ['leetCodeSummary'],
-		queryFn: () =>
-			axios
-				.get<LeetCodeSolvedData>(`/leetcode/solved/`)
-				.then((res) => res.data),
-	});
+	const { isPending, error, data } = useLeetCodeSolved();
 
 	if (error) {
 		return <div>Error: {error.message}</div>;
