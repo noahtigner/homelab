@@ -9,7 +9,6 @@ export const useDiagnostics = (client: AxiosInstance) => {
 		queryFn: () =>
 			client
 				.get('/diagnostics/')
-				.then((res) => diagnosticsDataSchema.parse(res.data))
-				.then((data) => data),
+				.then((res) => diagnosticsDataSchema.parse(res.data)),
 	});
 };

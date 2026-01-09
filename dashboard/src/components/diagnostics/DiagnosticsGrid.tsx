@@ -66,7 +66,7 @@ function DiagnosticsGrid({ client }: { client: AxiosInstance }) {
 					key={item.id}
 					title={item.title}
 					values={
-						isPending || error
+						isPending || error || !data
 							? ['An unexpected error occurred']
 							: item.values(data)
 					}
