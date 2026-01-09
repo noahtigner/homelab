@@ -4,6 +4,7 @@ import logging
 import requests
 from fastapi import APIRouter, HTTPException, Request, status
 
+from api.config import Settings
 from api.monarchmoney.models import (
     MoneyAccountsResponse,
     MoneyPortfolioIncoming,
@@ -20,15 +21,7 @@ router = APIRouter(
 
 @router.get("/portfolio/", response_model=MoneyPortfolioOutgoing)
 async def get_portfolio(request: Request):
-    # TODO: read token from secret then fall back to redis
-    token = await request.app.state.redis.get("monarchmoney_token")
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Monarch Money Token Not Found",
-        )
-    token = token.decode("utf-8")
-
+    token = Settings.MONARCHMONEY_API_TOKEN
     body = {
         "operationName": "Web_GetInvestmentsDashboardCard",
         "variables": {},
@@ -71,14 +64,7 @@ async def get_portfolio(request: Request):
 
 @router.get("/accounts/", response_model=MoneyAccountsResponse)
 async def get_accounts(request: Request):
-    token = await request.app.state.redis.get("monarchmoney_token")
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Monarch Money Token Not Found",
-        )
-    token = token.decode("utf-8")
-
+    token = Settings.MONARCHMONEY_API_TOKEN
     body = {
         "operationName": "Web_GetAccountsPage",
         "variables": {},
