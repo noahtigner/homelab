@@ -1,6 +1,4 @@
 import { ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
 import {
 	SwapHorizontalCircleOutlined as SwapHorizontalCircleOutlinedIcon,
@@ -8,45 +6,11 @@ import {
 	ArrowCircleUpOutlined as ArrowCircleUpOutlinedIcon,
 } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
+import { useSpeedTest } from '../../hooks/useSpeedTest';
+import type { z } from 'zod';
+import type { speedTestSchema } from '../../types/schemas';
 
-interface ServerModel {
-	url: string;
-	lat: string;
-	lon: string;
-	name: string;
-	country: string;
-	cc: string;
-	sponsor: string;
-	id: string;
-	host: string;
-	d: number;
-	latency: number;
-}
-
-interface ClientModel {
-	ip: string;
-	lat: string;
-	lon: string;
-	isp: string;
-	isprating: string;
-	rating: string;
-	ispdlavg: string;
-	ispulavg: string;
-	loggedin: string;
-	country: string;
-}
-
-interface SpeedTestModel {
-	download: number;
-	upload: number;
-	ping: number;
-	server: ServerModel;
-	timestamp: string;
-	bytes_sent: number;
-	bytes_received: number;
-	share: string | null;
-	client: ClientModel;
-}
+type SpeedTestModel = z.infer<typeof speedTestSchema>;
 
 const bytesToMegabits = (bytes: number): number => {
 	const megabits = bytes / 1e6;
@@ -115,12 +79,7 @@ function SpeedTestSummaryInner({ data }: { data: SpeedTestModel }) {
 }
 
 function SpeedTestSummary() {
-	const { isPending, error, data } = useQuery({
-		queryKey: ['speedtest'],
-		refetchInterval: 1000 * 30, // 30 seconds
-		queryFn: () =>
-			axios.get<SpeedTestModel>(`/speedtest/`).then((res) => res.data),
-	});
+	const { isPending, error, data } = useSpeedTest();
 
 	if (isPending) {
 		return (

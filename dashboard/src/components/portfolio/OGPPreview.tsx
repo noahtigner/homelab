@@ -1,18 +1,11 @@
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
 import { Box, Skeleton, Typography, useTheme } from '@mui/material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
-
-// TODO: type response
+import { useOGPPreview } from '../../hooks/useOGPPreview';
 
 function OGPPreview({ url }: { url: string }) {
 	const theme = useTheme();
 
-	const { isPending, error, data } = useQuery({
-		queryKey: ['ogpPreview'],
-		queryFn: () => axios.get(`/portfolio/ogp/`).then((res) => res.data),
-		retry: false,
-	});
+	const { isPending, error, data } = useOGPPreview();
 
 	if (isPending || error || data === null) {
 		return (

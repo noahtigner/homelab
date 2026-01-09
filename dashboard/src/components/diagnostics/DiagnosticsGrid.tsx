@@ -4,31 +4,14 @@ import {
 	DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
 	MemoryOutlined as MemoryIcon,
 } from '@mui/icons-material';
-import { useQuery } from '@tanstack/react-query';
 
 import DiagnosticsCard from './DiagnosticsCard';
 import { celsiusToFahrenheit } from '../../services/unitConversion';
+import { useDiagnostics } from '../../hooks/useDiagnostics';
+import type { z } from 'zod';
+import type { diagnosticsDataSchema } from '../../types/schemas';
 
-interface DiagnosticsData {
-	cpu: {
-		count: number;
-		percent: number[];
-		temp: number | null;
-	};
-	memory: {
-		total: number;
-		used: number;
-		available: number;
-		percent: number;
-	};
-	disk: {
-		total: number;
-		used: number;
-		available: number;
-		percent: number;
-	};
-	pids: number[];
-}
+type DiagnosticsData = z.infer<typeof diagnosticsDataSchema>;
 
 const cardItems = [
 	{
@@ -74,14 +57,7 @@ const cardItems = [
 ];
 
 function DiagnosticsGrid({ client }: { client: AxiosInstance }) {
-	const { isPending, error, data } = useQuery({
-		queryKey: ['diagnostics', client.getUri()],
-		refetchInterval: 1000 * 5, // 5 seconds
-		queryFn: () =>
-			client
-				.get<DiagnosticsData>(`/diagnostics/diagnostics/`)
-				.then((res) => res.data),
-	});
+	const { isPending, error, data } = useDiagnostics(client);
 
 	return (
 		<>

@@ -97,3 +97,155 @@ export const nasDiagnosticsSchema = z.object({
 		}),
 	}),
 });
+
+// SpeedTest schemas
+export const serverSchema = z.object({
+	url: z.string(),
+	lat: z.string(),
+	lon: z.string(),
+	name: z.string(),
+	country: z.string(),
+	cc: z.string(),
+	sponsor: z.string(),
+	id: z.string(),
+	host: z.string(),
+	d: z.number(),
+	latency: z.number(),
+});
+
+export const clientSchema = z.object({
+	ip: z.string(),
+	lat: z.string(),
+	lon: z.string(),
+	isp: z.string(),
+	isprating: z.string(),
+	rating: z.string(),
+	ispdlavg: z.string(),
+	ispulavg: z.string(),
+	loggedin: z.string(),
+	country: z.string(),
+});
+
+export const speedTestSchema = z.object({
+	download: z.number(),
+	upload: z.number(),
+	ping: z.number(),
+	server: serverSchema,
+	timestamp: z.string(),
+	bytes_sent: z.number(),
+	bytes_received: z.number(),
+	share: z.string().nullable(),
+	client: clientSchema,
+});
+
+// Diagnostics schema
+export const diagnosticsDataSchema = z.object({
+	cpu: z.object({
+		count: z.number(),
+		percent: z.array(z.number()),
+		temp: z.number().nullable(),
+	}),
+	memory: z.object({
+		total: z.number(),
+		used: z.number(),
+		available: z.number(),
+		percent: z.number(),
+	}),
+	disk: z.object({
+		total: z.number(),
+		used: z.number(),
+		available: z.number(),
+		percent: z.number(),
+	}),
+	pids: z.array(z.number()),
+});
+
+// Service status schema
+export const serviceStatusSchema = z.object({
+	status: z.enum(['ok', 'warning', 'error', 'loading']),
+});
+
+// LeetCode schemas
+export const leetCodeProblemDifficultySchema = z.object({
+	total: z.number(),
+	solved: z.number(),
+	solved_percent: z.number(),
+	beats_percent: z.number(),
+});
+
+export const leetCodeProblemAllSchema = z.object({
+	total: z.number(),
+	solved: z.number(),
+	solved_percent: z.number(),
+	beats_percent: z.null(),
+});
+
+export const leetCodeSolvedDataSchema = z.object({
+	all: leetCodeProblemAllSchema,
+	easy: leetCodeProblemDifficultySchema,
+	medium: leetCodeProblemDifficultySchema,
+	hard: leetCodeProblemDifficultySchema,
+});
+
+export const leetCodeLanguageSchema = z.object({
+	languageName: z.string(),
+	problemsSolved: z.number(),
+});
+
+export const leetCodeLanguagesSchema = z.array(leetCodeLanguageSchema);
+
+// Investment/Money schemas
+export const investmentSummaryDataSchema = z.object({
+	totalValue: z.number(),
+	oneDayChangeDollars: z.number(),
+});
+
+export const accountSchema = z.object({
+	id: z.string(),
+	syncDisabled: z.boolean(),
+	isHidden: z.boolean(),
+	isAsset: z.boolean(),
+	includeInNetWorth: z.boolean(),
+	type: z.object({
+		name: z.string(),
+		display: z.string(),
+	}),
+	displayName: z.string(),
+	displayBalance: z.number(),
+	signedBalance: z.number(),
+	updatedAt: z.string(),
+	icon: z.string(),
+	logoUrl: z.string(),
+	includeBalanceInNetWorth: z.boolean(),
+	institution: z
+		.object({
+			id: z.string(),
+			name: z.string(),
+		})
+		.optional(),
+});
+
+export const accountTypeSummarySchema = z.object({
+	type: z.object({
+		display: z.string(),
+		group: z.enum(['asset', 'liability']),
+		name: z.string(),
+	}),
+	accounts: z.array(accountSchema),
+	totalDisplayBalance: z.number(),
+});
+
+export const netWorthSummaryDataSchema = z.object({
+	data: z.object({
+		accountTypeSummaries: z.array(accountTypeSummarySchema),
+	}),
+});
+
+// OGP Preview schema
+export const ogpPreviewSchema = z.object({
+	hybridGraph: z.object({
+		image: z.string(),
+		title: z.string(),
+		description: z.string(),
+	}),
+});
