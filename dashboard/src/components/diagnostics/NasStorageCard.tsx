@@ -13,16 +13,24 @@ import { StyledCard, StyledCardContent } from '../StyledCard';
 import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
 import { bytesToTerabytes } from '../../services/unitConversion';
 
-function getStatusColor(status: string): 'success' | 'warning' | 'error' {
+function getStatusColor(
+	status: string
+): 'success' | 'warning' | 'error' | 'info' {
 	const normalStatuses = ['normal', 'initialized'];
 	const warningStatuses = ['warning'];
-	if (normalStatuses.includes(status.toLowerCase())) {
+	const errorStatuses = ['crashed', 'error', 'failing', 'failed'];
+	const lowerStatus = status.toLowerCase();
+	if (normalStatuses.includes(lowerStatus)) {
 		return 'success';
 	}
-	if (warningStatuses.includes(status.toLowerCase())) {
+	if (warningStatuses.includes(lowerStatus)) {
 		return 'warning';
 	}
-	return 'error';
+	if (errorStatuses.includes(lowerStatus)) {
+		return 'error';
+	}
+	// Unknown status - show as info rather than error to avoid false alarms
+	return 'info';
 }
 
 function HddRow({
@@ -30,21 +38,14 @@ function HddRow({
 	capacity,
 	status,
 	temp,
-	totalUsed,
-	totalCapacity,
 }: {
 	diskno: string;
 	capacity: number;
 	status: string;
 	temp: number;
-	totalUsed: number;
-	totalCapacity: number;
 }) {
 	const theme = useTheme();
 	const statusColor = getStatusColor(status);
-	// Calculate this drive's share of the used space proportionally
-	const driveShareUsed = (capacity / totalCapacity) * totalUsed;
-	const utilizationPercent = (driveShareUsed / capacity) * 100;
 
 	return (
 		<Box
@@ -68,27 +69,14 @@ function HddRow({
 			>
 				{diskno}
 			</Typography>
-			<Box sx={{ flexGrow: 1, minWidth: 0 }}>
-				<LinearProgress
-					variant="determinate"
-					value={utilizationPercent}
-					color={utilizationPercent > 90 ? 'error' : 'primary'}
-					sx={{
-						height: 8,
-						borderRadius: 1,
-					}}
-				/>
-			</Box>
 			<Typography
 				sx={{
-					fontSize: '0.75rem',
-					minWidth: '40px',
-					textAlign: 'right',
-					flexShrink: 0,
+					fontSize: '0.875rem',
+					flexGrow: 1,
 					color: theme.palette.text.secondary,
 				}}
 			>
-				{utilizationPercent.toFixed(0)}%
+				{status}
 			</Typography>
 			<Typography
 				sx={{
@@ -139,11 +127,15 @@ function NasStorageCardContent() {
 	}
 
 	const hdds = data.storage.hdd_info;
+	// Use volume info for accurate capacity calculations (accounts for RAID)
 	const totalUsedBytes = data.storage.vol_info.reduce(
 		(acc, v) => acc + v.used_size,
 		0
 	);
-	const totalCapacityBytes = hdds.reduce((acc, h) => acc + h.capacity, 0);
+	const totalCapacityBytes = data.storage.vol_info.reduce(
+		(acc, v) => acc + v.total_size,
+		0
+	);
 	const totalUsageTB = bytesToTerabytes(totalUsedBytes);
 	const totalCapacityTB = bytesToTerabytes(totalCapacityBytes);
 	const totalUsagePercent = (totalUsedBytes / totalCapacityBytes) * 100;
@@ -155,7 +147,7 @@ function NasStorageCardContent() {
 					display: 'flex',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					mb: theme.spacing(1),
+					mb: theme.spacing(0.5),
 				}}
 			>
 				<Typography
@@ -166,6 +158,16 @@ function NasStorageCardContent() {
 				</Typography>
 				<StorageIcon color="primary" sx={{ fontSize: 32 }} />
 			</Box>
+			<LinearProgress
+				variant="determinate"
+				value={totalUsagePercent}
+				color={totalUsagePercent > 90 ? 'error' : 'primary'}
+				sx={{
+					height: 8,
+					borderRadius: 1,
+					mb: theme.spacing(0.5),
+				}}
+			/>
 			<Typography
 				sx={{
 					fontSize: '0.875rem',
@@ -185,8 +187,6 @@ function NasStorageCardContent() {
 							capacity={hdd.capacity}
 							status={hdd.overview_status}
 							temp={hdd.temp}
-							totalUsed={totalUsedBytes}
-							totalCapacity={totalCapacityBytes}
 						/>
 					))}
 			</Box>
