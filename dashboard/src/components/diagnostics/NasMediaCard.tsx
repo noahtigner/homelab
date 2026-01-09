@@ -88,7 +88,7 @@ function NasMediaCardContent() {
 						}}
 					/>
 				}
-				label="TV Shows"
+				label="TV Shows (Seasons)"
 				count={tvShowCount}
 			/>
 			<MediaRow
