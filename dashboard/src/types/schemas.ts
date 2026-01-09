@@ -1,5 +1,24 @@
 import { z } from 'zod';
 
+export const nasFolderSchema = z.object({
+	name: z.string(),
+	path: z.string(),
+	is_dir: z.boolean(),
+	num_dir: z.number(),
+	num_file: z.number(),
+	total_size: z.number(),
+	time: z.object({
+		last_accessed: z.number(),
+		last_changed: z.number(),
+		last_modified: z.number(),
+		created: z.number(),
+	}),
+});
+
+export const nasFoldersSchema = z.object({
+	folders: z.array(nasFolderSchema),
+});
+
 export const nasDiagnosticsSchema = z.object({
 	core: z.object({
 		cpu_clock_speed: z.number(),
