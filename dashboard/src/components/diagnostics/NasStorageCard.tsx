@@ -11,7 +11,10 @@ import {
 } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
-import { bytesToTerabytes } from '../../services/unitConversion';
+import {
+	bytesToTerabytes,
+	celsiusToFahrenheit,
+} from '../../services/unitConversion';
 
 function getStatusColor(
 	status: string
@@ -98,7 +101,7 @@ function HddRow({
 					color: theme.palette.text.secondary,
 				}}
 			>
-				{temp}°C
+				{celsiusToFahrenheit(temp).toFixed(0)}°F
 			</Typography>
 		</Box>
 	);
@@ -156,7 +159,6 @@ function NasStorageCardContent() {
 				>
 					{totalUsageTB.toFixed(2)} / {totalCapacityTB.toFixed(2)} TB
 				</Typography>
-				<StorageIcon color="primary" sx={{ fontSize: 32 }} />
 			</Box>
 			<LinearProgress
 				variant="determinate"
@@ -203,8 +205,15 @@ function NasStorageCard() {
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(1) }}
+					sx={{ marginBottom: theme.spacing(0.5) }}
 				>
+					<StorageIcon
+						sx={{
+							fontSize: 20,
+							marginRight: theme.spacing(1),
+							marginBottom: '2px',
+						}}
+					/>
 					<Typography
 						sx={{
 							fontSize: '1.25rem',
