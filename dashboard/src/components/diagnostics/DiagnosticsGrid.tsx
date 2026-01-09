@@ -57,7 +57,10 @@ const cardItems = [
 ];
 
 function DiagnosticsGrid({ client }: { client: AxiosInstance }) {
-	const { isPending, error, data } = useDiagnostics(client);
+	const { isPending, error, data } = useDiagnostics(
+		client,
+		'/diagnostics/diagnostics/'
+	);
 
 	return (
 		<>

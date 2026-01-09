@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { servicesClient } from '../services/api';
+import { getRequest } from '../services/api/utils';
 import { serviceStatusSchema } from '../types/schemas';
 
 export const useServiceHealth = (endpoint: string, queryKey: string[]) => {
@@ -7,8 +7,6 @@ export const useServiceHealth = (endpoint: string, queryKey: string[]) => {
 		queryKey: [...queryKey, endpoint],
 		refetchInterval: 1000 * 60, // 1 minute
 		queryFn: () =>
-			servicesClient
-				.get(endpoint)
-				.then((res) => serviceStatusSchema.parse(res.data)),
+			getRequest(endpoint, serviceStatusSchema).then((res) => res.data),
 	});
 };
