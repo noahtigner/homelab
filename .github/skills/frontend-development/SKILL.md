@@ -85,9 +85,7 @@ export const useMyData = () => {
 		queryKey: ['myData'],
 		refetchInterval: 1000 * 30, // 30 seconds (optional)
 		queryFn: () =>
-			getRequest('/my-endpoint/', myDataSchema).then(
-				(res) => res.data
-			),
+			getRequest('/my-endpoint/', myDataSchema).then((res) => res.data),
 	});
 };
 ```
@@ -120,6 +118,7 @@ postRequest('/endpoint/', data, responseSchema, config?, path?)
 ```
 
 These utilities:
+
 - Use the configured `servicesClient` Axios instance
 - Automatically validate responses against Zod schemas
 - Return typed `AxiosResponse<T>` objects
@@ -241,6 +240,7 @@ The app uses a dark theme defined in `main.tsx`. Key theme values:
 ## ESLint Configuration
 
 The project uses ESLint flat config (`eslint.config.js`) with:
+
 - TypeScript-ESLint
 - React and React Hooks plugins
 - TanStack Query plugin

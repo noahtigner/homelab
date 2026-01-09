@@ -118,11 +118,11 @@ Traefik is configured via command-line arguments in `compose.dev.yml`:
 ```yaml
 traefik:
   command:
-    - '--log.level=INFO'              # Logging level
-    - '--api.insecure=true'           # Enable API/Dashboard (dev only)
-    - '--api.dashboard=true'          # Enable web dashboard
-    - '--providers.docker=true'       # Use Docker as provider
-    - '--providers.docker.exposedbydefault=false'  # Require explicit labels
+    - '--log.level=INFO' # Logging level
+    - '--api.insecure=true' # Enable API/Dashboard (dev only)
+    - '--api.dashboard=true' # Enable web dashboard
+    - '--providers.docker=true' # Use Docker as provider
+    - '--providers.docker.exposedbydefault=false' # Require explicit labels
     - '--entrypoints.web.address=:81' # HTTP entrypoint
 ```
 
