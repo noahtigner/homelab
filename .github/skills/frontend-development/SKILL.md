@@ -1,9 +1,9 @@
 ---
-name: dashboard-frontend
+name: frontend-development
 description: Guide for developing the dashboard frontend using React, TypeScript, MUI, Vite, React Query, and Zod. Use this when creating or modifying UI components, data fetching hooks, or frontend business logic.
 ---
 
-# Dashboard Frontend Development
+# Frontend Development
 
 This skill covers development of the React dashboard located in the `/dashboard` directory.
 
