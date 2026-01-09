@@ -5,7 +5,7 @@ description: Guide for developing the API service using Python, FastAPI, Pydanti
 
 # API Service Development
 
-This skill covers development of the FastAPI backend service located in the `/api` directory.
+This skill covers development of the FastAPI backend services located in `/api` (main API) and `/api_diagnostics` (system diagnostics API). Both services follow the same patterns and conventions.
 
 ## Technology Stack
 
