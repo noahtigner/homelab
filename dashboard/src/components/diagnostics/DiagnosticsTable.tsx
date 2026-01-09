@@ -15,8 +15,7 @@ import {
 	bytesToTerabytes,
 } from '../../services/unitConversion';
 import { StyledCard } from '../StyledCard';
-import { getRequest } from '../../services/api/utils';
-import { nasDiagnosticsSchema } from '../../types/schemas';
+import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
 
 interface DiagnosticsData {
 	cpu: {
@@ -40,14 +39,7 @@ interface DiagnosticsData {
 }
 
 function NasDiagnosticsTableRow() {
-	const { isLoading, isError, data } = useQuery({
-		queryKey: ['diagnostics', 'NAS'],
-		refetchInterval: 1000 * 30, // 30 seconds
-		queryFn: () =>
-			getRequest('/nas/system/', nasDiagnosticsSchema).then(
-				(res) => res.data
-			),
-	});
+	const { isLoading, isError, data } = useNasDiagnostics();
 
 	if (isError) {
 		return (
