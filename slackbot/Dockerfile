@@ -1,9 +1,9 @@
-FROM python:3.11-slim-buster
+FROM python:3.14-bookworm
 
 WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONBUFFERED=1
 
 # install python packages
 COPY ./requirements.txt /app/requirements.txt
