@@ -4,6 +4,7 @@ import LeetCodeSummaryCard from '../components/leetcode/LeetCodeSummaryCard';
 // import DockerTable from './components/docker/DockerTable';
 import NPMPackageCard from '../components/npm/NPMPackageCard';
 import GithubSummaryCard from '../components/github/GithubSummaryCard';
+import CopilotSummaryCard from '../components/copilot/CopilotSummaryCard';
 import PiholeStatus from '../components/pihole/PiholeStatus';
 import { StatusStackPrimary } from '../components/diagnostics/StatusStack';
 import OGPPreview from '../components/portfolio/OGPPreview';
@@ -59,6 +60,9 @@ function Index() {
 			</Grid>
 			<Grid xs={12} sm={6} lg={4}>
 				<GithubSummaryCard />
+			</Grid>
+			<Grid xs={12} sm={6} lg={4}>
+				<CopilotSummaryCard />
 			</Grid>
 			<Grid xs={12}>
 				<OGPPreview url="https://noahtigner.com/" />

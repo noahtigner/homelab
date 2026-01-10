@@ -31,6 +31,8 @@ class Settings:
     PIHOLE_API_PASSWORD = get_secret("pihole_password")
     LEETCODE_USERNAME = get_env("LEETCODE_USERNAME")
     GITHUB_USERNAME = get_env("GITHUB_USERNAME")
+    GITHUB_ORG = get_env("GITHUB_ORG")
+    GITHUB_TOKEN = get_secret("github_token")
     OGP_IO_API_KEY = get_env("OGP_IO_API_KEY")
     GA4_PROPERTY_ID = get_env("GA4_PROPERTY_ID")
     GA4_CREDENTIALS = get_secret("ga4_credentials")

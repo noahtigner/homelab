@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.cache.router import router as cache_router
 from api.config import Settings
+from api.copilot.router import router as copilot_router
 from api.github.router import router as github_router
 from api.google_analytics.router import router as google_analytics_router
 from api.leetcode.router import router as leetcode_router
@@ -40,6 +41,10 @@ tags_metadata = [
     {
         "name": "GitHub",
         "description": "GitHub Activity",
+    },
+    {
+        "name": "Copilot",
+        "description": "GitHub Copilot Usage Metrics",
     },
     {
         "name": "LeetCode",
@@ -122,6 +127,7 @@ api.add_middleware(
 api.include_router(pihole_router)
 api.include_router(leetcode_router)
 api.include_router(github_router)
+api.include_router(copilot_router)
 api.include_router(npm_router)
 api.include_router(cache_router)
 api.include_router(portfolio_router)
