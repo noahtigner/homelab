@@ -4,8 +4,12 @@ from datetime import datetime, timedelta
 import pandas as pd
 from fastapi import Request
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
-from google.analytics.data_v1beta.types import (DateRange, Dimension, Metric,
-                                                RunReportRequest)
+from google.analytics.data_v1beta.types import (
+    DateRange,
+    Dimension,
+    Metric,
+    RunReportRequest,
+)
 from google.oauth2 import service_account
 
 from api.config import Settings
@@ -16,7 +20,9 @@ from api.utils.cache import cache
 @cache("ga:active_users_per_day", ActiveUsersPerDay, ttl=60 * 60)
 async def retrieve_active_users_per_day(request: Request) -> ActiveUsersPerDay:
     credentials_json = json.loads(Settings.GA4_CREDENTIALS)
-    credentials = service_account.Credentials.from_service_account_info(credentials_json)
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_json
+    )
     property_id = Settings.GA4_PROPERTY_ID
     client = BetaAnalyticsDataClient(credentials=credentials)
 
@@ -30,7 +36,8 @@ async def retrieve_active_users_per_day(request: Request) -> ActiveUsersPerDay:
     response = client.run_report(api_request)
 
     data = [
-        (row.dimension_values[0].value, int(row.metric_values[0].value)) for row in response.rows
+        (row.dimension_values[0].value, int(row.metric_values[0].value))
+        for row in response.rows
     ]
 
     # Convert the data into a DataFrame

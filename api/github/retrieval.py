@@ -4,8 +4,12 @@ import requests
 from fastapi import HTTPException, Request, status
 
 from api.config import Settings
-from api.github.models import (ContributionsModel, EventModel,
-                               EventsResponseModel, RepoModel)
+from api.github.models import (
+    ContributionsModel,
+    EventModel,
+    EventsResponseModel,
+    RepoModel,
+)
 from api.utils.cache import cache
 
 logger = logging.getLogger(__name__)
@@ -25,7 +29,10 @@ async def retrieve_events(request: Request) -> EventsResponseModel:
             r = requests.get(f"{url}&page={i + 1}")
             raw_data = r.json()
 
-            if "message" in raw_data and "API rate limit exceeded" in raw_data["message"]:
+            if (
+                "message" in raw_data
+                and "API rate limit exceeded" in raw_data["message"]
+            ):
                 raise HTTPException(
                     status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                     detail="GitHub API Rate Limit Exceeded",
@@ -36,7 +43,9 @@ async def retrieve_events(request: Request) -> EventsResponseModel:
                     id=event["id"],
                     type=event["type"],
                     commits=(
-                        len(event["payload"]["commits"]) if "commits" in event["payload"] else 0
+                        len(event["payload"]["commits"])
+                        if "commits" in event["payload"]
+                        else 0
                     ),
                     repo=RepoModel(
                         id=event["repo"]["id"],
@@ -57,9 +66,13 @@ async def retrieve_events(request: Request) -> EventsResponseModel:
                     )
                 if event["repo"]["name"].startswith(Settings.GITHUB_USERNAME):
                     contributions.own_projects += (
-                        len(event["payload"]["commits"]) if "commits" in event["payload"] else 1
+                        len(event["payload"]["commits"])
+                        if "commits" in event["payload"]
+                        else 1
                     )
-                elif event["type"].startswith("Issue") or event["type"].startswith("Pull"):
+                elif event["type"].startswith("Issue") or event["type"].startswith(
+                    "Pull"
+                ):
                     contributions.oss_projects += 1
 
         return EventsResponseModel(

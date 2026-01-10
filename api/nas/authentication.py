@@ -8,8 +8,12 @@ import urllib3
 from fastapi import Depends, Request
 
 from api.config import Settings
-from api.nas.models import (SynoApiInfoResponse, SynoApiLoginResponse,
-                            SynoApiLogoutResponse, SynoApiVersions)
+from api.nas.models import (
+    SynoApiInfoResponse,
+    SynoApiLoginResponse,
+    SynoApiLogoutResponse,
+    SynoApiVersions,
+)
 from api.utils.cache import cache
 
 urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
@@ -38,7 +42,9 @@ async def retrieve_api_versions(*args, **kwargs) -> SynoApiVersions:
         ds_auth_api_version=ds_api_info.data["SYNO.API.Auth"].maxVersion,
         ds_filestation_api_version=ds_api_info.data["SYNO.FileStation.List"].maxVersion,
         ds_core_system_api_version=ds_api_info.data["SYNO.Core.System"].maxVersion,
-        ds_utilization_api_version=ds_api_info.data["SYNO.Core.System.Utilization"].maxVersion,
+        ds_utilization_api_version=ds_api_info.data[
+            "SYNO.Core.System.Utilization"
+        ].maxVersion,
     )
     return results
 

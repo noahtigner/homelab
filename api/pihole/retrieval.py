@@ -6,8 +6,12 @@ from fastapi import Request
 
 from api.config import Settings
 from api.pihole.authentication import pihole_session
-from api.pihole.models import (PiholeBlockingResponse, PiholeFTLSummary,
-                               PiholeRecentStats, PiholeRecentStatsResponse)
+from api.pihole.models import (
+    PiholeBlockingResponse,
+    PiholeFTLSummary,
+    PiholeRecentStats,
+    PiholeRecentStatsResponse,
+)
 from api.utils.cache import cache
 
 logger = logging.getLogger(__name__)
@@ -25,7 +29,9 @@ async def retrieve_blocking(request: Request, sid: str) -> PiholeBlockingRespons
 
 @cache("pihole:recent", PiholeRecentStatsResponse, ttl=30)
 @pihole_session
-async def retrieve_recent_stats(request: Request, sid: str) -> PiholeRecentStatsResponse:
+async def retrieve_recent_stats(
+    request: Request, sid: str
+) -> PiholeRecentStatsResponse:
     now = int(time.time())
     twenty_four_hours_ago = now - (24 * 60 * 60)
 

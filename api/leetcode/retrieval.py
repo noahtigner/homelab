@@ -4,9 +4,13 @@ import requests
 from fastapi import HTTPException, Request, status
 
 from api.config import Settings
-from api.leetcode.models import (LCLanguagesResponse, LCLanguageStatModel,
-                                 LCProblemDifficultyModel,
-                                 LCProblemsSolvedModel, LCTopicsSolvedModel)
+from api.leetcode.models import (
+    LCLanguagesResponse,
+    LCLanguageStatModel,
+    LCProblemDifficultyModel,
+    LCProblemsSolvedModel,
+    LCTopicsSolvedModel,
+)
 from api.utils.cache import cache
 
 logger = logging.getLogger(__name__)
@@ -51,42 +55,56 @@ async def retrieve_problems_solved(request: Request) -> LCProblemsSolvedModel:
         return LCProblemsSolvedModel(
             all=LCProblemDifficultyModel(
                 total=raw_data["allQuestionsCount"][0]["count"],
-                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][0]["count"],
-                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][0][
-                    "count"
-                ]
+                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][
+                    0
+                ]["count"],
+                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"][
+                    "acSubmissionNum"
+                ][0]["count"]
                 / raw_data["allQuestionsCount"][0]["count"]
                 * 100,
             ),
             easy=LCProblemDifficultyModel(
                 total=raw_data["allQuestionsCount"][1]["count"],
-                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][1]["count"],
-                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][1][
-                    "count"
-                ]
+                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][
+                    1
+                ]["count"],
+                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"][
+                    "acSubmissionNum"
+                ][1]["count"]
                 / raw_data["allQuestionsCount"][1]["count"]
                 * 100,
-                beats_percent=raw_data["matchedUser"]["problemsSolvedBeatsStats"][0]["percentage"],
+                beats_percent=raw_data["matchedUser"]["problemsSolvedBeatsStats"][0][
+                    "percentage"
+                ],
             ),
             medium=LCProblemDifficultyModel(
                 total=raw_data["allQuestionsCount"][2]["count"],
-                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][2]["count"],
-                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][2][
-                    "count"
-                ]
+                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][
+                    2
+                ]["count"],
+                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"][
+                    "acSubmissionNum"
+                ][2]["count"]
                 / raw_data["allQuestionsCount"][2]["count"]
                 * 100,
-                beats_percent=raw_data["matchedUser"]["problemsSolvedBeatsStats"][1]["percentage"],
+                beats_percent=raw_data["matchedUser"]["problemsSolvedBeatsStats"][1][
+                    "percentage"
+                ],
             ),
             hard=LCProblemDifficultyModel(
                 total=raw_data["allQuestionsCount"][3]["count"],
-                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][3]["count"],
-                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][3][
-                    "count"
-                ]
+                solved=raw_data["matchedUser"]["submitStatsGlobal"]["acSubmissionNum"][
+                    3
+                ]["count"],
+                solved_percent=raw_data["matchedUser"]["submitStatsGlobal"][
+                    "acSubmissionNum"
+                ][3]["count"]
                 / raw_data["allQuestionsCount"][3]["count"]
                 * 100,
-                beats_percent=raw_data["matchedUser"]["problemsSolvedBeatsStats"][2]["percentage"],
+                beats_percent=raw_data["matchedUser"]["problemsSolvedBeatsStats"][2][
+                    "percentage"
+                ],
             ),
         )
     except requests.exceptions.ConnectionError as e:
@@ -137,22 +155,29 @@ async def retrieve_languages(request: Request) -> LCLanguagesResponse:
 
         # convert list of dicts to dict
         data_as_dict: dict[str, int] = {
-            language["languageName"]: language["problemsSolved"] for language in raw_data
+            language["languageName"]: language["problemsSolved"]
+            for language in raw_data
         }
 
         # combine 'Python' and 'Python3' into one entry
         if "Python" in data_as_dict and "Python3" in data_as_dict:
-            data_as_dict["Python"] = max(data_as_dict["Python"], data_as_dict["Python3"])
+            data_as_dict["Python"] = max(
+                data_as_dict["Python"], data_as_dict["Python3"]
+            )
             data_as_dict.pop("Python3", None)
 
         # convert dict to list of models
         data_as_models: list[LCLanguageStatModel] = [
-            LCLanguageStatModel(languageName=language, problemsSolved=data_as_dict[language])
+            LCLanguageStatModel(
+                languageName=language, problemsSolved=data_as_dict[language]
+            )
             for language in data_as_dict
         ]
 
         # sort list of models by problemsSolved
-        sorted_languages = sorted(data_as_models, key=lambda x: x.problemsSolved, reverse=True)
+        sorted_languages = sorted(
+            data_as_models, key=lambda x: x.problemsSolved, reverse=True
+        )
 
         return LCLanguagesResponse(languages=sorted_languages)
     except requests.exceptions.ConnectionError as e:

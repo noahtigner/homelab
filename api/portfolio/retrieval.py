@@ -33,7 +33,10 @@ async def retrieve_ogp_data(request: Request) -> OGPPreviewResponse:
         )
     except requests.exceptions.HTTPError as e:
         logger.error(e)
-        if r.status_code == status.HTTP_403_FORBIDDEN and "Rate limit exceeded" in r.text:
+        if (
+            r.status_code == status.HTTP_403_FORBIDDEN
+            and "Rate limit exceeded" in r.text
+        ):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Rate Limit Exceeded",

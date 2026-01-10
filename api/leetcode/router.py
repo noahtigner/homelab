@@ -2,10 +2,16 @@ import logging
 
 from fastapi import APIRouter, Request
 
-from api.leetcode.models import (LCLanguagesResponse, LCProblemsSolvedModel,
-                                 LCTopicsSolvedModel)
-from api.leetcode.retrieval import (retrieve_languages,
-                                    retrieve_problems_solved, retrieve_topics)
+from api.leetcode.models import (
+    LCLanguagesResponse,
+    LCProblemsSolvedModel,
+    LCTopicsSolvedModel,
+)
+from api.leetcode.retrieval import (
+    retrieve_languages,
+    retrieve_problems_solved,
+    retrieve_topics,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -30,7 +30,9 @@ async def get_cache_value(key: str, request: Request):
 
 
 @router.post("/set/{key}/")
-async def set_cache_value(request: Request, key: str, value: Optional[str] = Body(None)):
+async def set_cache_value(
+    request: Request, key: str, value: Optional[str] = Body(None)
+):
     await request.app.state.redis.set(key, value)
     return {"key": key, "value": value}
 

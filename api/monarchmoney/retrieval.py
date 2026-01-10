@@ -5,9 +5,11 @@ import requests
 from fastapi import HTTPException, Request, status
 
 from api.config import Settings
-from api.monarchmoney.models import (MoneyAccountsResponse,
-                                     MoneyPortfolioIncoming,
-                                     MoneyPortfolioOutgoing)
+from api.monarchmoney.models import (
+    MoneyAccountsResponse,
+    MoneyPortfolioIncoming,
+    MoneyPortfolioOutgoing,
+)
 from api.utils.cache import cache
 
 logger = logging.getLogger(__name__)

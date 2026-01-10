@@ -2,8 +2,7 @@ import logging
 
 from fastapi import APIRouter, Request
 
-from api.monarchmoney.models import (MoneyAccountsResponse,
-                                     MoneyPortfolioOutgoing)
+from api.monarchmoney.models import MoneyAccountsResponse, MoneyPortfolioOutgoing
 from api.monarchmoney.retrieval import retrieve_accounts, retrieve_portfolio
 
 logger = logging.getLogger(__name__)
