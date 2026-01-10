@@ -237,15 +237,9 @@ class SynoNetworkResponse(BaseModel):
 
 
 class _SynoCpuUtilization(BaseModel):
-    load_15_min_avg: int = Field(
-        validation_alias=AliasChoices("15min_load", "load_15_min_avg")
-    )
-    load_5_min_avg: int = Field(
-        validation_alias=AliasChoices("5min_load", "load_5_min_avg")
-    )
-    load_1_min_avg: int = Field(
-        validation_alias=AliasChoices("1min_load", "load_1_min_avg")
-    )
+    load_15_min_avg: int = Field(validation_alias=AliasChoices("15min_load", "load_15_min_avg"))
+    load_5_min_avg: int = Field(validation_alias=AliasChoices("5min_load", "load_5_min_avg"))
+    load_1_min_avg: int = Field(validation_alias=AliasChoices("1min_load", "load_1_min_avg"))
 
 
 class _SynoMemoryUtilization(BaseModel):

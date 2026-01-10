@@ -2,50 +2,35 @@ import json
 from datetime import datetime, timedelta
 
 import pandas as pd
+from fastapi import Request
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
-from google.analytics.data_v1beta.types import (
-    DateRange,
-    Dimension,
-    Metric,
-    RunReportRequest,
-)
+from google.analytics.data_v1beta.types import (DateRange, Dimension, Metric,
+                                                RunReportRequest)
 from google.oauth2 import service_account
 
 from api.config import Settings
 from api.google_analytics.models import ActiveUsersPerDay
+from api.utils.cache import cache
 
 
-def get_active_users_per_day() -> ActiveUsersPerDay:
+@cache("ga:active_users_per_day", ActiveUsersPerDay, ttl=60 * 60)
+async def retrieve_active_users_per_day(request: Request) -> ActiveUsersPerDay:
     credentials_json = json.loads(Settings.GA4_CREDENTIALS)
-    credentials = service_account.Credentials.from_service_account_info(
-        credentials_json
-    )
+    credentials = service_account.Credentials.from_service_account_info(credentials_json)
     property_id = Settings.GA4_PROPERTY_ID
     client = BetaAnalyticsDataClient(credentials=credentials)
 
-    request = RunReportRequest(
+    api_request = RunReportRequest(
         property=f"properties/{property_id}",
-        # city, day, hostname, pagePath, data
-        # dimensions=[Dimension(name="pagePath")],
-        # # activeUsers, newUsers, active1DayUsers
-        # metrics=[Metric(name="activeUsers")],
-        # date_ranges=[
-        #     DateRange(start_date="yesterday", end_date="today"),
-        #     DateRange(start_date="7daysAgo", end_date="today"),
-        #     DateRange(start_date="30daysAgo", end_date="today"),
-        #     DateRange(start_date="365daysAgo", end_date="today"),
-        # ],
         dimensions=[Dimension(name="date")],
-        # activeUsers, newUsers, active1DayUsers
         metrics=[Metric(name="activeUsers")],
         date_ranges=[DateRange(start_date="365daysAgo", end_date="today")],
     )
 
-    response = client.run_report(request)
+    response = client.run_report(api_request)
 
     data = [
-        (row.dimension_values[0].value, int(row.metric_values[0].value))
-        for row in response.rows
+        (row.dimension_values[0].value, int(row.metric_values[0].value)) for row in response.rows
     ]
 
     # Convert the data into a DataFrame
@@ -70,6 +55,4 @@ def get_active_users_per_day() -> ActiveUsersPerDay:
     # Convert the DataFrame to a list of dictionaries
     data = df.to_dict("records")
 
-    response_data = ActiveUsersPerDay(per_day=data)
-
-    return response_data
+    return ActiveUsersPerDay(per_day=data)

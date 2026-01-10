@@ -30,9 +30,7 @@ def cache(key: str, response_model: BaseModel, ttl: int = 3600):
             result = await func(request=request, *args, **kwargs)
 
             # Cache the result
-            await request.app.state.redis.set(
-                cache_key, result.model_dump_json(), ex=ttl
-            )
+            await request.app.state.redis.set(cache_key, result.model_dump_json(), ex=ttl)
             return result
 
         return wrapper

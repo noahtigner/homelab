@@ -1,4 +1,10 @@
+from typing import Literal
+
 from pydantic import BaseModel
+
+
+class PiholeBlockingResponse(BaseModel):
+    blocking: Literal["enabled", "disabled"]
 
 
 class PiholeRecentStats(BaseModel):

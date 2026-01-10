@@ -1,9 +1,9 @@
-import json
 import logging
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, Request
 
 from api.speedtest.models import SpeedTestModel
+from api.speedtest.retrieval import retrieve_speedtest_data
 
 logger = logging.getLogger(__name__)
 
@@ -15,14 +15,4 @@ router = APIRouter(
 
 @router.get("/", response_model=SpeedTestModel)
 async def get_speedtest_data(request: Request):
-    # Try to get the result from cache
-    cached_result = await request.app.state.redis.get("speedtest")
-    if cached_result is not None:
-        logger.info("Cache hit")
-        return SpeedTestModel(**json.loads(cached_result))
-
-    # return an error
-    raise HTTPException(
-        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-        detail="SpeedTest data not cached",
-    )
+    return await retrieve_speedtest_data(request)

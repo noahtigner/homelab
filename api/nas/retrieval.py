@@ -7,29 +7,20 @@ from fastapi import Request
 
 from api.config import Settings
 from api.nas.authentication import nas_session
-from api.nas.models import (
-    SynoApiVersions,
-    SynoCompletedSizeTaskData,
-    SynoCompletedSizeTaskResponse,
-    SynoCoreSystemResponse,
-    SynoFolderFullInfo,
-    SynoFoldersResponse,
-    SynoFolderTimeData,
-    SynoListResponse,
-    SynoNetworkResponse,
-    SynoResourceUtilizationResponse,
-    SynoStorageResponse,
-    SynoSystemResponse,
-    SynoTaskStartResponse,
-)
+from api.nas.models import (SynoApiVersions, SynoCompletedSizeTaskData,
+                            SynoCompletedSizeTaskResponse,
+                            SynoCoreSystemResponse, SynoFolderFullInfo,
+                            SynoFoldersResponse, SynoFolderTimeData,
+                            SynoListResponse, SynoNetworkResponse,
+                            SynoResourceUtilizationResponse,
+                            SynoStorageResponse, SynoSystemResponse,
+                            SynoTaskStartResponse)
 from api.utils.cache import cache
 
 urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
 
 
-def _get_list_info(
-    sid: str, versions: SynoApiVersions, folder: str
-) -> SynoListResponse:
+def _get_list_info(sid: str, versions: SynoApiVersions, folder: str) -> SynoListResponse:
     additional_fields = ["time"]
     additional_fields = [f'"{field}"' for field in additional_fields]
     params = {
@@ -58,9 +49,7 @@ def _start_folder_size_task(
     task_ids: dict[str, str] = {}
     for folder in folders:
         start_params["path"] = f'["{folder}"]'
-        r = requests.get(
-            f"{Settings.NAS_API_BASE}?{urlencode(start_params)}", verify=False
-        )
+        r = requests.get(f"{Settings.NAS_API_BASE}?{urlencode(start_params)}", verify=False)
         r.raise_for_status()
         task_ids[folder] = SynoTaskStartResponse(**r.json()).data.taskid
     return task_ids
@@ -78,9 +67,7 @@ async def _get_folder_size(
     }
     polling_retries: int = 0
     while polling_retries < 20:
-        r = requests.get(
-            f"{Settings.NAS_API_BASE}?{urlencode(poll_pararms)}", verify=False
-        )
+        r = requests.get(f"{Settings.NAS_API_BASE}?{urlencode(poll_pararms)}", verify=False)
         r.raise_for_status()
         if r.json().get("data", {}).get("finished"):
             break

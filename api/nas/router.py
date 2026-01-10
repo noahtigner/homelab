@@ -3,7 +3,8 @@ import logging
 from fastapi import APIRouter, Request
 
 from api.nas.authentication import retrieve_api_versions
-from api.nas.models import SynoApiVersions, SynoFoldersResponse, SynoSystemResponse
+from api.nas.models import (SynoApiVersions, SynoFoldersResponse,
+                            SynoSystemResponse)
 from api.nas.retrieval import retrieve_folders_info, retrieve_system_info
 
 logger = logging.getLogger(__name__)

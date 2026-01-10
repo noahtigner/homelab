@@ -22,6 +22,10 @@ class LCLanguageStatModel(BaseModel):
     problemsSolved: int
 
 
+class LCLanguagesResponse(BaseModel):
+    languages: list[LCLanguageStatModel]
+
+
 class LCTopicStatModel(BaseModel):
     tagName: str
     tagSlug: str
