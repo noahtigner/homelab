@@ -2,13 +2,12 @@ import logging
 from contextlib import asynccontextmanager
 from itertools import product
 
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-
 from api.config import Settings
 from api.diagnostics.retrieval import get_cpu_percent
 from api.diagnostics.router import router as diagnostics_router
 from api.docker.router import router as docker_router
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(
     level=logging.INFO, format="%(levelname)s\t%(funcName)s.%(lineno)d\t%(message)s"

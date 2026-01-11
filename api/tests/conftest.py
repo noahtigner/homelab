@@ -1,5 +1,4 @@
 import os
-from unittest.mock import patch
 
 # Mock all required environment variables before any imports
 os.environ.setdefault("SERVER_IP", "127.0.0.1")

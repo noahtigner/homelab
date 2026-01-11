@@ -1,7 +1,5 @@
 from unittest.mock import mock_open, patch
 
-import pytest
-
 from diagnostics.retrieval import (
     get_cpu_count,
     get_cpu_percent,

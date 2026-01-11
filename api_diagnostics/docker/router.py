@@ -1,9 +1,7 @@
-import json
 import logging
 
-from fastapi import APIRouter
-
 from api.docker.retrieval import is_container_running, ping_docker
+from fastapi import APIRouter
 
 logger = logging.getLogger(__name__)
 

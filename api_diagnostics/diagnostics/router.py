@@ -1,7 +1,5 @@
 from typing import Union
 
-from fastapi import APIRouter
-
 from api.diagnostics.models import DiagnosticsModel
 from api.diagnostics.retrieval import (
     get_cpu_usage,
@@ -9,6 +7,7 @@ from api.diagnostics.retrieval import (
     get_mem_usage,
     get_pids,
 )
+from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/diagnostics",
