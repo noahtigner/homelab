@@ -23,11 +23,11 @@ class TestGetServiceStatuses:
     @patch("commands.requests.get")
     def test_get_service_statuses_all_running(self, mock_get):
         """Test service statuses when all services are running"""
+        from commands import get_service_statuses
+
         mock_response = mock_get.return_value
         mock_response.status_code = 200
         mock_response.json.return_value = {"status": "ok"}
-
-        from commands import get_service_statuses
 
         messages = list(get_service_statuses())
 
@@ -40,11 +40,11 @@ class TestGetServiceStatuses:
     @patch("commands.requests.get")
     def test_get_service_statuses_service_down(self, mock_get):
         """Test service statuses when a service returns error"""
+        from commands import get_service_statuses
+
         mock_response = mock_get.return_value
         mock_response.status_code = 500
         mock_response.json.return_value = {"detail": "Service unavailable"}
-
-        from commands import get_service_statuses
 
         messages = list(get_service_statuses())
 
@@ -58,9 +58,9 @@ class TestGetServiceStatuses:
     @patch("commands.requests.get")
     def test_get_service_statuses_connection_error(self, mock_get):
         """Test service statuses when connection fails"""
-        mock_get.side_effect = Exception("Connection refused")
-
         from commands import get_service_statuses
+
+        mock_get.side_effect = Exception("Connection refused")
 
         messages = list(get_service_statuses())
 

@@ -2,16 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-
-@patch.dict("os.environ", {"slack_app_token": "test-app-token", "slack_bot_token": "test-bot-token"})
-def _import_modules():
-    """Import modules with mocked environment"""
-    from main import Commands, SlackBot
-
-    return Commands, SlackBot
-
-
-Commands, SlackBot = _import_modules()
+from main import Commands, SlackBot
 
 
 class TestCommands:
