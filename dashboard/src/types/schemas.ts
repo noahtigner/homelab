@@ -215,7 +215,7 @@ export const accountSchema = z.object({
 	signedBalance: z.number(),
 	updatedAt: z.string(),
 	icon: z.string(),
-	logoUrl: z.string(),
+	logoUrl: z.string().nullable(),
 	includeBalanceInNetWorth: z.boolean(),
 	institution: z
 		.object({
