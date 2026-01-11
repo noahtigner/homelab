@@ -75,15 +75,67 @@ jobs:
       - name: Set up Python & Pip
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: '3.14'
           cache: 'pip'
       - run: cd ./api && pip install -r requirements.txt
       - name: Check sorting with isort
         run: cd ./api && python3 -m isort . --check-only --multi-line 3 --profile black
       - name: Check formatting with Black
-        run: cd ./api && python3 -m black . --target-version=py311 --check
+        run: cd ./api && python3 -m black . --target-version=py314 --check
       - name: Lint with Flake8
         run: cd ./api && python3 -m flake8 --max-line-length 120
+
+  test_api:
+    name: 'Unit Tests (API)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - run: cd ./api && pip install -r requirements.txt
+      - name: Run tests with pytest
+        run: cd ./api && python3 -m pytest tests/ -v
+
+  quality_checks_api_diagnostics:
+    name: 'Quality Checks (API Diagnostics)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - run: cd ./api_diagnostics && pip install -r requirements.txt
+      - name: Check sorting with isort
+        run: cd ./api_diagnostics && python3 -m isort . --check-only --multi-line 3 --profile black
+      - name: Check formatting with Black
+        run: cd ./api_diagnostics && python3 -m black . --target-version=py314 --check
+      - name: Lint with Flake8
+        run: cd ./api_diagnostics && python3 -m flake8 --max-line-length 120
+
+  test_api_diagnostics:
+    name: 'Unit Tests (API Diagnostics)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - run: cd ./api_diagnostics && pip install -r requirements.txt
+      - name: Run tests with pytest
+        run: cd ./api_diagnostics && python3 -m pytest tests/ -v
 
   quality_checks_slackbot:
     name: 'Quality Checks (Slack Bot)'
@@ -95,12 +147,64 @@ jobs:
       - name: Set up Python & Pip
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: '3.14'
           cache: 'pip'
       - run: cd ./slackbot && pip install -r requirements.txt
       - name: Check sorting with isort
         run: cd ./slackbot && python3 -m isort . --check-only --multi-line 3 --profile black
       - name: Check formatting with Black
-        run: cd ./slackbot && python3 -m black . --target-version=py311 --check
+        run: cd ./slackbot && python3 -m black . --target-version=py314 --check
       - name: Lint with Flake8
         run: cd ./slackbot && python3 -m flake8 --max-line-length 120
+
+  test_slackbot:
+    name: 'Unit Tests (Slack Bot)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - run: cd ./slackbot && pip install -r requirements.txt
+      - name: Run tests with pytest
+        run: cd ./slackbot && python3 -m pytest tests/ -v
+
+  quality_checks_speedtest:
+    name: 'Quality Checks (Speed Test)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - run: cd ./speedtest && pip install -r requirements.txt
+      - name: Check sorting with isort
+        run: cd ./speedtest && python3 -m isort . --check-only --multi-line 3 --profile black
+      - name: Check formatting with Black
+        run: cd ./speedtest && python3 -m black . --target-version=py314 --check
+      - name: Lint with Flake8
+        run: cd ./speedtest && python3 -m flake8 --max-line-length 120
+
+  test_speedtest:
+    name: 'Unit Tests (Speed Test)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python & Pip
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+      - run: cd ./speedtest && pip install -r requirements.txt
+      - name: Run tests with pytest
+        run: cd ./speedtest && python3 -m pytest tests/ -v

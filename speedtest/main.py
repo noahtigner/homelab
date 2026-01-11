@@ -1,10 +1,10 @@
+import json
+import logging
 import subprocess
 import time
-import logging
-import json
-from pydantic import BaseModel
-import redis
 
+import redis
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -48,12 +48,9 @@ class SpeedTestModel(BaseModel):
     share: str | None
     client: ClientModel
 
+
 def speedtest() -> SpeedTestModel:
-    result = subprocess.run(
-        ['speedtest', '--json'],
-        capture_output = True,
-        text = True
-    )
+    result = subprocess.run(["speedtest", "--json"], capture_output=True, text=True)
 
     if result.stderr:
         raise Exception(result.stderr)
@@ -61,13 +58,13 @@ def speedtest() -> SpeedTestModel:
     json_data = json.loads(result.stdout)
     return SpeedTestModel(**json_data)
 
+
 def main(interval: int) -> None:
     logger.info("Starting up...")
     cache = redis.Redis(host="cache", port=6379, db=0)
 
     while True:
         logger.info("Running speedtest...")
-    
 
         try:
             # run the speedtest
@@ -77,14 +74,14 @@ def main(interval: int) -> None:
             logger.info(result)
 
             # cache the results
-            cache.set("speedtest", result, ex=interval*2)
+            cache.set("speedtest", result, ex=interval * 2)
 
             time.sleep(interval)
 
         except Exception as e:
             logger.error(e)
             time.sleep(30)
-            
 
-if __name__ == '__main__':
-    main(interval=60*10) # roughly every 10 minutes
+
+if __name__ == "__main__":
+    main(interval=60 * 10)  # roughly every 10 minutes
