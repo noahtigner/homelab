@@ -15,4 +15,4 @@ router = APIRouter(
 
 @router.get("/{package_name}/", response_model=NPMPackageInfo)
 async def get_package_stats(request: Request, package_name: str):
-    return await retrieve_package_info(request, package_name)
+    return await retrieve_package_info(request, package_name=package_name)

@@ -20,7 +20,7 @@ export const useLeetCodeLanguages = () => {
 		queryKey: ['lcLanguageData'],
 		queryFn: () =>
 			getRequest('/leetcode/languages/', leetCodeLanguagesSchema).then(
-				(res) => res.data
+				(res) => res.data.languages
 			),
 	});
 };
