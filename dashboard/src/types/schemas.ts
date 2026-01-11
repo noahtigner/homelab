@@ -192,7 +192,9 @@ export const leetCodeLanguageSchema = z.object({
 	problemsSolved: z.number(),
 });
 
-export const leetCodeLanguagesSchema = z.array(leetCodeLanguageSchema);
+export const leetCodeLanguagesSchema = z.object({
+	languages: z.array(leetCodeLanguageSchema),
+});
 
 // Investment/Money schemas
 export const investmentSummaryDataSchema = z.object({

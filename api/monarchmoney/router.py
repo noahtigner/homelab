@@ -1,15 +1,9 @@
-import json
 import logging
 
-import requests
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, Request
 
-from api.config import Settings
-from api.monarchmoney.models import (
-    MoneyAccountsResponse,
-    MoneyPortfolioIncoming,
-    MoneyPortfolioOutgoing,
-)
+from api.monarchmoney.models import MoneyAccountsResponse, MoneyPortfolioOutgoing
+from api.monarchmoney.retrieval import retrieve_accounts, retrieve_portfolio
 
 logger = logging.getLogger(__name__)
 
@@ -21,121 +15,9 @@ router = APIRouter(
 
 @router.get("/portfolio/", response_model=MoneyPortfolioOutgoing)
 async def get_portfolio(request: Request):
-    token = Settings.MONARCHMONEY_API_TOKEN
-    body = {
-        "operationName": "Web_GetInvestmentsDashboardCard",
-        "variables": {},
-        "query": """
-            query Web_GetInvestmentsDashboardCard {
-                portfolio {
-                    performance {
-                        totalValue
-                        oneDayChangeDollars
-                    }
-                }
-            }
-        """,
-    }
-
-    try:
-        r = requests.post(
-            "https://api.monarchmoney.com/graphql",
-            data=json.dumps(body),
-            headers={
-                "Authorization": f"Token {token}",
-                "Content-Type": "application/json",
-            },
-        )
-        r.raise_for_status()
-        data = MoneyPortfolioIncoming(**r.json())
-        response_data = MoneyPortfolioOutgoing(
-            totalValue=data.data.portfolio.performance.totalValue,
-            oneDayChangeDollars=data.data.portfolio.performance.oneDayChangeDollars,
-        )
-
-        return response_data
-    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Connection to Monarch Money Refused: {e}",
-        )
+    return await retrieve_portfolio(request)
 
 
 @router.get("/accounts/", response_model=MoneyAccountsResponse)
 async def get_accounts(request: Request):
-    token = Settings.MONARCHMONEY_API_TOKEN
-    body = {
-        "operationName": "Web_GetAccountsPage",
-        "variables": {},
-        "query": """
-            query Web_GetAccountsPage {
-                accountTypeSummaries {
-                    type {
-                        name
-                        display
-                        group
-                    }
-                    accounts {
-                        id
-                        ...AccountsListFields
-                    }
-                    totalDisplayBalance
-                }
-            }
-            fragment AccountsListFields on Account {
-                id
-                syncDisabled
-                isHidden
-                isAsset
-                includeInNetWorth
-                type {
-                    name
-                    display
-                }
-                ...AccountListItemFields
-            }
-            fragment AccountListItemFields on Account {
-                id
-                displayName
-                displayBalance
-                signedBalance
-                updatedAt
-                syncDisabled
-                icon
-                logoUrl
-                isHidden
-                isAsset
-                includeInNetWorth
-                includeBalanceInNetWorth
-                institution {
-                    id
-                    ...InstitutionStatusTooltipFields
-                }
-            }
-            fragment InstitutionStatusTooltipFields on Institution {
-                id
-                name
-            }
-        """,
-    }
-
-    try:
-        r = requests.post(
-            "https://api.monarchmoney.com/graphql",
-            data=json.dumps(body),
-            headers={
-                "Authorization": f"Token {token}",
-                "Content-Type": "application/json",
-            },
-        )
-        r.raise_for_status()
-
-        data = MoneyAccountsResponse(**r.json())
-        return data
-    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Connection to Monarch Money Refused: {e}",
-        )
+    return await retrieve_accounts(request)
