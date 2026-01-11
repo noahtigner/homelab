@@ -16,7 +16,9 @@ describe('StatusChip', () => {
 
 	it('should render with warning color for warning status', () => {
 		render(<StatusChip label="Service Warning" status="warning" />);
-		const chip = screen.getByText('Service Warning').closest('.MuiChip-root');
+		const chip = screen
+			.getByText('Service Warning')
+			.closest('.MuiChip-root');
 		expect(chip).toHaveClass('MuiChip-colorWarning');
 	});
 
@@ -28,7 +30,9 @@ describe('StatusChip', () => {
 
 	it('should render with default color for loading status', () => {
 		render(<StatusChip label="Service Loading" status="loading" />);
-		const chip = screen.getByText('Service Loading').closest('.MuiChip-root');
+		const chip = screen
+			.getByText('Service Loading')
+			.closest('.MuiChip-root');
 		expect(chip).toHaveClass('MuiChip-colorDefault');
 	});
 

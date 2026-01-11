@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
+import type { InternalAxiosRequestConfig } from 'axios';
 import { useInvestmentSummary } from './useInvestmentSummary';
 import * as apiUtils from '../services/api/utils';
 
@@ -25,7 +26,9 @@ describe('useInvestmentSummary', () => {
 	});
 
 	const wrapper = ({ children }: { children: React.ReactNode }) => (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>
+			{children}
+		</QueryClientProvider>
 	);
 
 	it('should fetch investment summary data successfully', async () => {
@@ -40,10 +43,12 @@ describe('useInvestmentSummary', () => {
 			status: 200,
 			statusText: 'OK',
 			headers: {},
-			config: {} as any,
+			config: {} as InternalAxiosRequestConfig,
 		});
 
-		const { result } = renderHook(() => useInvestmentSummary(), { wrapper });
+		const { result } = renderHook(() => useInvestmentSummary(), {
+			wrapper,
+		});
 
 		await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -58,7 +63,9 @@ describe('useInvestmentSummary', () => {
 		const mockError = new Error('Failed to fetch');
 		vi.mocked(apiUtils.getRequest).mockRejectedValue(mockError);
 
-		const { result } = renderHook(() => useInvestmentSummary(), { wrapper });
+		const { result } = renderHook(() => useInvestmentSummary(), {
+			wrapper,
+		});
 
 		await waitFor(() => expect(result.current.isError).toBe(true));
 
@@ -70,7 +77,9 @@ describe('useInvestmentSummary', () => {
 			() => new Promise(() => {})
 		);
 
-		const { result } = renderHook(() => useInvestmentSummary(), { wrapper });
+		const { result } = renderHook(() => useInvestmentSummary(), {
+			wrapper,
+		});
 
 		expect(result.current.isLoading).toBe(true);
 		expect(result.current.data).toBeUndefined();
