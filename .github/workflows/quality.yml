@@ -65,6 +65,23 @@ jobs:
       - name: Typecheck with TypeScript
         run: cd ./dashboard && npm run typecheck
 
+  test_dashboard:
+    name: 'Unit Tests (Dashboard)'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node & pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
+      - name: Run tests with Vitest
+        run: cd ./dashboard && npm run test -- --run
+
   quality_checks_api:
     name: 'Quality Checks (API)'
     runs-on: ubuntu-latest

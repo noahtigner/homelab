@@ -11,7 +11,10 @@
 		"lint": "eslint . --max-warnings 0",
 		"lint:fix": "eslint . --max-warnings 0 --fix",
 		"typecheck": "tsc --noEmit",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"test:coverage": "vitest --coverage"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
@@ -30,11 +33,15 @@
 		"@eslint/eslintrc": "^3.3.1",
 		"@eslint/js": "^9.39.1",
 		"@tanstack/eslint-plugin-query": "^5.91.2",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.1",
+		"@testing-library/user-event": "^14.6.1",
 		"@types/lodash": "^4.17.20",
 		"@types/node": "^24",
 		"@types/react": "^19.2.2",
 		"@types/react-dom": "^19.2.2",
 		"@vitejs/plugin-react": "^5.1.2",
+		"@vitest/ui": "^4.0.16",
 		"dotenv": "^17.2.3",
 		"dotenv-expand": "^12.0.3",
 		"eslint": "^9.39.2",
@@ -45,11 +52,13 @@
 		"eslint-plugin-react": "^7.37.5",
 		"eslint-plugin-react-hooks": "^7.0.1",
 		"eslint-plugin-react-refresh": "^0.4.24",
+		"jsdom": "^27.4.0",
 		"prettier": "^3.6.2",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.52.0",
 		"validate-env-vars": "^2.0.0",
-		"vite": "^7.2.2"
+		"vite": "^7.2.2",
+		"vitest": "^4.0.16"
 	},
 	"packageManager": "pnpm@10.4.1"
 }
