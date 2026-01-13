@@ -39,8 +39,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react-is@19.2.0)(react@19.2.0)(redux@5.0.1)
       zod:
-        specifier: ^4.1.12
-        version: 4.1.12
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.3
@@ -122,7 +122,7 @@ importers:
         version: 8.52.0(eslint@9.39.2)(typescript@5.9.3)
       validate-env-vars:
         specifier: ^2.0.0
-        version: 2.0.0(zod@4.1.12)
+        version: 2.0.0(zod@4.3.5)
       vite:
         specifier: ^7.2.2
         version: 7.2.2(@types/node@24.10.4)
@@ -2820,8 +2820,8 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@4.1.12:
-    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+  zod@4.3.5:
+    resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
 
 snapshots:
 
@@ -4413,8 +4413,8 @@ snapshots:
       '@babel/parser': 7.28.5
       eslint: 9.39.2
       hermes-parser: 0.25.1
-      zod: 4.1.12
-      zod-validation-error: 4.0.2(zod@4.1.12)
+      zod: 4.3.5
+      zod-validation-error: 4.0.2(zod@4.3.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -5563,9 +5563,9 @@ snapshots:
     dependencies:
       react: 19.2.0
 
-  validate-env-vars@2.0.0(zod@4.1.12):
+  validate-env-vars@2.0.0(zod@4.3.5):
     dependencies:
-      zod: 4.1.12
+      zod: 4.3.5
 
   victory-vendor@37.3.6:
     dependencies:
@@ -5712,8 +5712,8 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod-validation-error@4.0.2(zod@4.1.12):
+  zod-validation-error@4.0.2(zod@4.3.5):
     dependencies:
-      zod: 4.1.12
+      zod: 4.3.5
 
-  zod@4.1.12: {}
+  zod@4.3.5: {}
