@@ -198,4 +198,4 @@ dist-ssr
 *.sw?
 
 # Plex
-plex
+./plex

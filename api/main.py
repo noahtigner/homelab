@@ -15,6 +15,7 @@ from api.monarchmoney.router import router as monarchmoney_router
 from api.nas.router import router as nas_router
 from api.npm.router import router as npm_router
 from api.pihole.router import router as pihole_router
+from api.plex.router import router as plex_router
 from api.portfolio.router import router as portfolio_router
 from api.speedtest.router import router as speedtest_router
 
@@ -68,6 +69,10 @@ tags_metadata = [
     {
         "name": "NAS",
         "description": "Synology NAS Info",
+    },
+    {
+        "name": "Plex",
+        "description": "Plex Media Server Info",
     },
 ]
 
@@ -129,6 +134,7 @@ api.include_router(monarchmoney_router)
 api.include_router(google_analytics_router)
 api.include_router(speedtest_router)
 api.include_router(nas_router)
+api.include_router(plex_router)
 
 
 @api.get("/", tags=["Diagnostics", "Ping"])

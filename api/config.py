@@ -38,3 +38,4 @@ class Settings:
     NAS_API_PASSWORD = get_env("NAS_API_PASSWORD")
     NAS_API_BASE = f"https://{get_env('NAS_IP')}:{get_env('NAS_PORT')}/webapi/entry.cgi"
     MONARCHMONEY_API_TOKEN = get_secret("monarchmoney_token")
+    PLEX_API_TOKEN = get_secret("plex_token")
