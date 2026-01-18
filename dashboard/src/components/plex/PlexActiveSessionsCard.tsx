@@ -2,17 +2,17 @@ import {
 	Box,
 	Chip,
 	LinearProgress,
+	Link,
 	Skeleton,
 	Typography,
 	useTheme,
 } from '@mui/material';
 import {
-	PeopleOutlined as UsersIcon,
-	PlayArrowOutlined as PlayIcon,
-	PauseOutlined as PauseIcon,
 	MovieOutlined as MovieIcon,
-	TvOutlined as TvIcon,
 	MusicNoteOutlined as MusicIcon,
+	PauseOutlined as PauseIcon,
+	PlayArrowOutlined as PlayIcon,
+	TvOutlined as TvIcon,
 } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { usePlexSessions } from '../../hooks/usePlexSessions';
@@ -208,6 +208,8 @@ function PlexActiveSessionsCardContent() {
 	);
 }
 
+const PLEX_URL = 'https://app.plex.tv/desktop';
+
 function PlexActiveSessionsCard() {
 	const theme = useTheme();
 	const { data } = usePlexSessions();
@@ -221,22 +223,34 @@ function PlexActiveSessionsCard() {
 					alignItems="center"
 					sx={{ marginBottom: theme.spacing(0.5) }}
 				>
-					<UsersIcon
-						sx={{
-							fontSize: 20,
+					<img
+						src="/plex.svg"
+						alt="Plex"
+						width={20}
+						style={{
 							marginRight: theme.spacing(1),
-							marginBottom: '2px',
+							marginBottom: 2,
 						}}
 					/>
-					<Typography
+					<Link
+						href={PLEX_URL}
+						target="_blank"
+						rel="noreferrer"
 						sx={{
-							fontSize: '1.25rem',
+							textDecoration: 'none',
+							color: 'inherit',
 							flexGrow: 1,
 						}}
-						variant="h2"
 					>
-						Active Streams
-					</Typography>
+						<Typography
+							sx={{
+								fontSize: '1.25rem',
+							}}
+							variant="h2"
+						>
+							Active Streams
+						</Typography>
+					</Link>
 					{sessionCount > 0 && (
 						<Chip
 							label={sessionCount}

@@ -1,10 +1,10 @@
-import { Box, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
 import {
-	VideoLibraryOutlined as VideoIcon,
 	LiveTvOutlined as TvIcon,
 	MovieOutlined as MovieIcon,
 	MusicNoteOutlined as MusicIcon,
 	PhotoOutlined as PhotoIcon,
+	VideoLibraryOutlined as VideoIcon,
 } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { usePlexLibrary } from '../../hooks/usePlexLibrary';
@@ -112,6 +112,8 @@ function PlexMediaLibraryCardContent() {
 	);
 }
 
+const PLEX_URL = 'https://app.plex.tv/desktop';
+
 function PlexMediaLibraryCard() {
 	const theme = useTheme();
 
@@ -123,21 +125,30 @@ function PlexMediaLibraryCard() {
 					alignItems="center"
 					sx={{ marginBottom: theme.spacing(0.5) }}
 				>
-					<VideoIcon
-						sx={{
-							fontSize: 20,
+					<img
+						src="/plex.svg"
+						alt="Plex"
+						width={20}
+						style={{
 							marginRight: theme.spacing(1),
-							marginBottom: '2px',
+							marginBottom: 2,
 						}}
 					/>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-						}}
-						variant="h2"
+					<Link
+						href={PLEX_URL}
+						target="_blank"
+						rel="noreferrer"
+						sx={{ textDecoration: 'none', color: 'inherit' }}
 					>
-						Media Library
-					</Typography>
+						<Typography
+							sx={{
+								fontSize: '1.25rem',
+							}}
+							variant="h2"
+						>
+							Media Library
+						</Typography>
+					</Link>
 				</Box>
 				<PlexMediaLibraryCardContent />
 			</StyledCardContent>
