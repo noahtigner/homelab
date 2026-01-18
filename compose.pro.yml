@@ -41,8 +41,14 @@ services:
       - TZ=Etc/UTC
       - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
+      # /config MUST be on fast local storage (SSD/NVMe), not NFS
+      # Plex performs many small I/O operations on metadata which would be slow over NFS
       - ./plex:/config
       - media:/media
+    # Use tmpfs for transcoding to improve performance and reduce disk wear
+    # Set the Plex Transcoder temporary directory to /transcode in Plex settings
+    tmpfs:
+      - /transcode:size=8G
     devices:
       - /dev/dri:/dev/dri
     ports:
@@ -78,3 +84,13 @@ services:
       # Optional, if Pi-hole should get some more processing time
       - SYS_NICE
     restart: unless-stopped
+
+# Volume definitions with optimized NFS settings for Plex performance
+volumes:
+  media:
+    driver_opts:
+      type: 'nfs'
+      # noatime: Prevents updating access time on reads, improving performance
+      # rsize/wsize: Larger read/write sizes for better throughput with large media files
+      o: 'addr=${NAS_IP},nolock,soft,rw,noatime,rsize=1048576,wsize=1048576'
+      device: ':/volume1/media/'
