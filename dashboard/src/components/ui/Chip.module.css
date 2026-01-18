@@ -1,0 +1,49 @@
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: calc(var(--spacing-unit) * 1);
+	padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+	border-radius: var(--border-radius-lg);
+	font-size: 0.8125rem;
+	line-height: 1.43;
+	background-color: var(--color-gray-100);
+	color: var(--color-text-primary);
+	border: none;
+	box-sizing: border-box;
+}
+
+.chipSmall {
+	padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1.5);
+	font-size: 0.75rem;
+}
+
+.chipSuccess {
+	background-color: var(--color-success-bg);
+	color: var(--color-success-text);
+}
+
+.chipError {
+	background-color: var(--color-error-bg);
+	color: var(--color-error-text);
+}
+
+.chipWarning {
+	background-color: var(--color-warning-bg);
+	color: var(--color-warning-text);
+}
+
+.chipPrimary {
+	background-color: var(--color-primary);
+	color: var(--color-black);
+}
+
+.chipIcon {
+	display: flex;
+	align-items: center;
+	margin-left: calc(var(--spacing-unit) * -0.5);
+}
+
+.chipFullWidth {
+	width: 100%;
+	justify-content: start;
+}

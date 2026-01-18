@@ -1,4 +1,4 @@
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Link, Skeleton, Typography } from '../ui';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import useQueryMoneyAccounts from '../../hooks/useQueryMoneyAccounts';
 
@@ -14,43 +14,41 @@ function EquitySummaryInner({
 	homeValue: number;
 	mortgageBalance: number;
 }) {
-	const theme = useTheme();
-
 	const totalEquity = homeValue - mortgageBalance;
 
 	return (
 		<div>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '1.25rem',
-					marginBottom: theme.spacing(1),
+					marginBottom: 'calc(var(--spacing-unit) * 1)',
 				}}
 				variant="h2"
 			>
 				{formatter.format(totalEquity)}
 			</Typography>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '1rem',
 					wordBreak: 'break-word',
 				}}
-				variant={'h3'}
+				variant="h3"
 			>
 				Home Value{' '}
-				<span style={{ backgroundColor: theme.palette.success.main }}>
+				<span style={{ backgroundColor: 'var(--color-success-bg)' }}>
 					{formatter.format(homeValue)}{' '}
 				</span>
 			</Typography>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '1rem',
 					wordBreak: 'break-word',
-					paddingTop: theme.spacing(1),
+					paddingTop: 'calc(var(--spacing-unit) * 1)',
 				}}
-				variant={'h3'}
+				variant="h3"
 			>
 				Mortgage{' '}
-				<span style={{ backgroundColor: theme.palette.error.main }}>
+				<span style={{ backgroundColor: 'var(--color-error-bg)' }}>
 					{formatter.format(mortgageBalance)}{' '}
 				</span>
 			</Typography>
@@ -68,9 +66,9 @@ function EquitySummary() {
 					variant="text"
 					width="100%"
 					height={24}
-					sx={{ marginBottom: 1 }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 1)' }}
 				/>
-				{...Array(2)
+				{Array(2)
 					.fill(0)
 					.map((_, i) => (
 						<Skeleton
@@ -87,20 +85,20 @@ function EquitySummary() {
 		return (
 			<div>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1.25rem',
-						marginBottom: 1,
+						marginBottom: 'calc(var(--spacing-unit) * 1)',
 					}}
 					variant="h2"
 				>
 					An unexpected error occurred
 				</Typography>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1rem',
 						wordBreak: 'break-word',
 					}}
-					variant={'h3'}
+					variant="h3"
 				>
 					{error.message}
 				</Typography>
@@ -135,31 +133,28 @@ function EquitySummary() {
 }
 
 function EquitySummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="https://app.monarchmoney.com/butterfly-logo.svg"
 						alt="Monarch Money"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						style={{ marginRight: 'calc(var(--spacing-unit) * 1)' }}
 					/>
 					<Link
 						href="https://app.monarchmoney.com/accounts"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							Equity

@@ -1,9 +1,9 @@
-import { Chip, Link } from '@mui/material';
+import { Chip, Link } from '../ui';
 import {
-	CheckCircle as CheckCircleIcon,
-	CircleOutlined as CircleIcon,
-	ErrorOutlineOutlined as ErrorCircleIcon,
-} from '@mui/icons-material';
+	CheckCircleIcon,
+	CircleOutlinedIcon,
+	ErrorOutlineIcon,
+} from '../icons';
 import type { ServiceStatus } from '../../types';
 
 const statusToColor = (status: ServiceStatus) => {
@@ -26,10 +26,10 @@ const statusToIcon = (status: ServiceStatus) => {
 			return <CheckCircleIcon />;
 		case 'warning':
 		case 'error':
-			return <ErrorCircleIcon />;
+			return <ErrorOutlineIcon />;
 		case 'loading':
 		default:
-			return <CircleIcon />;
+			return <CircleOutlinedIcon />;
 	}
 };
 
@@ -42,17 +42,6 @@ function StatusChip({
 	status: ServiceStatus;
 	url?: string;
 }) {
-	// if (url) {
-	// 	return (
-	// 		<Link
-	// 			href={url}
-	// 			target="_blank"
-	// 			sx={{ textDecoration: 'none', color: 'inherit' }}
-	// 		>
-	// 			<StatusChip label={label} status={status} />
-	// 		</Link>
-	// 	);
-	// }
 	return (
 		<Chip
 			label={
@@ -60,7 +49,8 @@ function StatusChip({
 					<Link
 						href={url}
 						target="_blank"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						color="inherit"
+						style={{ textDecoration: 'none' }}
 					>
 						{label}
 					</Link>
@@ -70,8 +60,7 @@ function StatusChip({
 			}
 			color={statusToColor(status)}
 			icon={statusToIcon(status)}
-			sx={{ justifyContent: 'start', width: '100%' }}
-			// size="small"
+			style={{ justifyContent: 'start', width: '100%' }}
 		/>
 	);
 }

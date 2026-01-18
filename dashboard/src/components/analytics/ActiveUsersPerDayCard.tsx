@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTheme, Typography, Link, Box, Chip } from '@mui/material';
+import { Box, Chip, Link, Typography } from '../ui';
 import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
 import type { TooltipContentProps } from 'recharts';
 import axios from 'axios';
@@ -16,8 +16,6 @@ interface ActivePerDay {
 }
 
 function ActiveUsersChips({ activePerDay }: { activePerDay: ActivePerDay }) {
-	const { palette } = useTheme();
-
 	const chipData = [
 		{
 			label: 'Today',
@@ -46,18 +44,18 @@ function ActiveUsersChips({ activePerDay }: { activePerDay: ActivePerDay }) {
 
 	return (
 		<Box
-			sx={{
-				display: 'flex',
-				flexWrap: 'wrap',
-				justifyContent: 'start',
-				alignContent: 'start',
-				listStyle: 'none',
-				m: 0,
-				marginTop: 1,
-				p: 0,
-				gap: 1,
-			}}
 			component="ul"
+			display="flex"
+			flexWrap="wrap"
+			justifyContent="flex-start"
+			alignItems="flex-start"
+			gap={1}
+			style={{
+				listStyle: 'none',
+				margin: 0,
+				marginTop: 'calc(var(--spacing-unit) * 1)',
+				padding: 0,
+			}}
 		>
 			{chipData.map(({ label, value }) => (
 				<li key={value}>
@@ -68,7 +66,7 @@ function ActiveUsersChips({ activePerDay }: { activePerDay: ActivePerDay }) {
 								{label}{' '}
 								<strong
 									style={{
-										color: palette.text.secondary,
+										color: 'var(--color-text-secondary)',
 									}}
 								>
 									({value})
@@ -86,18 +84,17 @@ function CustomTooltip({
 	active,
 	payload,
 }: TooltipContentProps<string, string>) {
-	const theme = useTheme();
 	if (active && payload && payload.length) {
 		return (
 			<div
 				style={{
-					backgroundColor: theme.palette.background.paper,
-					color: theme.palette.text.primary,
-					borderColor: theme.palette.divider,
-					borderRadius: theme.shape.borderRadius,
+					backgroundColor: 'var(--color-paper)',
+					color: 'var(--color-text-primary)',
+					borderColor: 'var(--color-divider)',
+					borderRadius: 'var(--border-radius-lg)',
 					borderWidth: 1,
 					borderStyle: 'solid',
-					padding: theme.spacing(0.5),
+					padding: 'calc(var(--spacing-unit) * 0.5)',
 					zIndex: 1,
 				}}
 			>
@@ -106,7 +103,7 @@ function CustomTooltip({
 				</Typography>
 				<Typography
 					variant="subtitle1"
-					style={{ color: theme.palette.success.main }}
+					style={{ color: 'var(--color-success-text)' }}
 				>
 					users: {payload[0].value}
 				</Typography>
@@ -118,43 +115,15 @@ function CustomTooltip({
 }
 
 function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
-	const theme = useTheme();
-
 	return (
 		<>
-			{/* <Box
-				sx={{
-					display: 'flex',
-					flexGrow: 1,
-					justifyContent: 'space-between',
-					marginBottom: theme.spacing(2),
-				}}
-			>
-				<Typography
-					sx={{
-						fontSize: '2.5rem',
-					}}
-					variant="h3"
-				>
-					{activePerDay.per_day.slice(-7).reduce((acc, day) => {
-						return acc + day.active_users;
-					}, 0)}{' '}
-					/ week
-				</Typography>
-				<PersonIcon color="success" sx={{ fontSize: 48 }} />
-			</Box> */}
 			<Link
 				href="https://noahtigner.com"
 				target="_blank"
 				rel="noreferrer"
-				sx={{ textDecoration: 'none', color: 'inherit' }}
+				style={{ textDecoration: 'none', color: 'inherit' }}
 			>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-					}}
-					variant="h2"
-				>
+				<Typography style={{ fontSize: '1.25rem' }} variant="h2">
 					noahtigner.com
 				</Typography>
 			</Link>
@@ -170,8 +139,8 @@ function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 					<Area
 						type="monotone"
 						dataKey="active_users"
-						stroke={theme.palette.primary.main}
-						fill={theme.palette.primary.dark}
+						stroke="var(--color-primary)"
+						fill="var(--color-primary-dark)"
 					/>
 					<Tooltip content={CustomTooltip} />
 				</AreaChart>
@@ -182,8 +151,6 @@ function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 }
 
 function ActiveUsersPerDayCard() {
-	const theme = useTheme();
-
 	const [activePerDay, setActivePerDay] = useState<ActivePerDay | null>(null);
 
 	useEffect(() => {
@@ -196,29 +163,27 @@ function ActiveUsersPerDayCard() {
 	}, []);
 
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg"
 						alt="GA"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						style={{ marginRight: 'calc(var(--spacing-unit) * 1)' }}
 					/>
 					<Link
 						href="https://noahtigner.com"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							Google Analytics

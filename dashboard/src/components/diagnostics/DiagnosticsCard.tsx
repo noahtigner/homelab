@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react';
-import { Box, Skeleton, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import { Box, Grid, Skeleton, Typography } from '../ui';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
@@ -15,28 +14,24 @@ function DiagnosticsCard({
 	icon: ReactNode;
 	loading?: boolean;
 }) {
-	const theme = useTheme();
-
 	return (
 		<Grid xs={12} sm={6} md={3}>
-			<StyledCard variant="outlined">
+			<StyledCard>
 				<StyledCardContent>
 					<Typography
-						sx={{
+						style={{
 							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.25),
+							marginBottom: 'calc(var(--spacing-unit) * 0.25)',
 						}}
 						variant="h2"
 					>
 						{title}
 					</Typography>
 					<Box
-						sx={{
-							display: 'flex',
-							flexGrow: 1,
-							justifyContent: 'space-between',
-							alignItems: 'center',
-						}}
+						display="flex"
+						flexGrow={1}
+						justifyContent="space-between"
+						alignItems="center"
 					>
 						<Box>
 							{loading ? (
@@ -49,14 +44,14 @@ function DiagnosticsCard({
 								values.map((v) => (
 									<Typography
 										key={v}
-										sx={{
+										style={{
 											fontSize:
 												values.length > 1
 													? '0.75rem'
 													: '2rem',
 											wordBreak: 'break-word',
 										}}
-										variant={'h3'}
+										variant="h3"
 									>
 										{v}
 									</Typography>

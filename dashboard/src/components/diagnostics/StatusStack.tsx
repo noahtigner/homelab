@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Stack } from '../ui';
 import { type UseQueryResult } from '@tanstack/react-query';
 
 import StatusChip from './StatusChip';
@@ -45,9 +45,7 @@ function StatusStackPrimary() {
 	return (
 		<Stack
 			direction="column"
-			// direction="row"
 			justifyContent="flex-start"
-			// alignItems="flex-start"
 			alignItems="stretch"
 			spacing={1}
 		>

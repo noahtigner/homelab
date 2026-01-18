@@ -3,21 +3,87 @@
 	line-height: 1.5;
 	font-weight: 400;
 
-	color-scheme: dark;
-	color: #e6f0e6;
-	background-color: #202020;
-
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+
+	color-scheme: dark;
+	color: #f8fbf8ff;
+	background-color: #141414;
+
+	/* Theme colors matching reference project */
+	--color-black: #141414;
+	--color-paper: #202020;
+	--color-divider: rgb(49, 49, 49);
+	--color-border-dark: rgb(97, 97, 97);
+	--color-border: rgba(248, 251, 248, 0.5);
+	--color-border-card: rgb(59, 59, 59);
+	--color-text-primary: rgb(248, 251, 248);
+	--color-text-secondary: rgba(210, 210, 210, 0.745);
+	--color-focus: #6edfca;
+	--color-ripple: rgba(248, 251, 248, 0.6);
+
+	/* Semantic colors */
+	--color-primary: #6edfca;
+	--color-primary-dark: #4db3a5;
+	--color-success-bg: #20503e;
+	--color-success-text: #a0f5d1;
+	--color-error-bg: #8c1d18;
+	--color-error-text: #f9dedc;
+	--color-warning-bg: #534612;
+	--color-warning-text: #fae190;
+
+	/* Gray scale using oklch */
+	--color-gray-50: oklch(17% 1% 264deg);
+	--color-gray-100: oklch(28% 3% 264deg / 65%);
+	--color-gray-200: oklch(31% 3% 264deg / 80%);
+	--color-gray-300: oklch(35% 3% 264deg / 80%);
+	--color-gray-400: oklch(47% 3.5% 264deg / 80%);
+	--color-gray-500: oklch(64% 4% 264deg / 80%);
+	--color-gray-600: oklch(82% 4% 264deg / 80%);
+	--color-gray-700: oklch(92% 4.5% 264deg / 80%);
+	--color-gray-800: oklch(93% 3.5% 264deg / 85%);
+	--color-gray-900: oklch(95% 2% 264deg / 90%);
+	--color-gray-950: oklch(94% 1.5% 264deg / 95%);
+
+	--border-radius: 4px;
+	--border-radius-lg: 8px;
+	--spacing-unit: 4px;
 }
 
 body {
+	position: relative;
 	margin: 0;
 	padding: 0;
 	min-width: 320px;
 	min-height: 100vh;
+}
+
+h1 {
+	font-size: 1.25rem;
+	font-weight: 300;
+	margin: 0;
+}
+
+h2 {
+	font-size: 1.25rem;
+	font-weight: 300;
+	margin: 0;
+}
+
+h3 {
+	margin: 0;
+}
+
+h4 {
+	margin: 0;
+}
+
+p {
+	margin: 0;
+	font-size: 1rem;
 }
 
 .logo {

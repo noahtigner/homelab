@@ -1,0 +1,48 @@
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+	user-select: none;
+}
+
+.icon svg {
+	width: 100%;
+	height: 100%;
+	fill: currentColor;
+}
+
+.iconSmall {
+	font-size: 1.25rem;
+}
+
+.iconMedium {
+	font-size: 1.5rem;
+}
+
+.iconLarge {
+	font-size: 2.25rem;
+}
+
+.colorPrimary {
+	color: var(--color-primary);
+}
+
+.colorSuccess {
+	color: var(--color-success-text);
+}
+
+.colorError {
+	color: var(--color-error-text);
+}
+
+.colorWarning {
+	color: var(--color-warning-text);
+}
+
+.colorSecondary {
+	color: var(--color-text-secondary);
+}

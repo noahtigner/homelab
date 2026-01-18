@@ -1,8 +1,5 @@
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import {
-	TrendingUp as TrendingUpIcon,
-	TrendingDown as TrendingDownIcon,
-} from '@mui/icons-material';
+import { Box, Link, Skeleton, Typography } from '../ui';
+import { TrendingUpIcon, TrendingDownIcon } from '../icons';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { useInvestmentSummary } from '../../hooks/useInvestmentSummary';
 import type { z } from 'zod';
@@ -16,8 +13,6 @@ const formatter = new Intl.NumberFormat('en-US', {
 });
 
 function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
-	const theme = useTheme();
-
 	const isTrendingUp = data.oneDayChangeDollars >= 0;
 	const changePercent = (data.oneDayChangeDollars / data.totalValue) * 100;
 	const roundedChangePercent = (Math.round(changePercent * 10) / 10).toFixed(
@@ -28,38 +23,31 @@ function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
 	return (
 		<div>
 			<Box
-				sx={{
-					display: 'flex',
-					gap: 0.5,
-					marginBottom: theme.spacing(1),
-				}}
+				display="flex"
+				gap={0.5}
+				style={{ marginBottom: 'calc(var(--spacing-unit) * 1)' }}
 			>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-					}}
-					variant="h2"
-				>
+				<Typography style={{ fontSize: '1.25rem' }} variant="h2">
 					{formatter.format(data.totalValue)}
 				</Typography>
 				{isTrendingUp ? (
-					<TrendingUpIcon color="success" sx={{ fontSize: 24 }} />
+					<TrendingUpIcon color="success" fontSize={24} />
 				) : (
-					<TrendingDownIcon color="error" sx={{ fontSize: 24 }} />
+					<TrendingDownIcon color="error" fontSize={24} />
 				)}
 			</Box>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '1rem',
 					wordBreak: 'break-word',
 				}}
-				variant={'h3'}
+				variant="h3"
 			>
 				<span
 					style={{
 						backgroundColor: isTrendingUp
-							? theme.palette.success.main
-							: theme.palette.error.main,
+							? 'var(--color-success-bg)'
+							: 'var(--color-error-bg)',
 					}}
 				>
 					{formatter.format(data.oneDayChangeDollars)}{' '}
@@ -81,7 +69,7 @@ function InvestmentSummary() {
 					variant="text"
 					width="100%"
 					height={24}
-					sx={{ marginBottom: 1 }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 1)' }}
 				/>
 				<Skeleton variant="text" width="100%" height={18} />
 			</div>
@@ -91,20 +79,20 @@ function InvestmentSummary() {
 		return (
 			<div>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1.25rem',
-						marginBottom: 1,
+						marginBottom: 'calc(var(--spacing-unit) * 1)',
 					}}
 					variant="h2"
 				>
 					An unexpected error occurred
 				</Typography>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1rem',
 						wordBreak: 'break-word',
 					}}
-					variant={'h3'}
+					variant="h3"
 				>
 					{error.message}
 				</Typography>
@@ -115,31 +103,28 @@ function InvestmentSummary() {
 }
 
 function InvestmentSummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="https://app.monarchmoney.com/butterfly-logo.svg"
 						alt="Monarch Money"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						style={{ marginRight: 'calc(var(--spacing-unit) * 1)' }}
 					/>
 					<Link
 						href="https://app.monarchmoney.com/accounts"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							Portfolio

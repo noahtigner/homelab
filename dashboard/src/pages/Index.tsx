@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Unstable_Grid2';
+import { Grid } from '../components/ui';
 
 import LeetCodeSummaryCard from '../components/leetcode/LeetCodeSummaryCard';
 // import DockerTable from './components/docker/DockerTable';
@@ -23,14 +23,14 @@ function Index() {
 			<Grid xs={12} md={2} lg={3}>
 				<StatusStackPrimary />
 			</Grid>
-			<Grid container spacing={2} xs={12} md={10} lg={9}>
-				<Grid xs={12}>
-					<DashboardTable />
-				</Grid>
-				{/* <Grid xs={12}>
-					<SpeedTestSummaryCard />
-				</Grid> */}
-				<Grid container spacing={2} xs={12}>
+			<Grid xs={12} md={10} lg={9}>
+				<Grid container spacing={2}>
+					<Grid xs={12}>
+						<DashboardTable />
+					</Grid>
+					{/* <Grid xs={12}>
+						<SpeedTestSummaryCard />
+					</Grid> */}
 					<PiholeStatus />
 				</Grid>
 			</Grid>

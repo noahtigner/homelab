@@ -1,0 +1,36 @@
+.divider {
+	border: none;
+	border-top: 1px solid var(--color-divider);
+	margin: calc(var(--spacing-unit) * 2) 0;
+}
+
+.dividerVertical {
+	border-top: none;
+	border-left: 1px solid var(--color-divider);
+	height: auto;
+	align-self: stretch;
+	margin: 0 calc(var(--spacing-unit) * 2);
+}
+
+.dividerWithText {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	color: var(--color-text-secondary);
+	font-size: 0.875rem;
+}
+
+.dividerWithText::before,
+.dividerWithText::after {
+	content: '';
+	flex: 1;
+	border-bottom: 1px solid var(--color-divider);
+}
+
+.dividerWithText::before {
+	margin-right: calc(var(--spacing-unit) * 2);
+}
+
+.dividerWithText::after {
+	margin-left: calc(var(--spacing-unit) * 2);
+}
