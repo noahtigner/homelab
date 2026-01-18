@@ -22,15 +22,10 @@ PLEX_HEADERS = {
 }
 
 
-def get_plex_base_url() -> str:
-    """Get the base URL for Plex API requests."""
-    return f"http://{Settings.SERVER_IP}:32400"
-
-
 @cache("plex:health", PlexHealthResponse, ttl=60)
 async def retrieve_health(request: Request) -> PlexHealthResponse:
     """Retrieve Plex server health/identity information."""
-    url = f"{get_plex_base_url()}/"
+    url = f"{Settings.PLEX_API_BASE}/"
 
     try:
         response = requests.get(url, headers=PLEX_HEADERS)
@@ -64,7 +59,7 @@ async def retrieve_health(request: Request) -> PlexHealthResponse:
 @cache("plex:sessions", PlexSessionsResponse, ttl=15)
 async def retrieve_sessions(request: Request) -> PlexSessionsResponse:
     """Retrieve currently active Plex sessions with user and media info."""
-    url = f"{get_plex_base_url()}/status/sessions"
+    url = f"{Settings.PLEX_API_BASE}/status/sessions"
 
     try:
         response = requests.get(url, headers=PLEX_HEADERS)
@@ -131,7 +126,7 @@ async def retrieve_sessions(request: Request) -> PlexSessionsResponse:
 @cache("plex:library_counts", PlexLibraryCountsResponse, ttl=300)
 async def retrieve_library_counts(request: Request) -> PlexLibraryCountsResponse:
     """Retrieve counts for all library sections."""
-    url = f"{get_plex_base_url()}/library/sections"
+    url = f"{Settings.PLEX_API_BASE}/library/sections"
 
     try:
         response = requests.get(url, headers=PLEX_HEADERS)
@@ -150,7 +145,7 @@ async def retrieve_library_counts(request: Request) -> PlexLibraryCountsResponse
             section_type = directory.get("type", "unknown")
 
             # Get the count for this section by querying it
-            section_url = f"{get_plex_base_url()}/library/sections/{section_key}/all"
+            section_url = f"{Settings.PLEX_API_BASE}/library/sections/{section_key}/all"
             section_response = requests.get(
                 section_url,
                 headers=PLEX_HEADERS,
