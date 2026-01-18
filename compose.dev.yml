@@ -53,7 +53,7 @@ services:
 
   traefik:
     container_name: 'reverse_proxy'
-    image: 'traefik:v2.10'
+    image: 'traefik:v3.6.7'
     command:
       # - "--log.level=DEBUG"
       - '--log.level=INFO'
