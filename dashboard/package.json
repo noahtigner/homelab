@@ -29,6 +29,7 @@
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.3",
 		"@eslint/js": "^9.39.1",
+		"@playwright/test": "^1.57.0",
 		"@tanstack/eslint-plugin-query": "^5.91.2",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.1",
