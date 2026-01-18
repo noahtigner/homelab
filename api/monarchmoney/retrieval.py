@@ -14,6 +14,8 @@ from api.utils.cache import cache
 
 logger = logging.getLogger(__name__)
 
+MONARCH_GRAPHQL_ENDPOINT = "https://api.monarch.com/graphql"
+
 
 @cache("money:portfolio", MoneyPortfolioOutgoing, ttl=60 * 5)
 async def retrieve_portfolio(request: Request) -> MoneyPortfolioOutgoing:
@@ -35,7 +37,7 @@ async def retrieve_portfolio(request: Request) -> MoneyPortfolioOutgoing:
 
     try:
         r = requests.post(
-            "https://api.monarchmoney.com/graphql",
+            MONARCH_GRAPHQL_ENDPOINT,
             data=json.dumps(body),
             headers={
                 "Authorization": f"Token {token}",
@@ -116,7 +118,7 @@ async def retrieve_accounts(request: Request) -> MoneyAccountsResponse:
 
     try:
         r = requests.post(
-            "https://api.monarchmoney.com/graphql",
+            MONARCH_GRAPHQL_ENDPOINT,
             data=json.dumps(body),
             headers={
                 "Authorization": f"Token {token}",
