@@ -1,0 +1,14 @@
+.link {
+	color: var(--color-text-primary);
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.link:hover {
+	text-decoration: underline;
+	text-decoration-color: var(--color-text-primary);
+}
+
+.linkInheritColor {
+	color: inherit;
+}

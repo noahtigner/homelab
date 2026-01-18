@@ -1,0 +1,32 @@
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.colorPrimary {
+	color: var(--color-primary);
+}
+
+.colorSuccess {
+	color: var(--color-success-text);
+}
+
+.colorError {
+	color: var(--color-error-text);
+}
+
+.colorWarning {
+	color: var(--color-warning-text);
+}
+
+.colorSecondary {
+	color: var(--color-text-secondary);
+}

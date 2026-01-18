@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-	useTheme,
-	Typography,
-	Link,
-	IconButton,
-	Box,
-	Chip,
-} from '@mui/material';
+import { Box, Chip, Link, Typography } from '../ui';
 import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
 import type { TooltipContentProps } from 'recharts';
-import LinkIcon from '@mui/icons-material/Link';
+import { LinkIcon, DownloadIcon } from '../icons';
 import axios from 'axios';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
-import { DownloadOutlined as DownloadOutlinedIcon } from '@mui/icons-material';
 
 interface NPMDownloadsDay {
 	downloads: number;
@@ -40,8 +32,6 @@ interface NPMPackageInfo {
 }
 
 function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
-	const { palette } = useTheme();
-
 	const chipData = [
 		{
 			label: 'Version',
@@ -59,18 +49,18 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 
 	return (
 		<Box
-			sx={{
-				display: 'flex',
-				flexWrap: 'wrap',
-				justifyContent: 'start',
-				alignContent: 'start',
-				listStyle: 'none',
-				m: 0,
-				marginTop: 1,
-				p: 0,
-				gap: 1,
-			}}
 			component="ul"
+			display="flex"
+			flexWrap="wrap"
+			justifyContent="flex-start"
+			alignItems="flex-start"
+			gap={1}
+			style={{
+				listStyle: 'none',
+				margin: 0,
+				marginTop: 'calc(var(--spacing-unit) * 1)',
+				padding: 0,
+			}}
 		>
 			{chipData.map(({ label, value, href }) => (
 				<li key={value ?? href}>
@@ -80,19 +70,18 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 							<>
 								{label}{' '}
 								{href ? (
-									<IconButton
-										component={Link}
+									<Link
 										href={href}
 										target="_blank"
 										rel="noopener"
-										sx={{ padding: 0 }}
+										style={{ padding: 0 }}
 									>
 										<LinkIcon />
-									</IconButton>
+									</Link>
 								) : (
 									<strong
 										style={{
-											color: palette.text.secondary,
+											color: 'var(--color-text-secondary)',
 										}}
 									>
 										({value})
@@ -111,18 +100,17 @@ function CustomTooltip({
 	active,
 	payload,
 }: TooltipContentProps<string, string>) {
-	const theme = useTheme();
 	if (active && payload && payload.length) {
 		return (
 			<div
 				style={{
-					backgroundColor: theme.palette.background.paper,
-					color: theme.palette.text.primary,
-					borderColor: theme.palette.divider,
-					borderRadius: theme.shape.borderRadius,
+					backgroundColor: 'var(--color-paper)',
+					color: 'var(--color-text-primary)',
+					borderColor: 'var(--color-divider)',
+					borderRadius: 'var(--border-radius-lg)',
 					borderWidth: 1,
 					borderStyle: 'solid',
-					padding: theme.spacing(0.5),
+					padding: 'calc(var(--spacing-unit) * 0.5)',
 					zIndex: 1,
 				}}
 			>
@@ -131,7 +119,7 @@ function CustomTooltip({
 				</Typography>
 				<Typography
 					variant="subtitle1"
-					style={{ color: theme.palette.success.main }}
+					style={{ color: 'var(--color-success-text)' }}
 				>
 					downloads: {payload[0].value}
 				</Typography>
@@ -147,28 +135,24 @@ function NPMPackageSummary({
 }: {
 	npmPackageInfo: NPMPackageInfo;
 }) {
-	const theme = useTheme();
-
 	return (
 		<>
 			<Box
-				sx={{
-					display: 'flex',
-					flexGrow: 1,
-					justifyContent: 'space-between',
-					marginBottom: theme.spacing(2),
-				}}
+				display="flex"
+				flexGrow={1}
+				justifyContent="space-between"
+				style={{ marginBottom: 'calc(var(--spacing-unit) * 2)' }}
 			>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '2.5rem',
-						marginBottom: theme.spacing(0.5),
+						marginBottom: 'calc(var(--spacing-unit) * 0.5)',
 					}}
 					variant="h3"
 				>
 					{npmPackageInfo.downloads.total} / month
 				</Typography>
-				<DownloadOutlinedIcon color="success" sx={{ fontSize: 48 }} />
+				<DownloadIcon color="success" fontSize={48} />
 			</Box>
 			<ResponsiveContainer
 				width={'100%'}
@@ -182,8 +166,8 @@ function NPMPackageSummary({
 					<Area
 						type="monotone"
 						dataKey="downloads"
-						stroke={theme.palette.primary.main}
-						fill={theme.palette.primary.dark}
+						stroke="var(--color-primary)"
+						fill="var(--color-primary-dark)"
 					/>
 					<Tooltip content={CustomTooltip} />
 				</AreaChart>
@@ -194,8 +178,6 @@ function NPMPackageSummary({
 }
 
 function NPMPackageCard({ packageName }: { packageName: string }) {
-	const theme = useTheme();
-
 	const [npmPackageInfo, setNPMPackageInfo] = useState<NPMPackageInfo | null>(
 		null
 	);
@@ -210,29 +192,27 @@ function NPMPackageCard({ packageName }: { packageName: string }) {
 	}, [packageName]);
 
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="https://static-production.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png"
 						alt="NPM"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						style={{ marginRight: 'calc(var(--spacing-unit) * 1)' }}
 					/>
 					<Link
 						href={npmPackageInfo?.homepage}
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							{packageName}

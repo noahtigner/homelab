@@ -1,14 +1,5 @@
-import {
-	Box,
-	LinearProgress,
-	Skeleton,
-	Typography,
-	useTheme,
-} from '@mui/material';
-import {
-	StorageOutlined as StorageIcon,
-	Circle as CircleIcon,
-} from '@mui/icons-material';
+import { Box, LinearProgress, Skeleton, Typography } from '../ui';
+import { StorageIcon, CircleIcon } from '../icons';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
 import {
@@ -18,7 +9,7 @@ import {
 
 function getStatusColor(
 	status: string
-): 'success' | 'warning' | 'error' | 'info' {
+): 'success' | 'warning' | 'error' | 'primary' {
 	const normalStatuses = ['normal', 'initialized'];
 	const warningStatuses = ['warning'];
 	const errorStatuses = ['crashed', 'error', 'failing', 'failed'];
@@ -32,8 +23,8 @@ function getStatusColor(
 	if (errorStatuses.includes(lowerStatus)) {
 		return 'error';
 	}
-	// Unknown status - show as info rather than error to avoid false alarms
-	return 'info';
+	// Unknown status - show as primary rather than error to avoid false alarms
+	return 'primary';
 }
 
 function HddRow({
@@ -47,24 +38,21 @@ function HddRow({
 	status: string;
 	temp: number;
 }) {
-	const theme = useTheme();
 	const statusColor = getStatusColor(status);
 
 	return (
 		<Box
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: theme.spacing(1.5),
-				py: theme.spacing(0.75),
+			display="flex"
+			alignItems="center"
+			gap={1.5}
+			style={{
+				paddingTop: 'calc(var(--spacing-unit) * 0.75)',
+				paddingBottom: 'calc(var(--spacing-unit) * 0.75)',
 			}}
 		>
-			<CircleIcon
-				color={statusColor}
-				sx={{ fontSize: 12, flexShrink: 0 }}
-			/>
+			<CircleIcon color={statusColor} fontSize={12} />
 			<Typography
-				sx={{
+				style={{
 					fontSize: '0.875rem',
 					minWidth: '48px',
 					flexShrink: 0,
@@ -73,33 +61,33 @@ function HddRow({
 				{diskno}
 			</Typography>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '0.875rem',
 					flexGrow: 1,
-					color: theme.palette.text.secondary,
 				}}
+				color="secondary"
 			>
 				{status}
 			</Typography>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '0.75rem',
 					minWidth: '50px',
 					textAlign: 'right',
 					flexShrink: 0,
-					color: theme.palette.text.secondary,
 				}}
+				color="secondary"
 			>
 				{bytesToTerabytes(capacity).toFixed(1)} TB
 			</Typography>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '0.75rem',
 					minWidth: '36px',
 					textAlign: 'right',
 					flexShrink: 0,
-					color: theme.palette.text.secondary,
 				}}
+				color="secondary"
 			>
 				{celsiusToFahrenheit(temp).toFixed(0)}°F
 			</Typography>
@@ -108,12 +96,17 @@ function HddRow({
 }
 
 function NasStorageCardContent() {
-	const theme = useTheme();
 	const { isLoading, isError, data } = useNasDiagnostics();
 
 	if (isError) {
 		return (
-			<Typography color="error" sx={{ py: 2 }}>
+			<Typography
+				color="error"
+				style={{
+					paddingTop: 'calc(var(--spacing-unit) * 2)',
+					paddingBottom: 'calc(var(--spacing-unit) * 2)',
+				}}
+			>
 				Failed to load NAS storage data
 			</Typography>
 		);
@@ -121,7 +114,7 @@ function NasStorageCardContent() {
 
 	if (isLoading || !data) {
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<Box display="flex" flexDirection="column" gap={1}>
 				{[1, 2, 3, 4].map((i) => (
 					<Skeleton key={i} variant="rectangular" height={24} />
 				))}
@@ -146,36 +139,33 @@ function NasStorageCardContent() {
 	return (
 		<>
 			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					mb: theme.spacing(0.5),
-				}}
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+				style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 			>
 				<Typography
-					sx={{ fontSize: '1.5rem', fontWeight: 500 }}
+					style={{ fontSize: '1.5rem', fontWeight: 500 }}
 					variant="h3"
 				>
 					{totalUsageTB.toFixed(2)} / {totalCapacityTB.toFixed(2)} TB
 				</Typography>
 			</Box>
 			<LinearProgress
-				variant="determinate"
 				value={totalUsagePercent}
 				color={totalUsagePercent > 90 ? 'error' : 'primary'}
-				sx={{
+				style={{
 					height: 8,
-					borderRadius: 1,
-					mb: theme.spacing(0.5),
+					borderRadius: 'var(--border-radius)',
+					marginBottom: 'calc(var(--spacing-unit) * 0.5)',
 				}}
 			/>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '0.875rem',
-					color: theme.palette.text.secondary,
-					mb: theme.spacing(1),
+					marginBottom: 'calc(var(--spacing-unit) * 1)',
 				}}
+				color="secondary"
 			>
 				{totalUsagePercent.toFixed(1)}% used across {hdds.length} drives
 			</Typography>
@@ -197,29 +187,22 @@ function NasStorageCardContent() {
 }
 
 function NasStorageCard() {
-	const theme = useTheme();
-
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<StorageIcon
-						sx={{
-							fontSize: 20,
-							marginRight: theme.spacing(1),
+						fontSize={20}
+						style={{
+							marginRight: 'calc(var(--spacing-unit) * 1)',
 							marginBottom: '2px',
 						}}
 					/>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-						}}
-						variant="h2"
-					>
+					<Typography style={{ fontSize: '1.25rem' }} variant="h2">
 						NAS Storage
 					</Typography>
 				</Box>

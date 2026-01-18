@@ -1,10 +1,5 @@
 import { ReactNode } from 'react';
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import {
-	SwapHorizontalCircleOutlined as SwapHorizontalCircleOutlinedIcon,
-	ArrowCircleDownOutlined as ArrowCircleDownOutlinedIcon,
-	ArrowCircleUpOutlined as ArrowCircleUpOutlinedIcon,
-} from '@mui/icons-material';
+import { Box, Link, Skeleton, Typography } from '../ui';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { useSpeedTest } from '../../hooks/useSpeedTest';
 import type { z } from 'zod';
@@ -30,14 +25,7 @@ const getTestElapsedTime = (timestamp: string): number => {
 
 function SpeedTestItem({ icon, text }: { icon: ReactNode; text: string }) {
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexGrow: 1,
-				alignItems: 'center',
-				gap: 1,
-			}}
-		>
+		<Box display="flex" flexGrow={1} alignItems="center" gap={1}>
 			{icon}
 			{text}
 		</Box>
@@ -46,28 +34,22 @@ function SpeedTestItem({ icon, text }: { icon: ReactNode; text: string }) {
 
 function SpeedTestSummaryInner({ data }: { data: SpeedTestModel }) {
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				gap: 0.5,
-				justifyContent: 'space-between',
-			}}
-		>
+		<Box display="flex" justifyContent="space-between" gap={0.5}>
 			<div>
 				<SpeedTestItem
-					icon={<SwapHorizontalCircleOutlinedIcon />}
+					icon={<span>↔</span>}
 					text={data.ping.toString()}
 				/>
 				<SpeedTestItem
-					icon={<ArrowCircleDownOutlinedIcon />}
+					icon={<span>↓</span>}
 					text={`${bytesToMegabits(data.download)} Mbps`}
 				/>
 				<SpeedTestItem
-					icon={<ArrowCircleUpOutlinedIcon />}
+					icon={<span>↑</span>}
 					text={`${bytesToMegabits(data.upload)} Mbps`}
 				/>
 			</div>
-			<Typography align="right">
+			<Typography style={{ textAlign: 'right' }}>
 				last tested {getTestElapsedTime(data.timestamp)} minutes ago
 				<br />
 				{data.client.ip}
@@ -88,7 +70,7 @@ function SpeedTestSummary() {
 					variant="text"
 					width="100%"
 					height={24}
-					sx={{ marginBottom: 1 }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 1)' }}
 				/>
 				<Skeleton variant="text" width="100%" height={18} />
 			</div>
@@ -98,20 +80,20 @@ function SpeedTestSummary() {
 		return (
 			<div>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1.25rem',
-						marginBottom: 1,
+						marginBottom: 'calc(var(--spacing-unit) * 1)',
 					}}
 					variant="h2"
 				>
 					An unexpected error occurred
 				</Typography>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1rem',
 						wordBreak: 'break-word',
 					}}
-					variant={'h3'}
+					variant="h3"
 				>
 					{error.message}
 				</Typography>
@@ -122,31 +104,28 @@ function SpeedTestSummary() {
 }
 
 function SpeedTestSummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="https://www.speedtest.net/favicon.ico"
 						alt="SpeedTest"
 						width={24}
-						style={{ marginRight: theme.spacing(1) }}
+						style={{ marginRight: 'calc(var(--spacing-unit) * 1)' }}
 					/>
 					<Link
 						href="https://www.speedtest.net/"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							SpeedTest

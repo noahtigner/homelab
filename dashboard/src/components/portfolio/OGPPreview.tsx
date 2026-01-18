@@ -1,34 +1,30 @@
-import { Box, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Skeleton, Typography } from '../ui';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { useOGPPreview } from '../../hooks/useOGPPreview';
 
 function OGPPreview({ url }: { url: string }) {
-	const theme = useTheme();
-
 	const { isPending, error, data } = useOGPPreview();
 
 	if (isPending || error || data === null) {
 		return (
-			<StyledCard variant="outlined">
+			<StyledCard>
 				<StyledCardContent
-					sx={{
+					style={{
 						display: 'flex',
 						flexDirection: 'row',
-						gap: 2,
+						gap: 'calc(var(--spacing-unit) * 2)',
 					}}
 				>
 					<Skeleton variant="rectangular" width={100} height={100} />
 					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'space-between',
-						}}
+						display="flex"
+						flexDirection="column"
+						justifyContent="space-between"
 					>
 						<Typography
-							sx={{
+							style={{
 								fontSize: '2rem',
-								marginBottom: theme.spacing(0.5),
+								marginBottom: 'calc(var(--spacing-unit) * 0.5)',
 							}}
 							variant="h3"
 						>
@@ -38,18 +34,17 @@ function OGPPreview({ url }: { url: string }) {
 							{error ? (
 								<>
 									<Typography
-										sx={{
+										style={{
 											fontSize: '1rem',
-											marginBottom: theme.spacing(0.5),
+											marginBottom:
+												'calc(var(--spacing-unit) * 0.5)',
 										}}
 										variant="h4"
 									>
 										An unexpected error occurred
 									</Typography>
 									<Typography
-										sx={{
-											fontSize: '0.75rem',
-										}}
+										style={{ fontSize: '0.75rem' }}
 										variant="body1"
 									>
 										{error.message}
@@ -77,12 +72,12 @@ function OGPPreview({ url }: { url: string }) {
 	}
 
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent
-				sx={{
+				style={{
 					display: 'flex',
 					flexDirection: 'row',
-					gap: 2,
+					gap: 'calc(var(--spacing-unit) * 2)',
 				}}
 			>
 				<a
@@ -105,16 +100,14 @@ function OGPPreview({ url }: { url: string }) {
 					/>
 				</a>
 				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'space-between',
-					}}
+					display="flex"
+					flexDirection="column"
+					justifyContent="space-between"
 				>
 					<Typography
-						sx={{
+						style={{
 							fontSize: '2rem',
-							marginBottom: theme.spacing(0.5),
+							marginBottom: 'calc(var(--spacing-unit) * 0.5)',
 						}}
 						variant="h3"
 					>
@@ -122,18 +115,16 @@ function OGPPreview({ url }: { url: string }) {
 					</Typography>
 					<div>
 						<Typography
-							sx={{
+							style={{
 								fontSize: '1rem',
-								marginBottom: theme.spacing(0.5),
+								marginBottom: 'calc(var(--spacing-unit) * 0.5)',
 							}}
 							variant="h4"
 						>
 							{data.hybridGraph.title}
 						</Typography>
 						<Typography
-							sx={{
-								fontSize: '0.75rem',
-							}}
+							style={{ fontSize: '0.75rem' }}
 							variant="body1"
 						>
 							{data.hybridGraph.description}

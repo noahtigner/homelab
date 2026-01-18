@@ -7,7 +7,7 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
-} from '@mui/material';
+} from '../ui';
 import { primaryClient } from '../../services/api';
 import {
 	celsiusToFahrenheit,
@@ -26,7 +26,7 @@ function NasDiagnosticsTableRow() {
 				component="th"
 				scope="row"
 				colSpan={999}
-				sx={{ textAlign: 'center ' }}
+				style={{ textAlign: 'center' }}
 			>
 				An unexpected error occurred
 			</TableCell>
@@ -80,7 +80,7 @@ function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
 				component="th"
 				scope="row"
 				colSpan={999}
-				sx={{ textAlign: 'center ' }}
+				style={{ textAlign: 'center' }}
 			>
 				An unexpected error occurred
 			</TableCell>
@@ -121,7 +121,7 @@ function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
 
 function DashboardTable() {
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<TableContainer>
 				<Table size="small">
 					<TableHead>

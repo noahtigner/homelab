@@ -1,0 +1,60 @@
+.typography {
+	margin: 0;
+	color: var(--color-text-primary);
+}
+
+.h1 {
+	font-size: 2.5rem;
+	font-weight: 300;
+}
+
+.h2 {
+	font-size: 1.25rem;
+	font-weight: 300;
+}
+
+.h3 {
+	font-size: 1rem;
+	font-weight: 400;
+}
+
+.h4 {
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+.body1 {
+	font-size: 1rem;
+	font-weight: 400;
+}
+
+.body2 {
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+.subtitle1 {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.subtitle2 {
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.colorSecondary {
+	color: var(--color-text-secondary);
+}
+
+.colorError {
+	color: var(--color-error-text);
+}
+
+.colorSuccess {
+	color: var(--color-success-text);
+}
+
+.colorPrimary {
+	color: var(--color-primary);
+}

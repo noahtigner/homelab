@@ -1,11 +1,11 @@
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
+import { Box, Link, Skeleton, Typography } from '../ui';
 import {
-	LiveTvOutlined as TvIcon,
-	MovieOutlined as MovieIcon,
-	MusicNoteOutlined as MusicIcon,
-	PhotoOutlined as PhotoIcon,
-	VideoLibraryOutlined as VideoIcon,
-} from '@mui/icons-material';
+	TvIcon,
+	MovieIcon,
+	MusicNoteIcon,
+	PhotoIcon,
+	VideoLibraryIcon,
+} from '../icons';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import { usePlexLibrary } from '../../hooks/usePlexLibrary';
 
@@ -16,11 +16,11 @@ function getIconForType(type: string) {
 		case 'show':
 			return TvIcon;
 		case 'artist':
-			return MusicIcon;
+			return MusicNoteIcon;
 		case 'photo':
 			return PhotoIcon;
 		default:
-			return VideoIcon;
+			return VideoLibraryIcon;
 	}
 }
 
@@ -33,20 +33,19 @@ function MediaRow({
 	label: string;
 	count: number;
 }) {
-	const theme = useTheme();
-
 	return (
 		<Box
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: theme.spacing(1.5),
-				py: theme.spacing(0.75),
+			display="flex"
+			alignItems="center"
+			gap={1.5}
+			style={{
+				paddingTop: 'calc(var(--spacing-unit) * 0.75)',
+				paddingBottom: 'calc(var(--spacing-unit) * 0.75)',
 			}}
 		>
 			{icon}
 			<Typography
-				sx={{
+				style={{
 					fontSize: '0.875rem',
 					flexGrow: 1,
 				}}
@@ -54,7 +53,7 @@ function MediaRow({
 				{label}
 			</Typography>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '1.25rem',
 					fontWeight: 500,
 					textAlign: 'right',
@@ -67,12 +66,17 @@ function MediaRow({
 }
 
 function PlexMediaLibraryCardContent() {
-	const theme = useTheme();
 	const { isLoading, isError, data } = usePlexLibrary();
 
 	if (isError) {
 		return (
-			<Typography color="error" sx={{ py: 2 }}>
+			<Typography
+				color="error"
+				style={{
+					paddingTop: 'calc(var(--spacing-unit) * 2)',
+					paddingBottom: 'calc(var(--spacing-unit) * 2)',
+				}}
+			>
 				Failed to load Plex library data
 			</Typography>
 		);
@@ -80,7 +84,7 @@ function PlexMediaLibraryCardContent() {
 
 	if (isLoading || !data) {
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<Box display="flex" flexDirection="column" gap={1}>
 				{[1, 2].map((i) => (
 					<Skeleton key={i} variant="rectangular" height={32} />
 				))}
@@ -95,14 +99,7 @@ function PlexMediaLibraryCardContent() {
 				return (
 					<MediaRow
 						key={section.key}
-						icon={
-							<IconComponent
-								sx={{
-									fontSize: 20,
-									color: theme.palette.text.secondary,
-								}}
-							/>
-						}
+						icon={<IconComponent fontSize={20} color="secondary" />}
 						label={section.title}
 						count={section.count}
 					/>
@@ -115,22 +112,20 @@ function PlexMediaLibraryCardContent() {
 const PLEX_URL = 'https://app.plex.tv/desktop';
 
 function PlexMediaLibraryCard() {
-	const theme = useTheme();
-
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="/plex.svg"
 						alt="Plex"
 						width={20}
 						style={{
-							marginRight: theme.spacing(1),
+							marginRight: 'calc(var(--spacing-unit) * 1)',
 							marginBottom: 2,
 						}}
 					/>
@@ -138,12 +133,10 @@ function PlexMediaLibraryCard() {
 						href={PLEX_URL}
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							Media Library

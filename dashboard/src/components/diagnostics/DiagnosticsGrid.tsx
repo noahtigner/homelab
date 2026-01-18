@@ -1,9 +1,5 @@
 import { AxiosInstance } from 'axios';
-import {
-	SaveOutlined as SaveIcon,
-	DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
-	MemoryOutlined as MemoryIcon,
-} from '@mui/icons-material';
+import { SaveIcon, ThermostatIcon, MemoryIcon } from '../icons';
 
 import DiagnosticsCard from './DiagnosticsCard';
 import { celsiusToFahrenheit } from '../../services/unitConversion';
@@ -24,7 +20,7 @@ const cardItems = [
 				data.cpu.percent.length
 			).toFixed(2)}% avg`,
 		],
-		icon: <MemoryIcon color="success" sx={{ fontSize: 36 }} />,
+		icon: <MemoryIcon color="success" fontSize={36} />,
 	},
 	{
 		id: 1,
@@ -32,13 +28,13 @@ const cardItems = [
 		values: (data: DiagnosticsData) => [
 			`${data.memory.percent.toFixed(1)}%`,
 		],
-		icon: <MemoryIcon color="success" sx={{ fontSize: 36 }} />,
+		icon: <MemoryIcon color="success" fontSize={36} />,
 	},
 	{
 		id: 2,
 		title: 'Disk',
 		values: (data: DiagnosticsData) => [`${data.disk.percent.toFixed(1)}%`],
-		icon: <SaveIcon color="success" sx={{ fontSize: 36 }} />,
+		icon: <SaveIcon color="success" fontSize={36} />,
 	},
 	{
 		id: 3,
@@ -47,12 +43,7 @@ const cardItems = [
 			data.cpu.temp
 				? [`${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`]
 				: [],
-		icon: (
-			<DeviceThermostatOutlinedIcon
-				color="success"
-				sx={{ fontSize: 36 }}
-			/>
-		),
+		icon: <ThermostatIcon color="success" fontSize={36} />,
 	},
 ];
 

@@ -1,12 +1,4 @@
-import {
-	Box,
-	Divider,
-	Link,
-	Skeleton,
-	Typography,
-	useTheme,
-} from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
+import { Box, Divider, Grid, Link, Skeleton, Typography } from '../ui';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import useQueryMoneyAccounts, {
 	AccountTypeSummary,
@@ -23,8 +15,6 @@ const isAsset = (accountType: AccountTypeSummary): boolean => {
 };
 
 function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
-	const theme = useTheme();
-
 	const totalNetWorth = data.data.accountTypeSummaries.reduce(
 		(acc, accountTypeSummary) =>
 			acc +
@@ -37,9 +27,9 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 	return (
 		<div>
 			<Typography
-				sx={{
+				style={{
 					fontSize: '1.25rem',
-					marginBottom: theme.spacing(1),
+					marginBottom: 'calc(var(--spacing-unit) * 1)',
 				}}
 				variant="h2"
 			>
@@ -49,7 +39,7 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 				{['asset', 'liability'].map((group) => (
 					<Grid key={group} xs={12} sm={6}>
 						<Typography
-							sx={{
+							style={{
 								fontSize: '0.75rem',
 								display: 'flex',
 								justifyContent: 'space-between',
@@ -59,16 +49,10 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 							{group === 'asset' ? 'Assets' : 'Liabilities'}{' '}
 							<span
 								style={{
-									// color:
-									// group === 'asset'
-									// 	? theme.palette.success.main
-									// 	: theme.palette.error.main,
-									// underline
-									// textDecoration: 'underline',
 									backgroundColor:
 										group === 'asset'
-											? theme.palette.success.main
-											: theme.palette.error.main,
+											? 'var(--color-success-bg)'
+											: 'var(--color-error-bg)',
 								}}
 							>
 								{formatter.format(
@@ -87,7 +71,12 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 								)}
 							</span>
 						</Typography>
-						<Divider role="presentation" sx={{ mt: 0.25 }} />
+						<Divider
+							style={{
+								marginTop: 'calc(var(--spacing-unit) * 0.25)',
+								marginBottom: 0,
+							}}
+						/>
 						{data.data.accountTypeSummaries
 							.filter(
 								(accountTypeSummary) =>
@@ -96,7 +85,7 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 							.map((accountTypeSummary) => (
 								<Typography
 									key={accountTypeSummary.type.name}
-									sx={{
+									style={{
 										fontSize: '0.75rem',
 										display: 'flex',
 										justifyContent: 'space-between',
@@ -109,8 +98,8 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 											backgroundColor: isAsset(
 												accountTypeSummary
 											)
-												? theme.palette.success.main
-												: theme.palette.error.main,
+												? 'var(--color-success-bg)'
+												: 'var(--color-error-bg)',
 										}}
 									>
 										{formatter.format(
@@ -136,9 +125,9 @@ function NetWorthSummary() {
 					variant="text"
 					width="100%"
 					height={24}
-					sx={{ marginBottom: 1 }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 1)' }}
 				/>
-				{...Array(4)
+				{Array(4)
 					.fill(0)
 					.map((_, i) => (
 						<Skeleton
@@ -155,20 +144,20 @@ function NetWorthSummary() {
 		return (
 			<div>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1.25rem',
-						marginBottom: 1,
+						marginBottom: 'calc(var(--spacing-unit) * 1)',
 					}}
 					variant="h2"
 				>
 					An unexpected error occurred
 				</Typography>
 				<Typography
-					sx={{
+					style={{
 						fontSize: '1rem',
 						wordBreak: 'break-word',
 					}}
-					variant={'h3'}
+					variant="h3"
 				>
 					{error.message}
 				</Typography>
@@ -179,31 +168,28 @@ function NetWorthSummary() {
 }
 
 function NetWorthSummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
+		<StyledCard>
 			<StyledCardContent>
 				<Box
 					display="flex"
 					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
+					style={{ marginBottom: 'calc(var(--spacing-unit) * 0.5)' }}
 				>
 					<img
 						src="https://app.monarchmoney.com/butterfly-logo.svg"
 						alt="Monarch Money"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						style={{ marginRight: 'calc(var(--spacing-unit) * 1)' }}
 					/>
 					<Link
 						href="https://app.monarchmoney.com/accounts"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						style={{ textDecoration: 'none', color: 'inherit' }}
 					>
 						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
+							style={{ fontSize: '1.25rem' }}
 							variant="h2"
 						>
 							Net Worth

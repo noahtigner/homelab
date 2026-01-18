@@ -1,0 +1,15 @@
+.box {
+	display: block;
+}
+
+.boxFlex {
+	display: flex;
+}
+
+.boxInlineFlex {
+	display: inline-flex;
+}
+
+.boxGrid {
+	display: grid;
+}
