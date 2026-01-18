@@ -91,7 +91,6 @@ volumes:
     driver_opts:
       type: 'nfs'
       # noatime: Prevents updating access time on reads, improving performance
-      # nfsvers=4: Use NFS version 4 for better performance and security
       # rsize/wsize: Larger read/write sizes for better throughput with large media files
       o: 'addr=${NAS_IP},nolock,soft,rw,noatime,rsize=1048576,wsize=1048576'
       device: ':/volume1/media/'
