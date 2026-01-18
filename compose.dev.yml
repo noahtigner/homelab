@@ -23,6 +23,7 @@ services:
       - pihole_password
       - ga4_credentials
       - monarchmoney_token
+      - plex_token
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.api.entrypoints=web'
@@ -52,7 +53,7 @@ services:
 
   traefik:
     container_name: 'reverse_proxy'
-    image: 'traefik:v2.10'
+    image: 'traefik:v3.6.7'
     command:
       # - "--log.level=DEBUG"
       - '--log.level=INFO'
@@ -122,3 +123,5 @@ secrets:
     file: './secrets/ga4_credentials.json'
   monarchmoney_token:
     file: './secrets/monarchmoney_token.txt'
+  plex_token:
+    file: './secrets/plex_token.txt'
