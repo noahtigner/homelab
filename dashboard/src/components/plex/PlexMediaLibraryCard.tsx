@@ -3,9 +3,26 @@ import {
 	VideoLibraryOutlined as VideoIcon,
 	LiveTvOutlined as TvIcon,
 	MovieOutlined as MovieIcon,
+	MusicNoteOutlined as MusicIcon,
+	PhotoOutlined as PhotoIcon,
 } from '@mui/icons-material';
 import { StyledCard, StyledCardContent } from '../StyledCard';
-import { useNasFolders } from '../../hooks/useNasFolders';
+import { usePlexLibrary } from '../../hooks/usePlexLibrary';
+
+function getIconForType(type: string) {
+	switch (type) {
+		case 'movie':
+			return MovieIcon;
+		case 'show':
+			return TvIcon;
+		case 'artist':
+			return MusicIcon;
+		case 'photo':
+			return PhotoIcon;
+		default:
+			return VideoIcon;
+	}
+}
 
 function MediaRow({
 	icon,
@@ -49,14 +66,14 @@ function MediaRow({
 	);
 }
 
-function NasMediaCardContent() {
+function PlexMediaLibraryCardContent() {
 	const theme = useTheme();
-	const { isLoading, isError, data } = useNasFolders('/media');
+	const { isLoading, isError, data } = usePlexLibrary();
 
 	if (isError) {
 		return (
 			<Typography color="error" sx={{ py: 2 }}>
-				Failed to load media library data
+				Failed to load Plex library data
 			</Typography>
 		);
 	}
@@ -71,43 +88,31 @@ function NasMediaCardContent() {
 		);
 	}
 
-	const tvFolder = data.folders.find((f) => f.name === 'tv');
-	const moviesFolder = data.folders.find((f) => f.name === 'movies');
-
-	const tvShowCount = tvFolder?.num_dir ?? 0;
-	const moviesCount = moviesFolder?.num_dir ?? 0;
-
 	return (
 		<Box>
-			<MediaRow
-				icon={
-					<TvIcon
-						sx={{
-							fontSize: 20,
-							color: theme.palette.text.secondary,
-						}}
+			{data.sections.map((section) => {
+				const IconComponent = getIconForType(section.type);
+				return (
+					<MediaRow
+						key={section.key}
+						icon={
+							<IconComponent
+								sx={{
+									fontSize: 20,
+									color: theme.palette.text.secondary,
+								}}
+							/>
+						}
+						label={section.title}
+						count={section.count}
 					/>
-				}
-				label="TV Shows (Seasons)"
-				count={tvShowCount}
-			/>
-			<MediaRow
-				icon={
-					<MovieIcon
-						sx={{
-							fontSize: 20,
-							color: theme.palette.text.secondary,
-						}}
-					/>
-				}
-				label="Movies"
-				count={moviesCount}
-			/>
+				);
+			})}
 		</Box>
 	);
 }
 
-function NasMediaCard() {
+function PlexMediaLibraryCard() {
 	const theme = useTheme();
 
 	return (
@@ -134,10 +139,10 @@ function NasMediaCard() {
 						Media Library
 					</Typography>
 				</Box>
-				<NasMediaCardContent />
+				<PlexMediaLibraryCardContent />
 			</StyledCardContent>
 		</StyledCard>
 	);
 }
 
-export default NasMediaCard;
+export default PlexMediaLibraryCard;
