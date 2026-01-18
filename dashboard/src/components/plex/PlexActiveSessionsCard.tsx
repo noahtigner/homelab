@@ -198,9 +198,9 @@ function PlexActiveSessionsCardContent() {
 
 	return (
 		<Box>
-			{data.sessions.map((session, index) => (
+			{data.sessions.map((session) => (
 				<SessionRow
-					key={`${session.username}-${index}`}
+					key={`${session.username}-${session.title}-${session.player.title}`}
 					session={session}
 				/>
 			))}

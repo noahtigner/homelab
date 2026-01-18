@@ -40,7 +40,7 @@ function Index() {
 			<Grid xs={12} sm={6} lg={3}>
 				<PlexActiveSessionsCard />
 			</Grid>
-			<Grid container spacing={2} xs={12} sm={12} lg={3}>
+			<Grid container spacing={2} xs={12} sm={12} lg={6}>
 				<PiholeStatus />
 			</Grid>
 			<Grid xs={12} md={3} lg={2}>
