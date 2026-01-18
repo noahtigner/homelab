@@ -251,3 +251,42 @@ export const ogpPreviewSchema = z.object({
 		description: z.string(),
 	}),
 });
+
+// Plex schemas
+export const plexPlayerSchema = z.object({
+	title: z.string(),
+	platform: z.string(),
+	product: z.string(),
+	state: z.string(),
+});
+
+export const plexSessionSchema = z.object({
+	username: z.string(),
+	title: z.string(),
+	media_type: z.string(),
+	grandparent_title: z.string().nullable(),
+	parent_title: z.string().nullable(),
+	year: z.number().nullable(),
+	thumb: z.string().nullable(),
+	player: plexPlayerSchema,
+	progress_percent: z.number(),
+	duration_ms: z.number(),
+	view_offset_ms: z.number(),
+});
+
+export const plexSessionsResponseSchema = z.object({
+	count: z.number(),
+	sessions: z.array(plexSessionSchema),
+});
+
+export const plexLibrarySectionSchema = z.object({
+	key: z.string(),
+	title: z.string(),
+	type: z.string(),
+	count: z.number(),
+});
+
+export const plexLibraryCountsResponseSchema = z.object({
+	total_items: z.number(),
+	sections: z.array(plexLibrarySectionSchema),
+});

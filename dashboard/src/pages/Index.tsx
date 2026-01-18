@@ -14,7 +14,8 @@ import ActiveUsersPerDayCard from '../components/analytics/ActiveUsersPerDayCard
 import DashboardTable from '../components/diagnostics/DiagnosticsTable';
 import SpeedTestSummaryCard from '../components/speedtest/SpeedTestSummary';
 import NasStorageCard from '../components/diagnostics/NasStorageCard';
-import NasMediaCard from '../components/diagnostics/NasMediaCard';
+import PlexMediaLibraryCard from '../components/plex/PlexMediaLibraryCard';
+import PlexActiveSessionsCard from '../components/plex/PlexActiveSessionsCard';
 
 function Index() {
 	return (
@@ -34,7 +35,10 @@ function Index() {
 				<NasStorageCard />
 			</Grid>
 			<Grid xs={12} sm={6} lg={3}>
-				<NasMediaCard />
+				<PlexMediaLibraryCard />
+			</Grid>
+			<Grid xs={12} sm={6} lg={3}>
+				<PlexActiveSessionsCard />
 			</Grid>
 			<Grid container spacing={2} xs={12} sm={12} lg={6}>
 				<PiholeStatus />
