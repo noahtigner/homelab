@@ -12,7 +12,7 @@ import NetWorthSummaryCard from '../components/money/NetWorthSummary';
 import EquitySummaryCard from '../components/money/EquitySummary';
 import ActiveUsersPerDayCard from '../components/analytics/ActiveUsersPerDayCard';
 import DashboardTable from '../components/diagnostics/DiagnosticsTable';
-import SpeedTestSummaryCard from '../components/speedtest/SpeedTestSummary';
+// import SpeedTestSummaryCard from '../components/speedtest/SpeedTestSummary';
 import NasStorageCard from '../components/diagnostics/NasStorageCard';
 import PlexMediaLibraryCard from '../components/plex/PlexMediaLibraryCard';
 import PlexActiveSessionsCard from '../components/plex/PlexActiveSessionsCard';
@@ -27,21 +27,21 @@ function Index() {
 				<Grid xs={12}>
 					<DashboardTable />
 				</Grid>
-				<Grid xs={12}>
+				{/* <Grid xs={12}>
 					<SpeedTestSummaryCard />
+				</Grid> */}
+				<Grid container spacing={2} xs={12}>
+					<PiholeStatus />
 				</Grid>
 			</Grid>
-			<Grid xs={12} sm={6} lg={3}>
+			<Grid xs={12} sm={6} lg={4}>
 				<NasStorageCard />
 			</Grid>
-			<Grid xs={12} sm={6} lg={3}>
+			<Grid xs={12} sm={6} lg={4}>
 				<PlexMediaLibraryCard />
 			</Grid>
-			<Grid xs={12} sm={6} lg={3}>
+			<Grid xs={12} sm={6} lg={4}>
 				<PlexActiveSessionsCard />
-			</Grid>
-			<Grid container spacing={2} xs={12} sm={12} lg={6}>
-				<PiholeStatus />
 			</Grid>
 			<Grid xs={12} md={3} lg={2}>
 				<InvestmentSummaryCard />
