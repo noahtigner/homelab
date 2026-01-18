@@ -226,13 +226,9 @@ class TestPlexLibraryCountsRetrieval:
                     }
                 }
             elif "/library/sections/1/all" in url:
-                mock_response.json.return_value = {
-                    "MediaContainer": {"totalSize": 150}
-                }
+                mock_response.json.return_value = {"MediaContainer": {"totalSize": 150}}
             elif "/library/sections/2/all" in url:
-                mock_response.json.return_value = {
-                    "MediaContainer": {"totalSize": 50}
-                }
+                mock_response.json.return_value = {"MediaContainer": {"totalSize": 50}}
             elif "/library/sections/3/all" in url:
                 mock_response.json.return_value = {
                     "MediaContainer": {"totalSize": 1000}
