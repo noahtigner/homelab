@@ -47,7 +47,7 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 			</Typography>
 			<Grid container spacing={1}>
 				{['asset', 'liability'].map((group) => (
-					<Grid key={group} xs={12} sm={6}>
+					<Grid key={group} size={{ xs: 12, sm: 6 }}>
 						<Typography
 							sx={{
 								fontSize: '0.75rem',
