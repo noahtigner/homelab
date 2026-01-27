@@ -12,7 +12,7 @@ router = APIRouter(
 async def get_cache_health(request: Request):
     try:
         status = await request.app.state.redis.ping()
-    except (ConnectionError, ConnectionRefusedError):
+    except ConnectionError, ConnectionRefusedError:
         status = False
     return {"status": "ok" if status else "error"}
 
