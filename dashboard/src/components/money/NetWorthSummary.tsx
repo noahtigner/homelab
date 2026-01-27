@@ -6,7 +6,7 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
+import Grid from '@mui/material/Grid2';
 import { StyledCard, StyledCardContent } from '../StyledCard';
 import useQueryMoneyAccounts, {
 	AccountTypeSummary,

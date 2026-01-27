@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Box, Skeleton, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
