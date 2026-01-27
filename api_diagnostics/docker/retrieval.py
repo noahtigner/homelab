@@ -13,7 +13,7 @@ def ping_docker() -> bool:
     try:
         client = get_docker_client()
         return client.ping()
-    except (DockerAPIError, DockerException):
+    except DockerAPIError, DockerException:
         logger.error("Could not connect to Docker daemon")
         return False
 
@@ -44,7 +44,7 @@ def get_container_stats() -> DockerStatsModel:
             block_io_raw = stats_raw["blkio_stats"]["io_service_bytes_recursive"]
             block_in = block_io_raw[0]["value"] or 0
             block_out = block_io_raw[1]["value"] or 0
-        except (KeyError, TypeError, IndexError):
+        except KeyError, TypeError, IndexError:
             logger.error("Could not read block I/O")
             block_in = 0
             block_out = 0
