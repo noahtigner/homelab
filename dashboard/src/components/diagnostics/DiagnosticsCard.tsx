@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Box, Skeleton, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 
 import { StyledCard, StyledCardContent } from '../StyledCard';
 
@@ -18,7 +18,7 @@ function DiagnosticsCard({
 	const theme = useTheme();
 
 	return (
-		<Grid xs={12} sm={6} md={3}>
+		<Grid size={{ xs: 12, sm: 6, md: 3 }}>
 			<StyledCard variant="outlined">
 				<StyledCardContent>
 					<Typography
