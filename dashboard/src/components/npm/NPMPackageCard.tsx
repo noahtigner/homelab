@@ -1,47 +1,17 @@
-import { useEffect, useState } from 'react';
-import {
-	useTheme,
-	Typography,
-	Link,
-	IconButton,
-	Box,
-	Chip,
-} from '@mui/material';
+import { Download, Link as LinkIcon } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
 import type { TooltipContentProps } from 'recharts';
-import LinkIcon from '@mui/icons-material/Link';
-import axios from 'axios';
+import type { z } from 'zod';
 
-import { StyledCard, StyledCardContent } from '../StyledCard';
-import { DownloadOutlined as DownloadOutlinedIcon } from '@mui/icons-material';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useNpmPackage } from '@/hooks/useNpmPackage';
+import type { npmPackageInfoSchema } from '@/types/schemas';
 
-interface NPMDownloadsDay {
-	downloads: number;
-	day: string;
-}
-
-interface NPMDownloads {
-	total?: number;
-	per_day: NPMDownloadsDay[];
-	start?: string;
-	end?: string;
-}
-
-interface NPMPackageInfo {
-	name: string;
-	version: string;
-	description: string;
-	license: string;
-	homepage: string;
-	repository: string;
-	issues: string;
-	pulls: string;
-	downloads: NPMDownloads;
-}
+type NPMPackageInfo = z.infer<typeof npmPackageInfoSchema>;
 
 function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
-	const { palette } = useTheme();
-
 	const chipData = [
 		{
 			label: 'Version',
@@ -58,52 +28,29 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 	];
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexWrap: 'wrap',
-				justifyContent: 'start',
-				alignContent: 'start',
-				listStyle: 'none',
-				m: 0,
-				marginTop: 1,
-				p: 0,
-				gap: 1,
-			}}
-			component="ul"
-		>
+		<ul className="mt-2 flex list-none flex-wrap items-start justify-start gap-2 p-0">
 			{chipData.map(({ label, value, href }) => (
 				<li key={value ?? href}>
-					<Chip
-						size="small"
-						label={
-							<>
-								{label}{' '}
-								{href ? (
-									<IconButton
-										component={Link}
-										href={href}
-										target="_blank"
-										rel="noopener"
-										sx={{ padding: 0 }}
-									>
-										<LinkIcon />
-									</IconButton>
-								) : (
-									<strong
-										style={{
-											color: palette.text.secondary,
-										}}
-									>
-										({value})
-									</strong>
-								)}
-							</>
-						}
-					/>
+					<Badge variant="secondary">
+						{label}{' '}
+						{href ? (
+							<a
+								href={href}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center text-inherit hover:text-primary"
+							>
+								<LinkIcon size={14} />
+							</a>
+						) : (
+							<strong className="text-muted-foreground">
+								({value})
+							</strong>
+						)}
+					</Badge>
 				</li>
 			))}
-		</Box>
+		</ul>
 	);
 }
 
@@ -111,30 +58,13 @@ function CustomTooltip({
 	active,
 	payload,
 }: TooltipContentProps<string, string>) {
-	const theme = useTheme();
 	if (active && payload && payload.length) {
 		return (
-			<div
-				style={{
-					backgroundColor: theme.palette.background.paper,
-					color: theme.palette.text.primary,
-					borderColor: theme.palette.divider,
-					borderRadius: theme.shape.borderRadius,
-					borderWidth: 1,
-					borderStyle: 'solid',
-					padding: theme.spacing(0.5),
-					zIndex: 1,
-				}}
-			>
-				<Typography variant="subtitle2">
-					{payload[0].payload.day}
-				</Typography>
-				<Typography
-					variant="subtitle1"
-					style={{ color: theme.palette.success.main }}
-				>
+			<div className="z-10 rounded border border-border bg-card p-1 text-card-foreground">
+				<p className="text-xs font-medium">{payload[0].payload.day}</p>
+				<p className="text-sm text-success-foreground">
 					downloads: {payload[0].value}
-				</Typography>
+				</p>
 			</div>
 		);
 	}
@@ -147,103 +77,87 @@ function NPMPackageSummary({
 }: {
 	npmPackageInfo: NPMPackageInfo;
 }) {
-	const theme = useTheme();
-
 	return (
 		<>
-			<Box
-				sx={{
-					display: 'flex',
-					flexGrow: 1,
-					justifyContent: 'space-between',
-					marginBottom: theme.spacing(2),
-				}}
-			>
-				<Typography
-					sx={{
-						fontSize: '2.5rem',
-						marginBottom: theme.spacing(0.5),
-					}}
-					variant="h3"
-				>
+			<div className="mb-2 flex grow justify-between">
+				<h3 className="text-2xl">
 					{npmPackageInfo.downloads.total} / month
-				</Typography>
-				<DownloadOutlinedIcon color="success" sx={{ fontSize: 48 }} />
-			</Box>
-			<ResponsiveContainer
-				width={'100%'}
-				aspect={8}
-				style={{ zIndex: 50 }}
-			>
-				<AreaChart
-					data={npmPackageInfo.downloads.per_day}
-					margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+				</h3>
+				<Download className="size-8 text-success-foreground" />
+			</div>
+			<div className="mt-auto">
+				<ResponsiveContainer
+					width="100%"
+					aspect={8}
+					style={{ zIndex: 50 }}
 				>
-					<Area
-						type="monotone"
-						dataKey="downloads"
-						stroke={theme.palette.primary.main}
-						fill={theme.palette.primary.dark}
-					/>
-					<Tooltip content={CustomTooltip} />
-				</AreaChart>
-			</ResponsiveContainer>
-			<NPMChips npmPackageInfo={npmPackageInfo} />
+					<AreaChart
+						data={npmPackageInfo.downloads.per_day}
+						margin={{ top: 0, right: 0, bottom: 2, left: 0 }}
+					>
+						<Area
+							type="monotone"
+							dataKey="downloads"
+							stroke="var(--color-primary)"
+							fill="var(--color-primary)"
+							fillOpacity={0.2}
+						/>
+						<Tooltip content={CustomTooltip} />
+					</AreaChart>
+				</ResponsiveContainer>
+				<NPMChips npmPackageInfo={npmPackageInfo} />
+			</div>
 		</>
 	);
 }
 
+function NPMPackageCardContent({ packageName }: { packageName: string }) {
+	const { isLoading, isError, data } = useNpmPackage(packageName);
+
+	if (isError) {
+		return (
+			<p className="py-2 text-destructive-foreground">
+				Failed to load NPM package data
+			</p>
+		);
+	}
+
+	if (isLoading || !data) {
+		return (
+			<div className="flex flex-col gap-2">
+				<Skeleton className="h-10 w-48" />
+				<Skeleton className="h-16 w-full" />
+				<Skeleton className="h-6 w-64" />
+			</div>
+		);
+	}
+
+	return <NPMPackageSummary npmPackageInfo={data} />;
+}
+
 function NPMPackageCard({ packageName }: { packageName: string }) {
-	const theme = useTheme();
-
-	const [npmPackageInfo, setNPMPackageInfo] = useState<NPMPackageInfo | null>(
-		null
-	);
-
-	useEffect(() => {
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/npm/${packageName}/`)
-			.then(({ data }) => {
-				setNPMPackageInfo(data);
-			})
-			.catch((error) => console.error(error));
-	}, [packageName]);
-
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent className="flex grow flex-col">
+				<div className="mb-1 flex items-center">
 					<img
 						src="https://static-production.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png"
 						alt="NPM"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						className="mr-2"
 					/>
-					<Link
-						href={npmPackageInfo?.homepage}
+					<a
+						href={`https://www.npmjs.com/package/${packageName}`}
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							{packageName}
-						</Typography>
-					</Link>
-				</Box>
-				{npmPackageInfo && (
-					<NPMPackageSummary npmPackageInfo={npmPackageInfo} />
-				)}
-			</StyledCardContent>
-		</StyledCard>
+						<h2 className="text-xl">{packageName}</h2>
+					</a>
+				</div>
+				<NPMPackageCardContent packageName={packageName} />
+			</CardContent>
+		</Card>
 	);
 }
 

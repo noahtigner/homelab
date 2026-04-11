@@ -1,19 +1,19 @@
 import { AxiosInstance } from 'axios';
 import {
-	Skeleton,
 	Table,
 	TableBody,
 	TableCell,
-	TableContainer,
 	TableHead,
+	TableHeader,
 	TableRow,
-} from '@mui/material';
+} from '@/components/ui/table';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card } from '@/components/ui/card';
 import { primaryClient } from '../../services/api';
 import {
 	celsiusToFahrenheit,
 	bytesToTerabytes,
 } from '../../services/unitConversion';
-import { StyledCard } from '../StyledCard';
 import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
 import { useDiagnostics } from '../../hooks/useDiagnostics';
 
@@ -22,20 +22,15 @@ function NasDiagnosticsTableRow() {
 
 	if (isError) {
 		return (
-			<TableCell
-				component="th"
-				scope="row"
-				colSpan={999}
-				sx={{ textAlign: 'center ' }}
-			>
+			<TableCell colSpan={999} className="text-center">
 				An unexpected error occurred
 			</TableCell>
 		);
 	}
 	if (isLoading || !data) {
 		return (
-			<TableCell component="th" scope="row" colSpan={999}>
-				<Skeleton variant="text" width="100%" />
+			<TableCell colSpan={999}>
+				<Skeleton className="h-4 w-full" />
 			</TableCell>
 		);
 	}
@@ -59,13 +54,11 @@ function NasDiagnosticsTableRow() {
 
 	return (
 		<>
-			<TableCell align="right">{`${cpuMax.toFixed(2)}%`}</TableCell>
-			<TableCell align="right">{`${cpuAvg.toFixed(2)}%`}</TableCell>
-			<TableCell align="right">{`${memoryUsage.toFixed(1)}%`}</TableCell>
-			<TableCell align="right">{`${diskUsageTB} / ${diskCapacityTB} (${diskUsagePercent.toFixed(
-				1
-			)}%)`}</TableCell>
-			<TableCell align="right">
+			<TableCell className="text-right">{`${cpuMax.toFixed(2)}%`}</TableCell>
+			<TableCell className="text-right">{`${cpuAvg.toFixed(2)}%`}</TableCell>
+			<TableCell className="text-right">{`${memoryUsage.toFixed(1)}%`}</TableCell>
+			<TableCell className="text-right">{`${diskUsageTB} / ${diskCapacityTB} (${diskUsagePercent.toFixed(1)}%)`}</TableCell>
+			<TableCell className="text-right">
 				{`${celsiusToFahrenheit(data.core.sys_temp).toFixed(1)}°F`}
 			</TableCell>
 		</>
@@ -76,41 +69,32 @@ function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
 	const { isLoading, isError, data } = useDiagnostics(client);
 	if (isError) {
 		return (
-			<TableCell
-				component="th"
-				scope="row"
-				colSpan={999}
-				sx={{ textAlign: 'center ' }}
-			>
+			<TableCell colSpan={999} className="text-center">
 				An unexpected error occurred
 			</TableCell>
 		);
 	}
 	if (isLoading || !data) {
 		return (
-			<TableCell component="th" scope="row" colSpan={999}>
-				<Skeleton variant="text" width="100%" />
+			<TableCell colSpan={999}>
+				<Skeleton className="h-4 w-full" />
 			</TableCell>
 		);
 	}
 	return (
 		<>
-			<TableCell align="right">
+			<TableCell className="text-right">
 				{`${Math.max(...data.cpu.percent).toFixed(2)}%`}
 			</TableCell>
-			<TableCell align="right">
+			<TableCell className="text-right">
 				{`${(
 					data.cpu.percent.reduce((acc, c) => acc + c, 0) /
 					data.cpu.percent.length
 				).toFixed(2)}%`}
 			</TableCell>
-			<TableCell align="right">{`${data.memory.percent.toFixed(
-				1
-			)}%`}</TableCell>
-			<TableCell align="right">{`${data.disk.percent.toFixed(
-				1
-			)}%`}</TableCell>
-			<TableCell align="right">
+			<TableCell className="text-right">{`${data.memory.percent.toFixed(1)}%`}</TableCell>
+			<TableCell className="text-right">{`${data.disk.percent.toFixed(1)}%`}</TableCell>
+			<TableCell className="text-right">
 				{data.cpu.temp
 					? `${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`
 					: null}
@@ -121,36 +105,40 @@ function DiagnosticsTableRow({ client }: { client: AxiosInstance }) {
 
 function DashboardTable() {
 	return (
-		<StyledCard variant="outlined">
-			<TableContainer>
-				<Table size="small">
-					<TableHead>
+		<Card className="overflow-hidden">
+			<div className="overflow-x-auto">
+				<Table>
+					<TableHeader>
 						<TableRow>
-							<TableCell>Server</TableCell>
-							<TableCell align="right">CPU (max)</TableCell>
-							<TableCell align="right">CPU (avg)</TableCell>
-							<TableCell align="right">Memory</TableCell>
-							<TableCell align="right">Disk</TableCell>
-							<TableCell align="right">Temperature</TableCell>
+							<TableHead>Server</TableHead>
+							<TableHead className="text-right">
+								CPU (max)
+							</TableHead>
+							<TableHead className="text-right">
+								CPU (avg)
+							</TableHead>
+							<TableHead className="text-right">Memory</TableHead>
+							<TableHead className="text-right">Disk</TableHead>
+							<TableHead className="text-right">
+								Temperature
+							</TableHead>
 						</TableRow>
-					</TableHead>
+					</TableHeader>
 					<TableBody>
 						<TableRow>
-							<TableCell component="th" scope="row">
+							<TableCell className="font-medium">
 								Mini-PC
 							</TableCell>
 							<DiagnosticsTableRow client={primaryClient} />
 						</TableRow>
 						<TableRow>
-							<TableCell component="th" scope="row">
-								NAS
-							</TableCell>
+							<TableCell className="font-medium">NAS</TableCell>
 							<NasDiagnosticsTableRow />
 						</TableRow>
 					</TableBody>
 				</Table>
-			</TableContainer>
-		</StyledCard>
+			</div>
+		</Card>
 	);
 }
 

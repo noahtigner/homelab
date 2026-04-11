@@ -1,13 +1,6 @@
-import {
-	Box,
-	Divider,
-	Link,
-	Skeleton,
-	Typography,
-	useTheme,
-} from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import useQueryMoneyAccounts, {
 	AccountTypeSummary,
 	NetWorthSummaryData,
@@ -23,8 +16,6 @@ const isAsset = (accountType: AccountTypeSummary): boolean => {
 };
 
 function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
-	const theme = useTheme();
-
 	const totalNetWorth = data.data.accountTypeSummaries.reduce(
 		(acc, accountTypeSummary) =>
 			acc +
@@ -36,40 +27,20 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 
 	return (
 		<div>
-			<Typography
-				sx={{
-					fontSize: '1.25rem',
-					marginBottom: theme.spacing(1),
-				}}
-				variant="h2"
-			>
-				{formatter.format(totalNetWorth)}
-			</Typography>
-			<Grid container spacing={1}>
+			<h2 className="mb-2 text-xl">{formatter.format(totalNetWorth)}</h2>
+			<div className="grid grid-cols-1 gap-2 md:grid-cols-2">
 				{['asset', 'liability'].map((group) => (
-					<Grid key={group} xs={12} sm={6}>
-						<Typography
-							sx={{
-								fontSize: '0.75rem',
-								display: 'flex',
-								justifyContent: 'space-between',
-							}}
-							variant="h4"
-						>
-							{group === 'asset' ? 'Assets' : 'Liabilities'}{' '}
+					<div key={group}>
+						<h4 className="flex justify-between text-xs">
+							<span className="text-muted-foreground">
+								{group === 'asset' ? 'Assets' : 'Liabilities'}
+							</span>
 							<span
-								style={{
-									// color:
-									// group === 'asset'
-									// 	? theme.palette.success.main
-									// 	: theme.palette.error.main,
-									// underline
-									// textDecoration: 'underline',
-									backgroundColor:
-										group === 'asset'
-											? theme.palette.success.main
-											: theme.palette.error.main,
-								}}
+								className={
+									group === 'asset'
+										? 'text-success-foreground'
+										: 'text-destructive-foreground'
+								}
 							>
 								{formatter.format(
 									data.data.accountTypeSummaries
@@ -86,42 +57,37 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 										)
 								)}
 							</span>
-						</Typography>
-						<Divider role="presentation" sx={{ mt: 0.25 }} />
+						</h4>
+						<Separator className="mt-1" />
 						{data.data.accountTypeSummaries
 							.filter(
 								(accountTypeSummary) =>
 									accountTypeSummary.type.group === group
 							)
 							.map((accountTypeSummary) => (
-								<Typography
+								<p
 									key={accountTypeSummary.type.name}
-									sx={{
-										fontSize: '0.75rem',
-										display: 'flex',
-										justifyContent: 'space-between',
-									}}
-									variant="body1"
+									className="flex justify-between text-xs"
 								>
-									{accountTypeSummary.type.display}{' '}
+									<span className="text-muted-foreground">
+										{accountTypeSummary.type.display}
+									</span>
 									<span
-										style={{
-											backgroundColor: isAsset(
-												accountTypeSummary
-											)
-												? theme.palette.success.main
-												: theme.palette.error.main,
-										}}
+										className={
+											isAsset(accountTypeSummary)
+												? 'text-success-foreground'
+												: 'text-destructive-foreground'
+										}
 									>
 										{formatter.format(
 											accountTypeSummary.totalDisplayBalance
 										)}
 									</span>
-								</Typography>
+								</p>
 							))}
-					</Grid>
+					</div>
 				))}
-			</Grid>
+			</div>
 		</div>
 	);
 }
@@ -132,21 +98,11 @@ function NetWorthSummary() {
 	if (isPending) {
 		return (
 			<div>
-				<Skeleton
-					variant="text"
-					width="100%"
-					height={24}
-					sx={{ marginBottom: 1 }}
-				/>
-				{...Array(4)
+				<Skeleton className="mb-2 h-6 w-full" />
+				{Array(4)
 					.fill(0)
 					.map((_, i) => (
-						<Skeleton
-							key={i}
-							variant="text"
-							width="100%"
-							height={18}
-						/>
+						<Skeleton key={i} className="h-5 w-full" />
 					))}
 			</div>
 		);
@@ -154,24 +110,8 @@ function NetWorthSummary() {
 	if (error) {
 		return (
 			<div>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-						marginBottom: 1,
-					}}
-					variant="h2"
-				>
-					An unexpected error occurred
-				</Typography>
-				<Typography
-					sx={{
-						fontSize: '1rem',
-						wordBreak: 'break-word',
-					}}
-					variant={'h3'}
-				>
-					{error.message}
-				</Typography>
+				<h2 className="mb-2 text-xl">An unexpected error occurred</h2>
+				<h3 className="break-words text-base">{error.message}</h3>
 			</div>
 		);
 	}
@@ -179,40 +119,28 @@ function NetWorthSummary() {
 }
 
 function NetWorthSummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent>
+				<div className="mb-1 flex items-center">
 					<img
 						src="https://app.monarchmoney.com/butterfly-logo.svg"
 						alt="Monarch Money"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						className="mr-2"
 					/>
-					<Link
+					<a
 						href="https://app.monarchmoney.com/accounts"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							Net Worth
-						</Typography>
-					</Link>
-				</Box>
+						<h2 className="text-xl">Net Worth</h2>
+					</a>
+				</div>
 				<NetWorthSummary />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 

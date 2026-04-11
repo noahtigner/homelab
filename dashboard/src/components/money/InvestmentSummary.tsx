@@ -1,9 +1,6 @@
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import {
-	TrendingUp as TrendingUpIcon,
-	TrendingDown as TrendingDownIcon,
-} from '@mui/icons-material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { TrendingUp, TrendingDown } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useInvestmentSummary } from '../../hooks/useInvestmentSummary';
 import type { z } from 'zod';
 import type { investmentSummaryDataSchema } from '../../types/schemas';
@@ -16,8 +13,6 @@ const formatter = new Intl.NumberFormat('en-US', {
 });
 
 function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
-	const theme = useTheme();
-
 	const isTrendingUp = data.oneDayChangeDollars >= 0;
 	const changePercent = (data.oneDayChangeDollars / data.totalValue) * 100;
 	const roundedChangePercent = (Math.round(changePercent * 10) / 10).toFixed(
@@ -27,46 +22,30 @@ function InvestmentSummaryInner({ data }: { data: InvestmentSummaryData }) {
 
 	return (
 		<div>
-			<Box
-				sx={{
-					display: 'flex',
-					gap: 0.5,
-					marginBottom: theme.spacing(1),
-				}}
-			>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-					}}
-					variant="h2"
-				>
-					{formatter.format(data.totalValue)}
-				</Typography>
+			<div className="mb-2 flex items-center gap-1">
+				<h2 className="text-xl">{formatter.format(data.totalValue)}</h2>
 				{isTrendingUp ? (
-					<TrendingUpIcon color="success" sx={{ fontSize: 24 }} />
+					<TrendingUp size={24} className="text-success-foreground" />
 				) : (
-					<TrendingDownIcon color="error" sx={{ fontSize: 24 }} />
+					<TrendingDown
+						size={24}
+						className="text-destructive-foreground"
+					/>
 				)}
-			</Box>
-			<Typography
-				sx={{
-					fontSize: '1rem',
-					wordBreak: 'break-word',
-				}}
-				variant={'h3'}
-			>
+			</div>
+			<h3 className="break-words text-base">
 				<span
-					style={{
-						backgroundColor: isTrendingUp
-							? theme.palette.success.main
-							: theme.palette.error.main,
-					}}
+					className={
+						isTrendingUp
+							? 'text-success-foreground'
+							: 'text-destructive-foreground'
+					}
 				>
 					{formatter.format(data.oneDayChangeDollars)}{' '}
 					{percentDisplayValue}
 				</span>{' '}
-				Today
-			</Typography>
+				<span className="text-muted-foreground">Today</span>
+			</h3>
 		</div>
 	);
 }
@@ -77,37 +56,16 @@ function InvestmentSummary() {
 	if (isPending) {
 		return (
 			<div>
-				<Skeleton
-					variant="text"
-					width="100%"
-					height={24}
-					sx={{ marginBottom: 1 }}
-				/>
-				<Skeleton variant="text" width="100%" height={18} />
+				<Skeleton className="mb-2 h-6 w-full" />
+				<Skeleton className="h-5 w-full" />
 			</div>
 		);
 	}
 	if (error) {
 		return (
 			<div>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-						marginBottom: 1,
-					}}
-					variant="h2"
-				>
-					An unexpected error occurred
-				</Typography>
-				<Typography
-					sx={{
-						fontSize: '1rem',
-						wordBreak: 'break-word',
-					}}
-					variant={'h3'}
-				>
-					{error.message}
-				</Typography>
+				<h2 className="mb-2 text-xl">An unexpected error occurred</h2>
+				<h3 className="break-words text-base">{error.message}</h3>
 			</div>
 		);
 	}
@@ -115,40 +73,28 @@ function InvestmentSummary() {
 }
 
 function InvestmentSummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent>
+				<div className="mb-1 flex items-center">
 					<img
 						src="https://app.monarchmoney.com/butterfly-logo.svg"
 						alt="Monarch Money"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						className="mr-2"
 					/>
-					<Link
+					<a
 						href="https://app.monarchmoney.com/accounts"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							Portfolio
-						</Typography>
-					</Link>
-				</Box>
+						<h2 className="text-xl">Portfolio</h2>
+					</a>
+				</div>
 				<InvestmentSummary />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 

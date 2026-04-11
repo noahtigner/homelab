@@ -1,7 +1,6 @@
 import { type ReactNode } from 'react';
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function PiholeSummaryCardWrapper({
 	title,
@@ -14,55 +13,37 @@ function PiholeSummaryCardWrapper({
 	child1: ReactNode;
 	child2: ReactNode;
 }) {
-	const theme = useTheme();
 	return (
-		<Grid xs={12} sm={6} md={4}>
-			<StyledCard variant="outlined">
-				<StyledCardContent>
-					<Box
-						display="flex"
-						alignItems="center"
-						sx={{ marginBottom: theme.spacing(0.5) }}
-					>
+		<div className="col-span-12 sm:col-span-4">
+			<Card>
+				<CardContent>
+					<div className="mb-1 flex items-center min-w-0">
 						<img
 							src="/pihole.svg"
-							alt="Pihole Admin Dashboard"
+							alt=""
 							height={20}
-							style={{ marginRight: theme.spacing(1) }}
+							width={20}
+							className="mr-2 shrink-0"
 						/>
-						<Link
-							href={`http://${
-								import.meta.env.VITE_SERVER_IP
-							}/admin/`}
+						<a
+							href={`http://${import.meta.env.VITE_SERVER_IP}/admin/`}
 							target="_blank"
 							rel="noreferrer"
-							sx={{ textDecoration: 'none', color: 'inherit' }}
+							className="min-w-0 no-underline text-inherit hover:text-primary"
 						>
-							<Typography
-								sx={{
-									fontSize: '1.25rem',
-								}}
-								variant="h2"
-							>
+							<h2 className="text-base leading-tight lg:text-xl">
 								{title}
-							</Typography>
-						</Link>
-					</Box>
-					<Box
-						sx={{
-							display: 'flex',
-							flexGrow: 1,
-							justifyContent: 'space-between',
-							alignItems: 'center',
-						}}
-					>
+							</h2>
+						</a>
+					</div>
+					<div className="flex grow items-center justify-between">
 						{child1}
 						{icon}
-					</Box>
+					</div>
 					{child2}
-				</StyledCardContent>
-			</StyledCard>
-		</Grid>
+				</CardContent>
+			</Card>
+		</div>
 	);
 }
 
@@ -77,28 +58,12 @@ function PiholeSummaryCard({
 	value2: string | number;
 	icon: ReactNode;
 }) {
-	const theme = useTheme();
-
 	return (
 		<PiholeSummaryCardWrapper
 			title={title}
 			icon={icon}
-			child1={
-				<Typography
-					sx={{
-						fontSize: '2.5rem',
-						marginBottom: theme.spacing(0.5),
-					}}
-					variant="h3"
-				>
-					{value1}
-				</Typography>
-			}
-			child2={
-				<Typography sx={{ fontSize: '1rem' }} variant="h4">
-					{value2}
-				</Typography>
-			}
+			child1={<h3 className="mb-1 text-2xl lg:text-4xl">{value1}</h3>}
+			child2={<h4 className="text-base">{value2}</h4>}
 		/>
 	);
 }
@@ -114,16 +79,8 @@ function PiholeSummaryCardLoading({
 		<PiholeSummaryCardWrapper
 			title={title}
 			icon={icon}
-			child1={
-				<Skeleton
-					variant="text"
-					width="100%"
-					style={{
-						fontSize: '2.5rem',
-					}}
-				/>
-			}
-			child2={<Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
+			child1={<Skeleton className="h-12 w-full" />}
+			child2={<Skeleton className="h-5 w-3/4" />}
 		/>
 	);
 }
@@ -141,23 +98,8 @@ function PiholeSummaryCardError({
 		<PiholeSummaryCardWrapper
 			title={title}
 			icon={icon}
-			child1={
-				<Skeleton
-					variant="text"
-					width="100%"
-					sx={{
-						fontSize: '2.5rem',
-					}}
-				/>
-			}
-			child2={
-				<Typography
-					sx={{ fontSize: '1rem', marginTop: '10px' }}
-					variant="h4"
-				>
-					{errorMessage}
-				</Typography>
-			}
+			child1={<Skeleton className="h-12 w-full" />}
+			child2={<h4 className="mt-2.5 text-base">{errorMessage}</h4>}
 		/>
 	);
 }

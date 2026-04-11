@@ -1,147 +1,63 @@
-import { Box, Skeleton, Typography, useTheme } from '@mui/material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useOGPPreview } from '../../hooks/useOGPPreview';
 
 function OGPPreview({ url }: { url: string }) {
-	const theme = useTheme();
-
 	const { isPending, error, data } = useOGPPreview();
 
 	if (isPending || error || data === null) {
 		return (
-			<StyledCard variant="outlined">
-				<StyledCardContent
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						gap: 2,
-					}}
-				>
-					<Skeleton variant="rectangular" width={100} height={100} />
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'space-between',
-						}}
-					>
-						<Typography
-							sx={{
-								fontSize: '2rem',
-								marginBottom: theme.spacing(0.5),
-							}}
-							variant="h3"
-						>
-							OGP Preview
-						</Typography>
+			<Card>
+				<CardContent className="flex flex-row gap-4">
+					<Skeleton className="h-[100px] w-[100px] shrink-0" />
+					<div className="flex min-w-0 flex-col justify-between">
+						<h3 className="mb-1 text-xl">OGP Preview</h3>
 						<div>
 							{error ? (
 								<>
-									<Typography
-										sx={{
-											fontSize: '1rem',
-											marginBottom: theme.spacing(0.5),
-										}}
-										variant="h4"
-									>
+									<h4 className="mb-1 text-base">
 										An unexpected error occurred
-									</Typography>
-									<Typography
-										sx={{
-											fontSize: '0.75rem',
-										}}
-										variant="body1"
-									>
-										{error.message}
-									</Typography>
+									</h4>
+									<p className="text-xs">{error.message}</p>
 								</>
 							) : (
 								<>
-									<Skeleton
-										variant="text"
-										width={300}
-										height={20}
-									/>
-									<Skeleton
-										variant="text"
-										width={500}
-										height={20}
-									/>
+									<Skeleton className="h-5 w-full max-w-[300px]" />
+									<Skeleton className="mt-1 h-5 w-full max-w-[500px]" />
 								</>
 							)}
 						</div>
-					</Box>
-				</StyledCardContent>
-			</StyledCard>
+					</div>
+				</CardContent>
+			</Card>
 		);
 	}
 
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					gap: 2,
-				}}
-			>
+		<Card>
+			<CardContent className="flex flex-row gap-4">
 				<a
 					href={url}
 					target="_blank"
 					rel="noreferrer"
-					style={{
-						all: 'unset',
-						textDecoration: 'none',
-						height: 100,
-					}}
+					className="h-[100px] shrink-0"
 				>
 					<img
 						src={data.hybridGraph.image}
 						alt={data.hybridGraph.title}
 						width={100}
-						style={{
-							display: 'block',
-						}}
+						height={100}
+						className="block rounded"
 					/>
 				</a>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'space-between',
-					}}
-				>
-					<Typography
-						sx={{
-							fontSize: '2rem',
-							marginBottom: theme.spacing(0.5),
-						}}
-						variant="h3"
-					>
-						OGP Preview
-					</Typography>
-					<div>
-						<Typography
-							sx={{
-								fontSize: '1rem',
-								marginBottom: theme.spacing(0.5),
-							}}
-							variant="h4"
-						>
-							{data.hybridGraph.title}
-						</Typography>
-						<Typography
-							sx={{
-								fontSize: '0.75rem',
-							}}
-							variant="body1"
-						>
-							{data.hybridGraph.description}
-						</Typography>
-					</div>
-				</Box>
-			</StyledCardContent>
-		</StyledCard>
+				<div className="flex min-w-0 flex-col justify-between">
+					<h2 className="mb-1 text-xl">{data.hybridGraph.title}</h2>
+					<p className="text-sm text-muted-foreground">
+						{data.hybridGraph.description}
+					</p>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 

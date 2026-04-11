@@ -1,11 +1,7 @@
-import { ReactNode } from 'react';
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import {
-	SwapHorizontalCircleOutlined as SwapHorizontalCircleOutlinedIcon,
-	ArrowCircleDownOutlined as ArrowCircleDownOutlinedIcon,
-	ArrowCircleUpOutlined as ArrowCircleUpOutlinedIcon,
-} from '@mui/icons-material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { type ReactNode } from 'react';
+import { ArrowDownCircle, ArrowUpCircle, RefreshCw } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useSpeedTest } from '../../hooks/useSpeedTest';
 import type { z } from 'zod';
 import type { speedTestSchema } from '../../types/schemas';
@@ -21,8 +17,6 @@ const getTestElapsedTime = (timestamp: string): number => {
 	const testDate = new Date(timestamp).getTime();
 	const currentDate = new Date().getTime();
 
-	console.log(testDate, currentDate);
-
 	const diffInMilliseconds = currentDate - testDate;
 	const diffInMinutes = Math.floor(diffInMilliseconds / 1000 / 60);
 	return diffInMinutes;
@@ -30,51 +24,38 @@ const getTestElapsedTime = (timestamp: string): number => {
 
 function SpeedTestItem({ icon, text }: { icon: ReactNode; text: string }) {
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexGrow: 1,
-				alignItems: 'center',
-				gap: 1,
-			}}
-		>
+		<div className="flex grow items-center gap-2">
 			{icon}
 			{text}
-		</Box>
+		</div>
 	);
 }
 
 function SpeedTestSummaryInner({ data }: { data: SpeedTestModel }) {
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				gap: 0.5,
-				justifyContent: 'space-between',
-			}}
-		>
+		<div className="flex justify-between gap-1">
 			<div>
 				<SpeedTestItem
-					icon={<SwapHorizontalCircleOutlinedIcon />}
+					icon={<RefreshCw size={20} />}
 					text={data.ping.toString()}
 				/>
 				<SpeedTestItem
-					icon={<ArrowCircleDownOutlinedIcon />}
+					icon={<ArrowDownCircle size={20} />}
 					text={`${bytesToMegabits(data.download)} Mbps`}
 				/>
 				<SpeedTestItem
-					icon={<ArrowCircleUpOutlinedIcon />}
+					icon={<ArrowUpCircle size={20} />}
 					text={`${bytesToMegabits(data.upload)} Mbps`}
 				/>
 			</div>
-			<Typography align="right">
+			<p className="text-right">
 				last tested {getTestElapsedTime(data.timestamp)} minutes ago
 				<br />
 				{data.client.ip}
 				<br />
 				{data.client.isp}, {data.client.country}
-			</Typography>
-		</Box>
+			</p>
+		</div>
 	);
 }
 
@@ -84,37 +65,16 @@ function SpeedTestSummary() {
 	if (isPending) {
 		return (
 			<div>
-				<Skeleton
-					variant="text"
-					width="100%"
-					height={24}
-					sx={{ marginBottom: 1 }}
-				/>
-				<Skeleton variant="text" width="100%" height={18} />
+				<Skeleton className="mb-2 h-6 w-full" />
+				<Skeleton className="h-5 w-full" />
 			</div>
 		);
 	}
 	if (error) {
 		return (
 			<div>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-						marginBottom: 1,
-					}}
-					variant="h2"
-				>
-					An unexpected error occurred
-				</Typography>
-				<Typography
-					sx={{
-						fontSize: '1rem',
-						wordBreak: 'break-word',
-					}}
-					variant={'h3'}
-				>
-					{error.message}
-				</Typography>
+				<h2 className="mb-2 text-xl">An unexpected error occurred</h2>
+				<h3 className="break-words text-base">{error.message}</h3>
 			</div>
 		);
 	}
@@ -122,40 +82,28 @@ function SpeedTestSummary() {
 }
 
 function SpeedTestSummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent>
+				<div className="mb-1 flex items-center">
 					<img
 						src="https://www.speedtest.net/favicon.ico"
 						alt="SpeedTest"
 						width={24}
-						style={{ marginRight: theme.spacing(1) }}
+						className="mr-2"
 					/>
-					<Link
+					<a
 						href="https://www.speedtest.net/"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							SpeedTest
-						</Typography>
-					</Link>
-				</Box>
+						<h2 className="text-xl">SpeedTest</h2>
+					</a>
+				</div>
 				<SpeedTestSummary />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 

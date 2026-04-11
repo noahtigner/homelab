@@ -1,37 +1,27 @@
-import { Chip, Link } from '@mui/material';
-import {
-	CheckCircle as CheckCircleIcon,
-	CircleOutlined as CircleIcon,
-	ErrorOutlineOutlined as ErrorCircleIcon,
-} from '@mui/icons-material';
+import { CheckCircle, CircleAlert, Circle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import type { ServiceStatus } from '../../types';
 
-const statusToColor = (status: ServiceStatus) => {
-	switch (status) {
-		case 'ok':
-			return 'success';
-		case 'warning':
-			return 'warning';
-		case 'error':
-			return 'error';
-		case 'loading':
-		default:
-			return 'default';
-	}
+const statusStyles: Record<string, string> = {
+	ok: 'bg-success/20 text-success-foreground border-success/30',
+	warning: 'bg-warning/20 text-warning-foreground border-warning/30',
+	error: 'bg-destructive/20 text-destructive-foreground border-destructive/30',
+	loading: 'bg-muted text-muted-foreground border-border',
 };
 
-const statusToIcon = (status: ServiceStatus) => {
+function statusIcon(status: ServiceStatus) {
+	const size = 16;
 	switch (status) {
 		case 'ok':
-			return <CheckCircleIcon />;
+			return <CheckCircle size={size} />;
 		case 'warning':
 		case 'error':
-			return <ErrorCircleIcon />;
+			return <CircleAlert size={size} />;
 		case 'loading':
 		default:
-			return <CircleIcon />;
+			return <Circle size={size} />;
 	}
-};
+}
 
 function StatusChip({
 	label,
@@ -42,38 +32,32 @@ function StatusChip({
 	status: ServiceStatus;
 	url?: string;
 }) {
-	// if (url) {
-	// 	return (
-	// 		<Link
-	// 			href={url}
-	// 			target="_blank"
-	// 			sx={{ textDecoration: 'none', color: 'inherit' }}
-	// 		>
-	// 			<StatusChip label={label} status={status} />
-	// 		</Link>
-	// 	);
-	// }
-	return (
-		<Chip
-			label={
-				url ? (
-					<Link
-						href={url}
-						target="_blank"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
-					>
-						{label}
-					</Link>
-				) : (
-					label
-				)
-			}
-			color={statusToColor(status)}
-			icon={statusToIcon(status)}
-			sx={{ justifyContent: 'start', width: '100%' }}
-			// size="small"
-		/>
+	const content = (
+		<div
+			className={cn(
+				'flex w-full items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors duration-150',
+				statusStyles[status] ?? statusStyles.loading
+			)}
+		>
+			{statusIcon(status)}
+			<span className="truncate">{label}</span>
+		</div>
 	);
+
+	if (url) {
+		return (
+			<a
+				href={url}
+				target="_blank"
+				rel="noreferrer"
+				className="group no-underline text-inherit hover:opacity-80"
+			>
+				{content}
+			</a>
+		);
+	}
+
+	return content;
 }
 
 export default StatusChip;

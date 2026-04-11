@@ -1,4 +1,3 @@
-import { Stack } from '@mui/material';
 import { type UseQueryResult } from '@tanstack/react-query';
 
 import StatusChip from './StatusChip';
@@ -43,14 +42,7 @@ function StatusStackPrimary() {
 	);
 
 	return (
-		<Stack
-			direction="column"
-			// direction="row"
-			justifyContent="flex-start"
-			// alignItems="flex-start"
-			alignItems="stretch"
-			spacing={1}
-		>
+		<div className="flex flex-row flex-wrap gap-2 md:flex-col md:items-stretch">
 			<StatusChip
 				label="Traefik"
 				status={getServiceStatus(traefikHealth)}
@@ -76,7 +68,7 @@ function StatusStackPrimary() {
 				status={getServiceStatus(speedtestHealth)}
 			/>
 			<StatusChip label="Dashboard" status="ok" />
-		</Stack>
+		</div>
 	);
 }
 

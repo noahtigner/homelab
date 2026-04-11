@@ -1,15 +1,8 @@
-import {
-	Box,
-	Chip,
-	Grid,
-	LinearProgress,
-	Link,
-	Skeleton,
-	Typography,
-	useTheme,
-} from '@mui/material';
-import { EmojiEventsOutlined as TrophyIcon } from '@mui/icons-material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Trophy } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
 	useLeetCodeSolved,
 	useLeetCodeLanguages,
@@ -27,26 +20,13 @@ function LeetCodeProgressText({
 	beats: number;
 }) {
 	return (
-		<Grid container sx={{ marginBottom: 0.5 }}>
-			<Grid item xs={4} alignItems="flex-end">
-				<Typography sx={{ fontSize: '1rem' }} variant="h4">
-					{difficulty}
-				</Typography>
-			</Grid>
-			<Grid item xs={4}>
-				<Typography sx={{ fontSize: '1rem' }} variant="h4">
-					{solved} / {questions}
-				</Typography>
-			</Grid>
-			<Grid item xs={4} justifySelf="end">
-				<Typography
-					sx={{ fontSize: '1rem', textAlign: 'right' }}
-					variant="h4"
-				>
-					Beats {beats.toFixed(2)}%
-				</Typography>
-			</Grid>
-		</Grid>
+		<div className="mb-1 grid grid-cols-3">
+			<h4 className="text-sm">{difficulty}</h4>
+			<h4 className="text-sm">
+				{solved} / {questions}
+			</h4>
+			<h4 className="text-right text-sm">Beats {beats.toFixed(2)}%</h4>
+		</div>
 	);
 }
 
@@ -55,16 +35,10 @@ function LeetCodeProgressSkeleton({
 }: {
 	difficulty: 'Easy' | 'Medium' | 'Hard';
 }) {
-	return (
-		<Typography sx={{ fontSize: '1rem', marginBottom: 0.5 }} variant="h4">
-			{difficulty}
-		</Typography>
-	);
+	return <h4 className="mb-0.5 text-sm">{difficulty}</h4>;
 }
 
 function LeetCodeLanguageChips() {
-	const { palette } = useTheme();
-
 	const { isPending, error, data } = useLeetCodeLanguages();
 
 	if (error) {
@@ -73,80 +47,35 @@ function LeetCodeLanguageChips() {
 
 	if (isPending) {
 		return (
-			<Box
-				sx={{
-					display: 'flex',
-					flexWrap: 'wrap',
-					justifyContent: 'start',
-					alignContent: 'start',
-					listStyle: 'none',
-					m: 0,
-					marginTop: 1,
-					p: 0,
-					gap: 1,
-				}}
-				component="ul"
-			>
+			<ul className="mt-2 flex list-none flex-wrap items-start justify-start gap-2 p-0">
 				{Array.from({ length: 3 }, (_, i) => (
 					<li key={i}>
-						<Chip
-							size="small"
-							label={
-								<>
-									<Skeleton
-										variant="text"
-										width={100}
-										height={24}
-										sx={{ borderRadius: 1 }}
-									/>
-								</>
-							}
-						/>
+						<Badge variant="secondary">
+							<Skeleton className="h-5 w-24 rounded" />
+						</Badge>
 					</li>
 				))}
-			</Box>
+			</ul>
 		);
 	}
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexWrap: 'wrap',
-				justifyContent: 'start',
-				alignContent: 'start',
-				listStyle: 'none',
-				m: 0,
-				marginTop: 1,
-				p: 0,
-				gap: 1,
-			}}
-			component="ul"
-		>
+		<ul className="mt-2 flex list-none flex-wrap items-start justify-start gap-2 p-0">
 			{data.map(({ languageName, problemsSolved }) => (
 				<li key={languageName}>
-					<Chip
-						size="small"
-						label={
-							<>
-								{languageName}{' '}
-								<strong
-									style={{ color: palette.text.secondary }}
-								>
-									({problemsSolved})
-								</strong>
-							</>
-						}
-					/>
+					<Badge variant="secondary">
+						{languageName}{' '}
+						<strong className="text-muted-foreground">
+							({problemsSolved})
+						</strong>
+					</Badge>
 				</li>
 			))}
-		</Box>
+		</ul>
 	);
 }
 
 function LeetCodeSummary() {
-	const theme = useTheme();
-
 	const { isPending, error, data } = useLeetCodeSolved();
 
 	if (error) {
@@ -155,154 +84,104 @@ function LeetCodeSummary() {
 
 	if (isPending) {
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-				<Box
-					sx={{
-						display: 'flex',
-						flexGrow: 1,
-						justifyContent: 'space-between',
-						marginBottom: theme.spacing(2),
-					}}
-				>
-					<Typography
-						sx={{
-							fontSize: '2.5rem',
-							marginBottom: theme.spacing(0.5),
-						}}
-						variant="h3"
-					>
-						Loading...
-					</Typography>
-					<TrophyIcon color="success" sx={{ fontSize: 48 }} />
-				</Box>
+			<div className="flex flex-col gap-2">
+				<div className="mb-2 flex grow justify-between">
+					<h3 className="text-2xl">Loading...</h3>
+					<Trophy className="size-8 text-success-foreground" />
+				</div>
 				<LeetCodeProgressSkeleton difficulty="Easy" />
-				<LinearProgress
-					variant="determinate"
+				<Progress
 					value={0.1}
-					color="success"
+					className="h-1 [&_[data-slot=progress-indicator]]:bg-success-foreground"
 				/>
 				<LeetCodeProgressSkeleton difficulty="Medium" />
-				<LinearProgress
-					variant="determinate"
+				<Progress
 					value={0.1}
-					color="warning"
+					className="h-1 [&_[data-slot=progress-indicator]]:bg-warning-foreground"
 				/>
 				<LeetCodeProgressSkeleton difficulty="Hard" />
-				<LinearProgress
-					variant="determinate"
+				<Progress
 					value={0.1}
-					color="error"
+					className="h-1 [&_[data-slot=progress-indicator]]:bg-destructive-foreground"
 				/>
-			</Box>
+			</div>
 		);
 	}
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-			<Box
-				sx={{
-					display: 'flex',
-					flexGrow: 1,
-					justifyContent: 'space-between',
-					marginBottom: theme.spacing(2),
-				}}
-			>
-				<Typography
-					sx={{
-						fontSize: '2.5rem',
-						marginBottom: theme.spacing(0.5),
-					}}
-					variant="h3"
-				>
+		<div className="flex flex-col gap-2">
+			<div className="mb-2 flex grow justify-between">
+				<h3 className="text-2xl">
 					{data.all.solved} / {data.all.total}
-				</Typography>
-				<TrophyIcon color="success" sx={{ fontSize: 48 }} />
-			</Box>
-			<span>
+				</h3>
+				<Trophy className="size-8 text-success-foreground" />
+			</div>
+			<div>
 				<LeetCodeProgressText
 					difficulty="Easy"
 					solved={data.easy.solved}
 					questions={data.easy.total}
 					beats={data.easy.beats_percent}
 				/>
-				<LinearProgress
-					variant="determinate"
+				<Progress
 					value={data.easy.solved_percent}
-					color="success"
+					className="h-1 [&_[data-slot=progress-indicator]]:bg-success-foreground"
 				/>
-			</span>
-			<span>
+			</div>
+			<div>
 				<LeetCodeProgressText
 					difficulty="Medium"
 					solved={data.medium.solved}
 					questions={data.medium.total}
 					beats={data.medium.beats_percent}
 				/>
-				<LinearProgress
-					variant="determinate"
+				<Progress
 					value={data.medium.solved_percent}
-					color="warning"
+					className="h-1 [&_[data-slot=progress-indicator]]:bg-warning-foreground"
 				/>
-			</span>
-			<span>
+			</div>
+			<div>
 				<LeetCodeProgressText
 					difficulty="Hard"
 					solved={data.hard.solved}
 					questions={data.hard.total}
 					beats={data.hard.beats_percent}
 				/>
-				<LinearProgress
-					variant="determinate"
+				<Progress
 					value={data.hard.solved_percent}
-					color="error"
+					className="h-1 [&_[data-slot=progress-indicator]]:bg-destructive-foreground"
 				/>
-			</span>
-		</Box>
+			</div>
+		</div>
 	);
 }
 
 function LeetCodeSummaryCard() {
-	const theme = useTheme();
-
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent className="flex grow flex-col">
+				<div className="mb-0.5 flex items-center">
 					<img
 						src="https://leetcode.com/favicon.ico"
 						alt="LeetCode"
 						width={20}
-						style={{
-							marginRight: theme.spacing(1),
-							marginBottom: 2,
-						}}
+						className="mr-2"
 					/>
-					<Link
-						href={`https://leetcode.com/${
-							import.meta.env.VITE_LEETCODE_USERNAME
-						}/`}
+					<a
+						href={`https://leetcode.com/${import.meta.env.VITE_LEETCODE_USERNAME}/`}
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							LeetCode
-						</Typography>
-					</Link>
-				</Box>
+						<h2 className="text-xl">LeetCode</h2>
+					</a>
+				</div>
 				<LeetCodeSummary />
-				<LeetCodeLanguageChips />
-			</StyledCardContent>
-		</StyledCard>
+				<div className="mt-auto">
+					<LeetCodeLanguageChips />
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 

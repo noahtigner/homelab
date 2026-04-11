@@ -1,9 +1,5 @@
 import { AxiosInstance } from 'axios';
-import {
-	SaveOutlined as SaveIcon,
-	DeviceThermostatOutlined as DeviceThermostatOutlinedIcon,
-	MemoryOutlined as MemoryIcon,
-} from '@mui/icons-material';
+import { HardDrive, Thermometer, Cpu } from 'lucide-react';
 
 import DiagnosticsCard from './DiagnosticsCard';
 import { celsiusToFahrenheit } from '../../services/unitConversion';
@@ -12,6 +8,8 @@ import type { z } from 'zod';
 import type { diagnosticsDataSchema } from '../../types/schemas';
 
 type DiagnosticsData = z.infer<typeof diagnosticsDataSchema>;
+
+const iconClass = 'size-9 text-success-foreground';
 
 const cardItems = [
 	{
@@ -24,7 +22,7 @@ const cardItems = [
 				data.cpu.percent.length
 			).toFixed(2)}% avg`,
 		],
-		icon: <MemoryIcon color="success" sx={{ fontSize: 36 }} />,
+		icon: <Cpu className={iconClass} />,
 	},
 	{
 		id: 1,
@@ -32,13 +30,13 @@ const cardItems = [
 		values: (data: DiagnosticsData) => [
 			`${data.memory.percent.toFixed(1)}%`,
 		],
-		icon: <MemoryIcon color="success" sx={{ fontSize: 36 }} />,
+		icon: <Cpu className={iconClass} />,
 	},
 	{
 		id: 2,
 		title: 'Disk',
 		values: (data: DiagnosticsData) => [`${data.disk.percent.toFixed(1)}%`],
-		icon: <SaveIcon color="success" sx={{ fontSize: 36 }} />,
+		icon: <HardDrive className={iconClass} />,
 	},
 	{
 		id: 3,
@@ -47,12 +45,7 @@ const cardItems = [
 			data.cpu.temp
 				? [`${celsiusToFahrenheit(data.cpu.temp).toFixed(1)}°F`]
 				: [],
-		icon: (
-			<DeviceThermostatOutlinedIcon
-				color="success"
-				sx={{ fontSize: 36 }}
-			/>
-		),
+		icon: <Thermometer className={iconClass} />,
 	},
 ];
 
@@ -65,17 +58,21 @@ function DiagnosticsGrid({ client }: { client: AxiosInstance }) {
 	return (
 		<>
 			{cardItems.map((item) => (
-				<DiagnosticsCard
+				<div
 					key={item.id}
-					title={item.title}
-					values={
-						isPending || error || !data
-							? ['An unexpected error occurred']
-							: item.values(data)
-					}
-					icon={item.icon}
-					loading={isPending}
-				/>
+					className="col-span-12 sm:col-span-6 md:col-span-3"
+				>
+					<DiagnosticsCard
+						title={item.title}
+						values={
+							isPending || error || !data
+								? ['An unexpected error occurred']
+								: item.values(data)
+						}
+						icon={item.icon}
+						loading={isPending}
+					/>
+				</div>
 			))}
 		</>
 	);

@@ -1,16 +1,111 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens from noahtigner.com
+ * This dashboard is dark-mode only — no light theme needed.
+ * We use the .dark class on <html> to activate shadcn's dark variant,
+ * but all the :root values are also set to dark values as a fallback.
+ */
 :root {
+	/* Typography */
 	font-family: 'Poppins', sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
-
 	color-scheme: dark;
-	color: #e6f0e6;
-	background-color: #202020;
-
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	/* shadcn semantic tokens — dark values as defaults */
+	--background: #141414;
+	--foreground: rgb(248, 251, 248);
+	--card: #181818;
+	--card-foreground: rgb(248, 251, 248);
+	--popover: #181818;
+	--popover-foreground: rgb(248, 251, 248);
+	--primary: #6edfca;
+	--primary-foreground: #141414;
+	--secondary: #1e1e1e;
+	--secondary-foreground: rgb(248, 251, 248);
+	--muted: #1e1e1e;
+	--muted-foreground: rgba(255, 255, 255, 0.5);
+	--accent: #6edfca;
+	--accent-foreground: #141414;
+	--destructive: #7f1d1d;
+	--destructive-foreground: #fca5a5;
+	--success: #14532d;
+	--success-foreground: #86efac;
+	--warning: #78350f;
+	--warning-foreground: #fbbf24;
+	--border: rgba(255, 255, 255, 0.08);
+	--input: rgba(255, 255, 255, 0.08);
+	--ring: #6edfca;
+	--chart-1: #6edfca;
+	--chart-2: #86efac;
+	--chart-3: #14532d;
+	--chart-4: #78350f;
+	--chart-5: #fbbf24;
+	--radius: 0.5rem;
+
+	/* Custom tokens (matching noahtigner.com) */
+	--color-paper: #181818;
+	--color-divider: rgba(255, 255, 255, 0.06);
+	--color-border-dark: rgb(97, 97, 97);
+	--color-border-card: rgba(255, 255, 255, 0.08);
+	--color-text-primary: rgb(248, 251, 248);
+	--color-text-secondary: rgba(255, 255, 255, 0.5);
+	--color-focus: #6edfca;
+	--color-ripple: rgba(248, 251, 248, 0.6);
+
+	/* OKLCH gray scale */
+	--color-gray-50: oklch(17% 1% 264deg);
+	--color-gray-100: oklch(28% 3% 264deg / 65%);
+	--color-gray-200: oklch(31% 3% 264deg / 80%);
+	--color-gray-300: oklch(35% 3% 264deg / 80%);
+	--color-gray-400: oklch(47% 3.5% 264deg / 80%);
+	--color-gray-500: oklch(64% 4% 264deg / 80%);
+	--color-gray-600: oklch(82% 4% 264deg / 80%);
+	--color-gray-700: oklch(92% 4.5% 264deg / 80%);
+	--color-gray-800: oklch(93% 3.5% 264deg / 85%);
+	--color-gray-900: oklch(95% 2% 264deg / 90%);
+	--color-gray-950: oklch(94% 1.5% 264deg / 95%);
+}
+
+/* Duplicate for .dark class (shadcn components use dark: variant) */
+.dark {
+	--background: #141414;
+	--foreground: rgb(248, 251, 248);
+	--card: #181818;
+	--card-foreground: rgb(248, 251, 248);
+	--popover: #181818;
+	--popover-foreground: rgb(248, 251, 248);
+	--primary: #6edfca;
+	--primary-foreground: #141414;
+	--secondary: #1e1e1e;
+	--secondary-foreground: rgb(248, 251, 248);
+	--muted: #1e1e1e;
+	--muted-foreground: rgba(255, 255, 255, 0.5);
+	--accent: #6edfca;
+	--accent-foreground: #141414;
+	--destructive: #7f1d1d;
+	--destructive-foreground: #fca5a5;
+	--success: #14532d;
+	--success-foreground: #86efac;
+	--warning: #78350f;
+	--warning-foreground: #fbbf24;
+	--border: rgba(255, 255, 255, 0.08);
+	--input: rgba(255, 255, 255, 0.08);
+	--ring: #6edfca;
+	--chart-1: #6edfca;
+	--chart-2: #86efac;
+	--chart-3: #14532d;
+	--chart-4: #78350f;
+	--chart-5: #fbbf24;
 }
 
 body {
@@ -20,36 +115,60 @@ body {
 	min-height: 100vh;
 }
 
-.logo {
-	height: 6em;
-	padding: 1.5em;
-	will-change: filter;
-	transition: filter 300ms;
-}
-.logo.vite:hover {
-	filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-	filter: drop-shadow(0 0 2em #61dafbaa);
-}
-.logo.pihole:hover {
-	filter: drop-shadow(0 0 2em #f60d1a);
-}
-.logo.fastAPI:hover {
-	filter: drop-shadow(0 0 2em #05998b);
+@theme inline {
+	--font-heading: 'Poppins', sans-serif;
+	--font-sans: 'Poppins', sans-serif;
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-warning-foreground: var(--warning-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@keyframes logo-spin {
-	from {
-		transform: rotate(0deg);
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
 	}
-	to {
-		transform: rotate(360deg);
+	body {
+		@apply bg-background text-foreground;
 	}
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	a:nth-of-type(2) .logo {
-		animation: logo-spin infinite 20s linear;
+	html {
+		@apply font-sans;
+	}
+	a {
+		@apply transition-colors duration-150;
+	}
+	a:focus-visible {
+		@apply rounded-sm outline-2 outline-offset-2 outline-ring;
 	}
 }

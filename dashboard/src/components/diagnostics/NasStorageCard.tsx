@@ -1,39 +1,29 @@
-import {
-	Box,
-	LinearProgress,
-	Skeleton,
-	Typography,
-	useTheme,
-} from '@mui/material';
-import {
-	StorageOutlined as StorageIcon,
-	Circle as CircleIcon,
-} from '@mui/icons-material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { HardDrive, Circle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useNasDiagnostics } from '../../hooks/useNasDiagnostics';
 import {
 	bytesToTerabytes,
 	celsiusToFahrenheit,
 } from '../../services/unitConversion';
 
-function getStatusColor(
-	status: string
-): 'success' | 'warning' | 'error' | 'info' {
+function getStatusColor(status: string): string {
 	const normalStatuses = ['normal', 'initialized'];
 	const warningStatuses = ['warning'];
 	const errorStatuses = ['crashed', 'error', 'failing', 'failed'];
 	const lowerStatus = status.toLowerCase();
 	if (normalStatuses.includes(lowerStatus)) {
-		return 'success';
+		return 'text-success-foreground';
 	}
 	if (warningStatuses.includes(lowerStatus)) {
-		return 'warning';
+		return 'text-warning-foreground';
 	}
 	if (errorStatuses.includes(lowerStatus)) {
-		return 'error';
+		return 'text-destructive-foreground';
 	}
-	// Unknown status - show as info rather than error to avoid false alarms
-	return 'info';
+	return 'text-primary';
 }
 
 function HddRow({
@@ -47,90 +37,46 @@ function HddRow({
 	status: string;
 	temp: number;
 }) {
-	const theme = useTheme();
-	const statusColor = getStatusColor(status);
-
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: theme.spacing(1.5),
-				py: theme.spacing(0.75),
-			}}
-		>
-			<CircleIcon
-				color={statusColor}
-				sx={{ fontSize: 12, flexShrink: 0 }}
+		<div className="flex items-center gap-2 py-0.5">
+			<Circle
+				size={8}
+				className={cn('shrink-0 fill-current', getStatusColor(status))}
 			/>
-			<Typography
-				sx={{
-					fontSize: '0.875rem',
-					minWidth: '48px',
-					flexShrink: 0,
-				}}
-			>
-				{diskno}
-			</Typography>
-			<Typography
-				sx={{
-					fontSize: '0.875rem',
-					flexGrow: 1,
-					color: theme.palette.text.secondary,
-				}}
-			>
-				{status}
-			</Typography>
-			<Typography
-				sx={{
-					fontSize: '0.75rem',
-					minWidth: '50px',
-					textAlign: 'right',
-					flexShrink: 0,
-					color: theme.palette.text.secondary,
-				}}
-			>
+			<span className="min-w-[40px] shrink-0 text-xs">{diskno}</span>
+			<span className="grow text-xs text-muted-foreground">{status}</span>
+			<span className="min-w-[44px] shrink-0 text-right text-xs text-muted-foreground">
 				{bytesToTerabytes(capacity).toFixed(1)} TB
-			</Typography>
-			<Typography
-				sx={{
-					fontSize: '0.75rem',
-					minWidth: '36px',
-					textAlign: 'right',
-					flexShrink: 0,
-					color: theme.palette.text.secondary,
-				}}
-			>
+			</span>
+			<span className="min-w-[32px] shrink-0 text-right text-xs text-muted-foreground">
 				{celsiusToFahrenheit(temp).toFixed(0)}°F
-			</Typography>
-		</Box>
+			</span>
+		</div>
 	);
 }
 
 function NasStorageCardContent() {
-	const theme = useTheme();
 	const { isLoading, isError, data } = useNasDiagnostics();
 
 	if (isError) {
 		return (
-			<Typography color="error" sx={{ py: 2 }}>
+			<p className="py-2 text-destructive-foreground">
 				Failed to load NAS storage data
-			</Typography>
+			</p>
 		);
 	}
 
 	if (isLoading || !data) {
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<div className="flex flex-col gap-2">
 				{[1, 2, 3, 4].map((i) => (
-					<Skeleton key={i} variant="rectangular" height={24} />
+					<Skeleton key={i} className="h-6 w-full" />
 				))}
-			</Box>
+			</div>
 		);
 	}
 
 	const hdds = data.storage.hdd_info;
-	// Use volume info for accurate capacity calculations (accounts for RAID)
 	const totalUsedBytes = data.storage.vol_info.reduce(
 		(acc, v) => acc + v.used_size,
 		0
@@ -145,41 +91,23 @@ function NasStorageCardContent() {
 
 	return (
 		<>
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					mb: theme.spacing(0.5),
-				}}
-			>
-				<Typography
-					sx={{ fontSize: '1.5rem', fontWeight: 500 }}
-					variant="h3"
-				>
+			<div className="flex items-center justify-between">
+				<h3 className="text-lg font-medium">
 					{totalUsageTB.toFixed(2)} / {totalCapacityTB.toFixed(2)} TB
-				</Typography>
-			</Box>
-			<LinearProgress
-				variant="determinate"
+				</h3>
+			</div>
+			<Progress
 				value={totalUsagePercent}
-				color={totalUsagePercent > 90 ? 'error' : 'primary'}
-				sx={{
-					height: 8,
-					borderRadius: 1,
-					mb: theme.spacing(0.5),
-				}}
+				className={cn(
+					'mb-0.5 h-1.5',
+					totalUsagePercent > 90 &&
+						'[&_[data-slot=progress-indicator]]:bg-destructive'
+				)}
 			/>
-			<Typography
-				sx={{
-					fontSize: '0.875rem',
-					color: theme.palette.text.secondary,
-					mb: theme.spacing(1),
-				}}
-			>
+			<p className="mb-1 text-xs text-muted-foreground">
 				{totalUsagePercent.toFixed(1)}% used across {hdds.length} drives
-			</Typography>
-			<Box>
+			</p>
+			<div>
 				{hdds
 					.sort((a, b) => a.order - b.order)
 					.map((hdd) => (
@@ -191,41 +119,22 @@ function NasStorageCardContent() {
 							temp={hdd.temp}
 						/>
 					))}
-			</Box>
+			</div>
 		</>
 	);
 }
 
 function NasStorageCard() {
-	const theme = useTheme();
-
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
-					<StorageIcon
-						sx={{
-							fontSize: 20,
-							marginRight: theme.spacing(1),
-							marginBottom: '2px',
-						}}
-					/>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-						}}
-						variant="h2"
-					>
-						NAS Storage
-					</Typography>
-				</Box>
+		<Card size="sm">
+			<CardContent>
+				<div className="mb-0.5 flex items-center">
+					<HardDrive size={16} className="mr-1.5" />
+					<h2 className="text-base">NAS Storage</h2>
+				</div>
 				<NasStorageCardContent />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 

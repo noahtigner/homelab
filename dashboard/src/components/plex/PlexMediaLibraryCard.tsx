@@ -1,26 +1,21 @@
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import {
-	LiveTvOutlined as TvIcon,
-	MovieOutlined as MovieIcon,
-	MusicNoteOutlined as MusicIcon,
-	PhotoOutlined as PhotoIcon,
-	VideoLibraryOutlined as VideoIcon,
-} from '@mui/icons-material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Tv, Film, Music, Image, Video } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { usePlexLibrary } from '../../hooks/usePlexLibrary';
 
 function getIconForType(type: string) {
+	const iconClass = 'size-5 text-muted-foreground';
 	switch (type) {
 		case 'movie':
-			return MovieIcon;
+			return <Film className={iconClass} />;
 		case 'show':
-			return TvIcon;
+			return <Tv className={iconClass} />;
 		case 'artist':
-			return MusicIcon;
+			return <Music className={iconClass} />;
 		case 'photo':
-			return PhotoIcon;
+			return <Image className={iconClass} />;
 		default:
-			return VideoIcon;
+			return <Video className={iconClass} />;
 	}
 }
 
@@ -33,126 +28,77 @@ function MediaRow({
 	label: string;
 	count: number;
 }) {
-	const theme = useTheme();
-
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: theme.spacing(1.5),
-				py: theme.spacing(0.75),
-			}}
-		>
+		<div className="flex items-center gap-3 py-1.5">
 			{icon}
-			<Typography
-				sx={{
-					fontSize: '0.875rem',
-					flexGrow: 1,
-				}}
-			>
-				{label}
-			</Typography>
-			<Typography
-				sx={{
-					fontSize: '1.25rem',
-					fontWeight: 500,
-					textAlign: 'right',
-				}}
-			>
+			<span className="grow text-sm">{label}</span>
+			<span className="text-right text-xl font-medium">
 				{count.toLocaleString()}
-			</Typography>
-		</Box>
+			</span>
+		</div>
 	);
 }
 
 function PlexMediaLibraryCardContent() {
-	const theme = useTheme();
 	const { isLoading, isError, data } = usePlexLibrary();
 
 	if (isError) {
 		return (
-			<Typography color="error" sx={{ py: 2 }}>
+			<p className="py-2 text-destructive-foreground">
 				Failed to load Plex library data
-			</Typography>
+			</p>
 		);
 	}
 
 	if (isLoading || !data) {
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<div className="flex flex-col gap-2">
 				{[1, 2].map((i) => (
-					<Skeleton key={i} variant="rectangular" height={32} />
+					<Skeleton key={i} className="h-8 w-full" />
 				))}
-			</Box>
+			</div>
 		);
 	}
 
 	return (
-		<Box>
-			{data.sections.map((section) => {
-				const IconComponent = getIconForType(section.type);
-				return (
-					<MediaRow
-						key={section.key}
-						icon={
-							<IconComponent
-								sx={{
-									fontSize: 20,
-									color: theme.palette.text.secondary,
-								}}
-							/>
-						}
-						label={section.title}
-						count={section.count}
-					/>
-				);
-			})}
-		</Box>
+		<div>
+			{data.sections.map((section) => (
+				<MediaRow
+					key={section.key}
+					icon={getIconForType(section.type)}
+					label={section.title}
+					count={section.count}
+				/>
+			))}
+		</div>
 	);
 }
 
 const PLEX_URL = 'https://app.plex.tv/desktop';
 
 function PlexMediaLibraryCard() {
-	const theme = useTheme();
-
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent>
+				<div className="mb-1 flex items-center">
 					<img
 						src="/plex.svg"
 						alt="Plex"
 						width={20}
-						style={{
-							marginRight: theme.spacing(1),
-							marginBottom: 2,
-						}}
+						className="mr-2"
 					/>
-					<Link
+					<a
 						href={PLEX_URL}
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							Media Library
-						</Typography>
-					</Link>
-				</Box>
+						<h2 className="text-xl">Media Library</h2>
+					</a>
+				</div>
 				<PlexMediaLibraryCardContent />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 
