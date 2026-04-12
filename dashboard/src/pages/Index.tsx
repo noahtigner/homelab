@@ -20,7 +20,6 @@ function Index() {
 		<div className="grid grid-cols-12 gap-2 sm:gap-3">
 			<h1 className="sr-only">Homelab Dashboard</h1>
 
-			{/* Status chips + Diagnostics table + Pi-hole */}
 			<div className="col-span-12 md:col-span-3">
 				<StatusStackPrimary />
 			</div>
@@ -33,7 +32,6 @@ function Index() {
 				</div>
 			</div>
 
-			{/* Storage / Media */}
 			<div className="col-span-12 sm:col-span-6 md:col-span-4">
 				<NasStorageCard />
 			</div>
@@ -44,7 +42,6 @@ function Index() {
 				<PlexActiveSessionsCard />
 			</div>
 
-			{/* Finance */}
 			<div className="col-span-12 sm:col-span-6 md:col-span-3">
 				<InvestmentSummaryCard />
 			</div>
@@ -55,7 +52,6 @@ function Index() {
 				<NetWorthSummaryCard />
 			</div>
 
-			{/* Analytics / Code */}
 			<div className="col-span-12 sm:col-span-6 lg:col-span-4">
 				<ActiveUsersPerDayCard />
 			</div>

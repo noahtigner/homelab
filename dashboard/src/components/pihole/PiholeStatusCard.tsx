@@ -17,7 +17,7 @@ function PiholeSummaryCardWrapper({
 		<div className="col-span-12 sm:col-span-4">
 			<Card>
 				<CardContent>
-					<div className="mb-1 flex items-center min-w-0">
+					<div className="mb-1 flex min-w-0 items-center">
 						<img
 							src="/pihole.svg"
 							alt=""

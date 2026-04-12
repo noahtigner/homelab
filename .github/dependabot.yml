@@ -5,15 +5,51 @@
 
 version: 2
 updates:
-  - package-ecosystem: 'pip' # See documentation for possible values
-    directory: '/api/' # Location of package manifests
+  - package-ecosystem: 'pip'
+    directory: '/api/'
     schedule:
       interval: 'weekly'
-  - package-ecosystem: 'npm' # See documentation for possible values
-    directory: '/dashboard/' # Location of package manifests
+    groups:
+      api:
+        patterns:
+          - '*'
+  - package-ecosystem: 'pip'
+    directory: '/api_diagnostics/'
     schedule:
       interval: 'weekly'
-  - package-ecosystem: 'npm' # See documentation for possible values
-    directory: '/' # Location of package manifests
+    groups:
+      api-diagnostics:
+        patterns:
+          - '*'
+  - package-ecosystem: 'npm'
+    directory: '/dashboard/'
     schedule:
       interval: 'weekly'
+    groups:
+      dashboard:
+        patterns:
+          - '*'
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    groups:
+      root:
+        patterns:
+          - '*'
+  - package-ecosystem: 'pip'
+    directory: '/slackbot/'
+    schedule:
+      interval: 'weekly'
+    groups:
+      slackbot:
+        patterns:
+          - '*'
+  - package-ecosystem: 'pip'
+    directory: '/speedtest/'
+    schedule:
+      interval: 'weekly'
+    groups:
+      speedtest:
+        patterns:
+          - '*'

@@ -54,14 +54,12 @@ function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 	);
 }
 
-function CustomTooltip({
-	active,
-	payload,
-}: TooltipContentProps<string, string>) {
+function CustomTooltip({ active, payload }: TooltipContentProps) {
 	if (active && payload && payload.length) {
+		const point = payload[0].payload as { day: string };
 		return (
 			<div className="z-10 rounded border border-border bg-card p-1 text-card-foreground">
-				<p className="text-xs font-medium">{payload[0].payload.day}</p>
+				<p className="text-xs font-medium">{point.day}</p>
 				<p className="text-sm text-success-foreground">
 					downloads: {payload[0].value}
 				</p>

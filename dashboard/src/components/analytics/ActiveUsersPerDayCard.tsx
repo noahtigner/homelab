@@ -53,14 +53,12 @@ function ActiveUsersChips({ activePerDay }: { activePerDay: ActivePerDay }) {
 	);
 }
 
-function CustomTooltip({
-	active,
-	payload,
-}: TooltipContentProps<string, string>) {
+function CustomTooltip({ active, payload }: TooltipContentProps) {
 	if (active && payload && payload.length) {
+		const point = payload[0].payload as { date: string };
 		return (
 			<div className="z-10 rounded border border-border bg-card p-1 text-card-foreground">
-				<p className="text-xs font-medium">{payload[0].payload.date}</p>
+				<p className="text-xs font-medium">{point.date}</p>
 				<p className="text-sm text-success-foreground">
 					users: {payload[0].value}
 				</p>
