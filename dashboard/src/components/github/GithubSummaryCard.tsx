@@ -1,31 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useTheme, Typography, Link, Box, Chip } from '@mui/material';
-import axios from 'axios';
+import { GitCompareArrows } from 'lucide-react';
+import type { z } from 'zod';
 
-import { StyledCard, StyledCardContent } from '../StyledCard';
-import { CompareArrowsOutlined as CompareArrowsOutlinedIcon } from '@mui/icons-material';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useGithubEvents } from '@/hooks/useGithubEvents';
+import type { githubEventsSchema } from '@/types/schemas';
 
-interface Contributions {
-	own_projects: number;
-	oss_projects: number;
-}
-
-interface Repo {
-	id: number;
-	name: string;
-	url: string;
-}
-
-interface GithubEvents {
-	events: []; // TODO:
-	events_seen: unknown;
-	repos_seen: Repo[];
-	contributions: Contributions;
-}
+type GithubEvents = z.infer<typeof githubEventsSchema>;
 
 function GithubChips({ githubEvents }: { githubEvents: GithubEvents }) {
-	const { palette } = useTheme();
-
 	const chipData = [
 		{
 			label: 'OSS Contributions',
@@ -38,138 +22,98 @@ function GithubChips({ githubEvents }: { githubEvents: GithubEvents }) {
 	];
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexWrap: 'wrap',
-				justifyContent: 'start',
-				alignContent: 'start',
-				listStyle: 'none',
-				m: 0,
-				marginTop: 1,
-				p: 0,
-				gap: 1,
-			}}
-			component="ul"
-		>
+		<ul className="mt-2 flex list-none flex-wrap items-start justify-start gap-2 p-0">
 			{chipData.map(({ label, value }) => (
 				<li key={label}>
-					<Chip
-						size="small"
-						label={
-							<>
-								{label}{' '}
-								<strong
-									style={{
-										color: palette.text.secondary,
-									}}
-								>
-									({value})
-								</strong>
-							</>
-						}
-					/>
+					<Badge variant="secondary">
+						{label}{' '}
+						<strong className="text-muted-foreground">
+							({value})
+						</strong>
+					</Badge>
 				</li>
 			))}
-		</Box>
+		</ul>
 	);
 }
 
 function GithubSummary({ githubEvents }: { githubEvents: GithubEvents }) {
-	const theme = useTheme();
-
 	return (
 		<>
-			<Box
-				sx={{
-					display: 'flex',
-					flexGrow: 1,
-					justifyContent: 'space-between',
-					marginBottom: theme.spacing(2),
-				}}
-			>
-				<Typography
-					sx={{
-						fontSize: '2.5rem',
-						marginBottom: theme.spacing(0.5),
-					}}
-					variant="h3"
-				>
-					Contributions
-				</Typography>
-				<CompareArrowsOutlinedIcon
-					color="success"
-					sx={{ fontSize: 48 }}
-				/>
-			</Box>
+			<div className="mb-2 flex grow justify-between">
+				<h3 className="text-2xl">Contributions</h3>
+				<GitCompareArrows className="size-8 text-success-foreground" />
+			</div>
 			<div>
 				{githubEvents.repos_seen
 					.slice(0, 4)
 					.map(({ id, name, url }) => (
-						<Link
+						<a
 							href={url}
 							target="_blank"
-							rel="noopener"
+							rel="noopener noreferrer"
 							key={id}
+							className="block text-foreground transition-colors duration-150 hover:text-primary"
 						>
-							<Typography color="text.primary">{name}</Typography>
-						</Link>
+							{name}
+						</a>
 					))}
 			</div>
-			<GithubChips githubEvents={githubEvents} />
+			<div className="mt-auto">
+				<GithubChips githubEvents={githubEvents} />
+			</div>
 		</>
 	);
 }
 
+function GithubSummaryCardContent() {
+	const { isLoading, isError, data } = useGithubEvents();
+
+	if (isError) {
+		return (
+			<p className="py-2 text-destructive-foreground">
+				Failed to load GitHub data
+			</p>
+		);
+	}
+
+	if (isLoading || !data) {
+		return (
+			<div className="flex flex-col gap-2">
+				<Skeleton className="h-10 w-48" />
+				<Skeleton className="h-6 w-64" />
+				<Skeleton className="h-6 w-56" />
+				<Skeleton className="h-6 w-48" />
+			</div>
+		);
+	}
+
+	return <GithubSummary githubEvents={data} />;
+}
+
 function GithubSummaryCard() {
-	const theme = useTheme();
-
-	const [githubEvents, setGithubEvents] = useState<GithubEvents | null>(null);
-
-	useEffect(() => {
-		axios
-			.get(`${import.meta.env.VITE_API_BASE}/github/events/`)
-			.then(({ data }) => {
-				setGithubEvents(data);
-			})
-			.catch((error) => console.error(error));
-	}, []);
-
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent className="flex grow flex-col">
+				<div className="mb-1 flex items-center">
 					<img
 						src="https://github.githubassets.com/favicons/favicon-dark.svg"
 						alt="Github"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						className="mr-2"
 					/>
-					<Link
-						href={`https://github.com/${
-							import.meta.env.VITE_GITHUB_USERNAME
-						}`}
+					<a
+						href={`https://github.com/${import.meta.env.VITE_GITHUB_USERNAME}`}
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							Github
-						</Typography>
-					</Link>
-				</Box>
-				{githubEvents && <GithubSummary githubEvents={githubEvents} />}
-			</StyledCardContent>
-		</StyledCard>
+						<h2 className="text-xl">Github</h2>
+					</a>
+				</div>
+				<GithubSummaryCardContent />
+			</CardContent>
+		</Card>
 	);
 }
 

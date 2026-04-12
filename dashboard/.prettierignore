@@ -3,6 +3,7 @@
 **/.svn
 **/.hg
 **/node_modules
+**/.pnpm-store
 
 # files touched by DependaBot
 **/pnpm-lock.yaml

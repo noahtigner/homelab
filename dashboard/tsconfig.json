@@ -1,27 +1,17 @@
 {
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.node.json"
+		}
+	],
 	"compilerOptions": {
-		"target": "es6",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"module": "esnext",
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"moduleResolution": "node",
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true,
-		"jsx": "react-jsx",
-		"types": ["vite/client", "vitest/globals"],
 		"baseUrl": ".",
-
-		/* Linting */
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-		"allowSyntheticDefaultImports": true,
-		"forceConsistentCasingInFileNames": true
-	},
-	"include": ["src", ".env.config.ts"]
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	}
 }

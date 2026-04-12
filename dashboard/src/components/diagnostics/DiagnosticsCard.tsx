@@ -1,8 +1,6 @@
 import { type ReactNode } from 'react';
-import { Box, Skeleton, Typography, useTheme } from '@mui/material';
-import Grid from '@mui/material/Grid';
-
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function DiagnosticsCard({
 	title,
@@ -15,59 +13,33 @@ function DiagnosticsCard({
 	icon: ReactNode;
 	loading?: boolean;
 }) {
-	const theme = useTheme();
-
 	return (
-		<Grid size={{ xs: 12, sm: 6, md: 3 }}>
-			<StyledCard variant="outlined">
-				<StyledCardContent>
-					<Typography
-						sx={{
-							fontSize: '1.25rem',
-							marginBottom: theme.spacing(0.25),
-						}}
-						variant="h2"
-					>
-						{title}
-					</Typography>
-					<Box
-						sx={{
-							display: 'flex',
-							flexGrow: 1,
-							justifyContent: 'space-between',
-							alignItems: 'center',
-						}}
-					>
-						<Box>
-							{loading ? (
-								<Skeleton
-									variant="text"
-									width={100}
-									height={36}
-								/>
-							) : (
-								values.map((v) => (
-									<Typography
-										key={v}
-										sx={{
-											fontSize:
-												values.length > 1
-													? '0.75rem'
-													: '2rem',
-											wordBreak: 'break-word',
-										}}
-										variant={'h3'}
-									>
-										{v}
-									</Typography>
-								))
-							)}
-						</Box>
-						{icon}
-					</Box>
-				</StyledCardContent>
-			</StyledCard>
-		</Grid>
+		<Card>
+			<CardContent>
+				<h2 className="mb-1 text-xl font-light">{title}</h2>
+				<div className="flex grow items-center justify-between">
+					<div>
+						{loading ? (
+							<Skeleton className="h-9 w-[100px]" />
+						) : (
+							values.map((v) => (
+								<h3
+									key={v}
+									className={
+										values.length > 1
+											? 'text-xs break-words'
+											: 'text-3xl break-words'
+									}
+								>
+									{v}
+								</h3>
+							))
+						)}
+					</div>
+					{icon}
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 

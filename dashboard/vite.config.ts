@@ -1,5 +1,7 @@
+import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import validateEnvVars from 'validate-env-vars';
 
 import envConfigSchema from './.env.config';
@@ -8,6 +10,7 @@ import envConfigSchema from './.env.config';
 export default defineConfig(({ mode }) => ({
 	plugins: [
 		react(),
+		tailwindcss(),
 		// Skip env validation in test mode
 		...(mode !== 'test'
 			? [
@@ -23,6 +26,11 @@ export default defineConfig(({ mode }) => ({
 				]
 			: []),
 	],
+	resolve: {
+		alias: {
+			'@': path.resolve(import.meta.dirname, './src'),
+		},
+	},
 	test: {
 		globals: true,
 		environment: 'jsdom',

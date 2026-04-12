@@ -1,20 +1,8 @@
-import {
-	Box,
-	Chip,
-	LinearProgress,
-	Link,
-	Skeleton,
-	Typography,
-	useTheme,
-} from '@mui/material';
-import {
-	MovieOutlined as MovieIcon,
-	MusicNoteOutlined as MusicIcon,
-	PauseOutlined as PauseIcon,
-	PlayArrowOutlined as PlayIcon,
-	TvOutlined as TvIcon,
-} from '@mui/icons-material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Film, Music, Tv, Pause, Play } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { usePlexSessions } from '../../hooks/usePlexSessions';
 import type { z } from 'zod';
 import type { plexSessionSchema } from '../../types/schemas';
@@ -22,15 +10,16 @@ import type { plexSessionSchema } from '../../types/schemas';
 type PlexSession = z.infer<typeof plexSessionSchema>;
 
 function getMediaIcon(mediaType: string) {
+	const size = 18;
 	switch (mediaType) {
 		case 'movie':
-			return <MovieIcon sx={{ fontSize: 18 }} />;
+			return <Film size={size} />;
 		case 'episode':
-			return <TvIcon sx={{ fontSize: 18 }} />;
+			return <Tv size={size} />;
 		case 'track':
-			return <MusicIcon sx={{ fontSize: 18 }} />;
+			return <Music size={size} />;
 		default:
-			return <MovieIcon sx={{ fontSize: 18 }} />;
+			return <Film size={size} />;
 	}
 }
 
@@ -54,215 +43,117 @@ function getMediaTitle(session: PlexSession): string {
 }
 
 function SessionRow({ session }: { session: PlexSession }) {
-	const theme = useTheme();
 	const isPlaying = session.player.state === 'playing';
 
 	return (
-		<Box
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				gap: theme.spacing(0.5),
-				py: theme.spacing(1),
-				borderBottom: `1px solid ${theme.palette.divider}`,
-				'&:last-child': {
-					borderBottom: 'none',
-					pb: 0,
-				},
-			}}
-		>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: theme.spacing(1),
-				}}
-			>
-				<Box sx={{ color: theme.palette.text.secondary }}>
+		<div className="flex flex-col gap-1 border-b border-border py-2 last:border-b-0 last:pb-0">
+			<div className="flex items-center gap-2">
+				<span className="text-muted-foreground">
 					{getMediaIcon(session.media_type)}
-				</Box>
-				<Typography
-					sx={{
-						fontSize: '0.875rem',
-						fontWeight: 500,
-						flexGrow: 1,
-						overflow: 'hidden',
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap',
-					}}
-				>
+				</span>
+				<span className="grow truncate text-sm font-medium">
 					{getMediaTitle(session)}
-				</Typography>
+				</span>
 				{isPlaying ? (
-					<PlayIcon
-						sx={{ fontSize: 16, color: theme.palette.success.main }}
-					/>
+					<Play size={16} className="text-success-foreground" />
 				) : (
-					<PauseIcon
-						sx={{ fontSize: 16, color: theme.palette.warning.main }}
-					/>
+					<Pause size={16} className="text-warning-foreground" />
 				)}
-			</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: theme.spacing(1),
-				}}
-			>
-				<Chip
-					label={session.username}
-					size="small"
-					sx={{
-						fontSize: '0.75rem',
-						height: 20,
-					}}
-				/>
-				<Typography
-					sx={{
-						fontSize: '0.75rem',
-						color: theme.palette.text.secondary,
-						flexGrow: 1,
-					}}
-				>
+			</div>
+			<div className="flex items-center gap-2">
+				<Badge variant="secondary" className="text-xs">
+					{session.username}
+				</Badge>
+				<span className="grow text-xs text-muted-foreground">
 					{session.player.title} ({session.player.platform})
-				</Typography>
-			</Box>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: theme.spacing(1),
-				}}
-			>
-				<LinearProgress
-					variant="determinate"
+				</span>
+			</div>
+			<div className="flex items-center gap-2">
+				<Progress
 					value={session.progress_percent}
-					sx={{
-						flexGrow: 1,
-						height: 4,
-						borderRadius: 1,
-					}}
+					className="h-1 grow"
 				/>
-				<Typography
-					sx={{
-						fontSize: '0.625rem',
-						color: theme.palette.text.secondary,
-						minWidth: 80,
-						textAlign: 'right',
-					}}
-				>
+				<span className="min-w-[80px] text-right text-[0.625rem] text-muted-foreground">
 					{formatDuration(session.view_offset_ms)} /{' '}
 					{formatDuration(session.duration_ms)}
-				</Typography>
-			</Box>
-		</Box>
+				</span>
+			</div>
+		</div>
 	);
 }
 
 function PlexActiveSessionsCardContent() {
-	const theme = useTheme();
 	const { isLoading, isError, data } = usePlexSessions();
 
 	if (isError) {
 		return (
-			<Typography color="error" sx={{ py: 2 }}>
+			<p className="py-2 text-destructive-foreground">
 				Failed to load active sessions
-			</Typography>
+			</p>
 		);
 	}
 
 	if (isLoading || !data) {
 		return (
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<div className="flex flex-col gap-2">
 				{[1, 2].map((i) => (
-					<Skeleton key={i} variant="rectangular" height={72} />
+					<Skeleton key={i} className="h-[72px] w-full" />
 				))}
-			</Box>
+			</div>
 		);
 	}
 
 	if (data.count === 0) {
 		return (
-			<Typography
-				sx={{
-					py: theme.spacing(2),
-					color: theme.palette.text.secondary,
-					textAlign: 'center',
-				}}
-			>
+			<p className="py-4 text-center text-muted-foreground">
 				No active streams
-			</Typography>
+			</p>
 		);
 	}
 
 	return (
-		<Box>
+		<div>
 			{data.sessions.map((session) => (
 				<SessionRow
 					key={`${session.username}-${session.title}-${session.player.title}`}
 					session={session}
 				/>
 			))}
-		</Box>
+		</div>
 	);
 }
 
 const PLEX_URL = 'https://app.plex.tv/desktop';
 
 function PlexActiveSessionsCard() {
-	const theme = useTheme();
 	const { data } = usePlexSessions();
 	const sessionCount = data?.count ?? 0;
 
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent>
+				<div className="mb-1 flex items-center">
 					<img
 						src="/plex.svg"
 						alt="Plex"
 						width={20}
-						style={{
-							marginRight: theme.spacing(1),
-							marginBottom: 2,
-						}}
+						className="mr-2"
 					/>
-					<Link
+					<a
 						href={PLEX_URL}
 						target="_blank"
 						rel="noreferrer"
-						sx={{
-							textDecoration: 'none',
-							color: 'inherit',
-							flexGrow: 1,
-						}}
+						className="grow no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							Active Streams
-						</Typography>
-					</Link>
+						<h2 className="text-xl">Active Streams</h2>
+					</a>
 					{sessionCount > 0 && (
-						<Chip
-							label={sessionCount}
-							size="small"
-							color="primary"
-							sx={{ fontSize: '0.75rem', height: 20 }}
-						/>
+						<Badge className="text-xs">{sessionCount}</Badge>
 					)}
-				</Box>
+				</div>
 				<PlexActiveSessionsCardContent />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 

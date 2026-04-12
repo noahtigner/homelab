@@ -1,5 +1,5 @@
-import { Box, Link, Skeleton, Typography, useTheme } from '@mui/material';
-import { StyledCard, StyledCardContent } from '../StyledCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import useQueryMoneyAccounts from '../../hooks/useQueryMoneyAccounts';
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -14,46 +14,23 @@ function EquitySummaryInner({
 	homeValue: number;
 	mortgageBalance: number;
 }) {
-	const theme = useTheme();
-
 	const totalEquity = homeValue - mortgageBalance;
 
 	return (
 		<div>
-			<Typography
-				sx={{
-					fontSize: '1.25rem',
-					marginBottom: theme.spacing(1),
-				}}
-				variant="h2"
-			>
-				{formatter.format(totalEquity)}
-			</Typography>
-			<Typography
-				sx={{
-					fontSize: '1rem',
-					wordBreak: 'break-word',
-				}}
-				variant={'h3'}
-			>
-				Home Value{' '}
-				<span style={{ backgroundColor: theme.palette.success.main }}>
-					{formatter.format(homeValue)}{' '}
+			<h2 className="mb-2 text-xl">{formatter.format(totalEquity)}</h2>
+			<h3 className="break-words text-base">
+				<span className="text-muted-foreground">Home Value</span>{' '}
+				<span className="text-success-foreground">
+					{formatter.format(homeValue)}
 				</span>
-			</Typography>
-			<Typography
-				sx={{
-					fontSize: '1rem',
-					wordBreak: 'break-word',
-					paddingTop: theme.spacing(1),
-				}}
-				variant={'h3'}
-			>
-				Mortgage{' '}
-				<span style={{ backgroundColor: theme.palette.error.main }}>
-					{formatter.format(mortgageBalance)}{' '}
+			</h3>
+			<h3 className="break-words pt-2 text-base">
+				<span className="text-muted-foreground">Mortgage</span>{' '}
+				<span className="text-destructive-foreground">
+					{formatter.format(mortgageBalance)}
 				</span>
-			</Typography>
+			</h3>
 		</div>
 	);
 }
@@ -64,21 +41,11 @@ function EquitySummary() {
 	if (isPending) {
 		return (
 			<div>
-				<Skeleton
-					variant="text"
-					width="100%"
-					height={24}
-					sx={{ marginBottom: 1 }}
-				/>
-				{...Array(2)
+				<Skeleton className="mb-2 h-6 w-full" />
+				{Array(2)
 					.fill(0)
 					.map((_, i) => (
-						<Skeleton
-							key={i}
-							variant="text"
-							width="100%"
-							height={18}
-						/>
+						<Skeleton key={i} className="h-5 w-full" />
 					))}
 			</div>
 		);
@@ -86,24 +53,8 @@ function EquitySummary() {
 	if (error) {
 		return (
 			<div>
-				<Typography
-					sx={{
-						fontSize: '1.25rem',
-						marginBottom: 1,
-					}}
-					variant="h2"
-				>
-					An unexpected error occurred
-				</Typography>
-				<Typography
-					sx={{
-						fontSize: '1rem',
-						wordBreak: 'break-word',
-					}}
-					variant={'h3'}
-				>
-					{error.message}
-				</Typography>
+				<h2 className="mb-2 text-xl">An unexpected error occurred</h2>
+				<h3 className="break-words text-base">{error.message}</h3>
 			</div>
 		);
 	}
@@ -135,40 +86,28 @@ function EquitySummary() {
 }
 
 function EquitySummaryCard() {
-	const theme = useTheme();
 	return (
-		<StyledCard variant="outlined">
-			<StyledCardContent>
-				<Box
-					display="flex"
-					alignItems="center"
-					sx={{ marginBottom: theme.spacing(0.5) }}
-				>
+		<Card>
+			<CardContent>
+				<div className="mb-1 flex items-center">
 					<img
 						src="https://app.monarchmoney.com/butterfly-logo.svg"
 						alt="Monarch Money"
 						width={20}
-						style={{ marginRight: theme.spacing(1) }}
+						className="mr-2"
 					/>
-					<Link
+					<a
 						href="https://app.monarchmoney.com/accounts"
 						target="_blank"
 						rel="noreferrer"
-						sx={{ textDecoration: 'none', color: 'inherit' }}
+						className="no-underline text-inherit hover:text-primary"
 					>
-						<Typography
-							sx={{
-								fontSize: '1.25rem',
-							}}
-							variant="h2"
-						>
-							Equity
-						</Typography>
-					</Link>
-				</Box>
+						<h2 className="text-xl">Equity</h2>
+					</a>
+				</div>
 				<EquitySummary />
-			</StyledCardContent>
-		</StyledCard>
+			</CardContent>
+		</Card>
 	);
 }
 

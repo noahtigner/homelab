@@ -290,3 +290,57 @@ export const plexLibraryCountsResponseSchema = z.object({
 	total_items: z.number(),
 	sections: z.array(plexLibrarySectionSchema),
 });
+
+// NPM schemas
+export const npmDownloadsDaySchema = z.object({
+	downloads: z.number(),
+	day: z.string(),
+});
+
+export const npmDownloadsSchema = z.object({
+	total: z.number().optional(),
+	per_day: z.array(npmDownloadsDaySchema),
+	start: z.string().optional(),
+	end: z.string().optional(),
+});
+
+export const npmPackageInfoSchema = z.object({
+	name: z.string(),
+	version: z.string(),
+	description: z.string(),
+	license: z.string(),
+	homepage: z.string(),
+	repository: z.string(),
+	issues: z.string(),
+	pulls: z.string(),
+	downloads: npmDownloadsSchema,
+});
+
+// GitHub schemas
+export const githubRepoSchema = z.object({
+	id: z.number(),
+	name: z.string(),
+	url: z.string(),
+});
+
+export const githubContributionsSchema = z.object({
+	own_projects: z.number(),
+	oss_projects: z.number(),
+});
+
+export const githubEventsSchema = z.object({
+	events: z.array(z.unknown()),
+	events_seen: z.unknown(),
+	repos_seen: z.array(githubRepoSchema),
+	contributions: githubContributionsSchema,
+});
+
+// Analytics schemas
+export const activeSingleDaySchema = z.object({
+	active_users: z.number(),
+	date: z.string(),
+});
+
+export const activePerDaySchema = z.object({
+	per_day: z.array(activeSingleDaySchema),
+});
