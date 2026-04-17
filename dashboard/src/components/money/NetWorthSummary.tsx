@@ -64,6 +64,11 @@ function NetWorthSummaryInner({ data }: { data: NetWorthSummaryData }) {
 								(accountTypeSummary) =>
 									accountTypeSummary.type.group === group
 							)
+							.sort(
+								(a, b) =>
+									b.totalDisplayBalance -
+									a.totalDisplayBalance
+							)
 							.map((accountTypeSummary) => (
 								<p
 									key={accountTypeSummary.type.name}

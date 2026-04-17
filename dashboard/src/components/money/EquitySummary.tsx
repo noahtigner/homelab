@@ -63,19 +63,10 @@ function EquitySummary() {
 		data.data.accountTypeSummaries.find(
 			(accType) => accType.type.name === 'real_estate'
 		)?.totalDisplayBalance || 0;
-	const loanAccounts =
+	const mortgageBalance: number =
 		data.data.accountTypeSummaries.find(
-			(accType) => accType.type.name === 'loan'
-		)?.accounts || [];
-	const mortgageAccounts = loanAccounts.filter(
-		(acc) =>
-			acc.displayName.toLowerCase().includes('mortgage') ||
-			acc.institution?.name.toLowerCase().includes('mortgage')
-	);
-	const mortgageBalance: number = mortgageAccounts.reduce(
-		(acc, accType) => acc + accType.displayBalance,
-		0
-	);
+			(accType) => accType.type.name === 'mortgage'
+		)?.totalDisplayBalance || 0;
 
 	return (
 		<EquitySummaryInner

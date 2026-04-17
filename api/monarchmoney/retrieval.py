@@ -7,6 +7,8 @@ from fastapi import HTTPException, Request, status
 from api.config import Settings
 from api.monarchmoney.models import (
     MoneyAccountsResponse,
+    MoneyAccountSummary,
+    MoneyAccountSummaryType,
     MoneyPortfolioIncoming,
     MoneyPortfolioOutgoing,
 )
@@ -56,6 +58,49 @@ async def retrieve_portfolio(request: Request) -> MoneyPortfolioOutgoing:
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=f"Connection to Monarch Money Refused: {e}",
         )
+
+
+def _split_mortgage_from_loans(response: MoneyAccountsResponse) -> None:
+    """Split mortgage accounts out of the "loan" account type summary into a
+    separate "mortgage" summary. Mutates the response in place."""
+    summaries = response.data.accountTypeSummaries
+    loan_summary = next(
+        (s for s in summaries if s.type.name == "loan"),
+        None,
+    )
+    if loan_summary is None:
+        return
+
+    mortgage_accounts = [
+        acc
+        for acc in loan_summary.accounts
+        if "mortgage" in acc.displayName.lower()
+        or (acc.institution and "mortgage" in acc.institution.name.lower())
+    ]
+    if not mortgage_accounts:
+        return
+
+    remaining_loans = [
+        acc for acc in loan_summary.accounts if acc not in mortgage_accounts
+    ]
+    loan_summary.accounts = remaining_loans
+    loan_summary.totalDisplayBalance = sum(
+        acc.displayBalance for acc in remaining_loans
+    )
+
+    mortgage_summary = MoneyAccountSummary(
+        type=MoneyAccountSummaryType(
+            display="Mortgages",
+            group="liability",
+            name="mortgage",
+        ),
+        accounts=mortgage_accounts,
+        totalDisplayBalance=sum(acc.displayBalance for acc in mortgage_accounts),
+    )
+    # Insert the mortgage summary right after the loan summary so related
+    # liabilities stay grouped together.
+    loan_index = summaries.index(loan_summary)
+    summaries.insert(loan_index + 1, mortgage_summary)
 
 
 @cache("money:accounts", MoneyAccountsResponse, ttl=60 * 5)
@@ -127,7 +172,9 @@ async def retrieve_accounts(request: Request) -> MoneyAccountsResponse:
         )
         r.raise_for_status()
 
-        return MoneyAccountsResponse(**r.json())
+        response = MoneyAccountsResponse(**r.json())
+        _split_mortgage_from_loans(response)
+        return response
     except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
         logger.error(e)
         raise HTTPException(
