@@ -5,9 +5,7 @@ import GithubSummaryCard from '@/components/github/GithubSummaryCard';
 import PiholeStatus from '@/components/pihole/PiholeStatus';
 import { StatusStackPrimary } from '@/components/diagnostics/StatusStack';
 import OGPPreview from '@/components/portfolio/OGPPreview';
-import InvestmentSummaryCard from '@/components/money/InvestmentSummary';
 import NetWorthSummaryCard from '@/components/money/NetWorthSummary';
-import EquitySummaryCard from '@/components/money/EquitySummary';
 import ActiveUsersPerDayCard from '@/components/analytics/ActiveUsersPerDayCard';
 import DashboardTable from '@/components/diagnostics/DiagnosticsTable';
 // import SpeedTestSummaryCard from '@/components/speedtest/SpeedTestSummary';
@@ -42,13 +40,7 @@ function Index() {
 				<PlexActiveSessionsCard />
 			</div>
 
-			<div className="col-span-12 sm:col-span-6 md:col-span-3">
-				<InvestmentSummaryCard />
-			</div>
-			<div className="col-span-12 sm:col-span-6 md:col-span-3">
-				<EquitySummaryCard />
-			</div>
-			<div className="col-span-12 md:col-span-6">
+			<div className="col-span-12">
 				<NetWorthSummaryCard />
 			</div>
 
