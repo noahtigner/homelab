@@ -50,6 +50,30 @@ curl 'http://SERVER_IP:8090/search?q=Star+Wars&limit=10&genre=sci-fi&type=movie'
 
 The first start downloads the IMDb title and ratings datasets, generates `movies.jsonl`, and builds the in-memory index. Generated data is retained in the `go_autocomplete_data` Docker volume, so later starts reuse it. The full index has historically required about 8.24 GiB of RAM at peak. IMDb data is subject to [IMDb's non-commercial dataset terms](https://developer.imdb.com/non-commercial-datasets/).
 
+### Public endpoint
+
+Production runs a Cloudflare Tunnel connector that routes `https://autocomplete.noahtigner.com` to the internal `go_autocomplete:8090` service. The connector token is stored in the ignored `secrets/cloudflare_tunnel_token.txt` file.
+
+```sh
+docker compose -f compose.dev.yml -f compose.pro.yml up -d go_autocomplete cloudflared
+```
+
+Configure the Cloudflare tunnel's public hostname with service URL `http://go_autocomplete:8090`. Protect the public API at the Cloudflare edge:
+
+1. In **Security** > **Security rules**, create a custom rule with the action **Block** and this expression. It prevents the upstream diagnostic routes from being public:
+
+   ```txt
+   http.host eq "autocomplete.noahtigner.com" and not (http.request.method eq "GET" and http.request.uri.path eq "/search")
+   ```
+
+2. In **Security** > **Security rules**, create a rate limiting rule for URI Path equal to `/search`. Count by IP and start with 20 requests per 10 seconds, blocking for 10 seconds. Tune it from traffic.
+3. In **Rules** > **Transform Rules** > **Modify Response Header**, add a rule matching `autocomplete.noahtigner.com` and `/search` that sets these headers. Use the portfolio's canonical origin if it is served from a different hostname:
+
+   ```txt
+   Access-Control-Allow-Origin: https://noahtigner.com
+   Access-Control-Allow-Methods: GET
+   ```
+
 # Attribution
 
 <a href="https://www.plex.tv/"><img alt="Pi-hole" src="https://www.plex.tv/wp-content/themes/plex/assets/img/favicons/favicon.ico" height="32" /></a>

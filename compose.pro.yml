@@ -2,6 +2,17 @@ services:
   api:
     command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api'
 
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared:2026.9.1
+    command: 'tunnel --no-autoupdate run --token-file /run/secrets/cloudflare_tunnel_token'
+    depends_on:
+      go_autocomplete:
+        condition: service_healthy
+    restart: unless-stopped
+    secrets:
+      - cloudflare_tunnel_token
+
   postgres:
     container_name: postgres_n8n
     image: postgres:17-bookworm
@@ -157,6 +168,8 @@ networks:
     internal: true
 
 secrets:
+  cloudflare_tunnel_token:
+    file: './secrets/cloudflare_tunnel_token.txt'
   postgres_n8n_admin_password:
     file: './secrets/postgres_n8n_admin_password.txt'
   n8n_postgres_password:
