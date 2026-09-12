@@ -31,7 +31,24 @@
 - [x] [whoami](https://hub.docker.com/r/containous/whoami) - Simple HTTP service that prints OS info and HTTP request to output
 - [x] [Slack](https://slack.com/) Bot - Bot for interacting with homelab services
 - [x] [Redis Cache](https://redis.io/) - Cache for homelab services
+- [x] [go-autocomplete](https://github.com/noahtigner/go-autocomplete) - IMDb title autocomplete and substring search service
 - [ ] DB
+
+## go-autocomplete
+
+Start the service with:
+
+```sh
+docker compose -f compose.dev.yml up -d --build go_autocomplete
+```
+
+It is available on the LAN at `http://SERVER_IP:8090`. Search IMDb titles with:
+
+```sh
+curl 'http://SERVER_IP:8090/search?q=Star+Wars&limit=10&genre=sci-fi&type=movie'
+```
+
+The first start downloads the IMDb title and ratings datasets, generates `movies.jsonl`, and builds the in-memory index. Generated data is retained in the `go_autocomplete_data` Docker volume, so later starts reuse it. The full index has historically required about 8.24 GiB of RAM at peak. IMDb data is subject to [IMDb's non-commercial dataset terms](https://developer.imdb.com/non-commercial-datasets/).
 
 # Attribution
 

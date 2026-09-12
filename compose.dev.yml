@@ -104,6 +104,16 @@ services:
     ports:
       - '6379:6379'
 
+  go_autocomplete:
+    container_name: go_autocomplete
+    build:
+      context: ./go_autocomplete
+    ports:
+      - '8090:8090'
+    restart: 'unless-stopped'
+    volumes:
+      - go_autocomplete_data:/app/data
+
 volumes:
   media:
     driver_opts:
@@ -111,6 +121,7 @@ volumes:
       o: 'addr=${NAS_IP},nolock,soft,rw'
       device: ':/volume1/media/'
   exclude:
+  go_autocomplete_data:
 
 secrets:
   pihole_password:
