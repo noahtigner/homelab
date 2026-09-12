@@ -95,10 +95,16 @@ function NetWorthSummaryInner({
 	);
 	const totalAssets = accounts.data.accountTypeSummaries
 		.filter((accountType) => accountType.type.group === 'asset')
-		.reduce((total, accountType) => total + accountType.totalDisplayBalance, 0);
+		.reduce(
+			(total, accountType) => total + accountType.totalDisplayBalance,
+			0
+		);
 	const totalLiabilities = accounts.data.accountTypeSummaries
 		.filter((accountType) => accountType.type.group === 'liability')
-		.reduce((total, accountType) => total + accountType.totalDisplayBalance, 0);
+		.reduce(
+			(total, accountType) => total + accountType.totalDisplayBalance,
+			0
+		);
 	const realEstate = getAccountTypeSummary(accounts, 'real_estate');
 	const mortgage = getAccountTypeSummary(accounts, 'mortgage', 'mortgages');
 	const investments = getAccountTypeSummary(
@@ -152,7 +158,9 @@ function NetWorthSummaryInner({
 				<tr className="border-b">
 					<td className="py-1 pr-4">
 						<div className="flex justify-between gap-2">
-							<span className="text-muted-foreground">Assets</span>
+							<span className="text-muted-foreground">
+								Assets
+							</span>
 							<span className="text-success-foreground">
 								{formatter.format(totalAssets)}
 							</span>
@@ -160,7 +168,9 @@ function NetWorthSummaryInner({
 					</td>
 					<td className="py-1 pr-4">
 						<div className="flex justify-between gap-2">
-							<span className="text-muted-foreground">Liabilities</span>
+							<span className="text-muted-foreground">
+								Liabilities
+							</span>
 							<span className="text-destructive-foreground">
 								{formatter.format(totalLiabilities)}
 							</span>
@@ -174,9 +184,14 @@ function NetWorthSummaryInner({
 				</tr>
 				<tr className="border-b">
 					<AccountBalanceCell accountType={realEstate} />
-					<AccountBalanceCell accountType={mortgage} label="Mortgage" />
+					<AccountBalanceCell
+						accountType={mortgage}
+						label="Mortgage"
+					/>
 					<SummaryCell label="Equity">
-						<span className="font-medium">{formatter.format(equity)}</span>
+						<span className="font-medium">
+							{formatter.format(equity)}
+						</span>
 					</SummaryCell>
 				</tr>
 				<tr className="border-b">
@@ -190,8 +205,12 @@ function NetWorthSummaryInner({
 				</tr>
 				{Array.from({ length: remainingRowCount }, (_, index) => (
 					<tr key={index} className="border-b">
-						<AccountBalanceCell accountType={remainingAssets[index]} />
-						<AccountBalanceCell accountType={remainingLiabilities[index]} />
+						<AccountBalanceCell
+							accountType={remainingAssets[index]}
+						/>
+						<AccountBalanceCell
+							accountType={remainingLiabilities[index]}
+						/>
 						<td />
 					</tr>
 				))}
