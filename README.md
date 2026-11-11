@@ -54,6 +54,8 @@ The first start downloads the IMDb title and ratings datasets, generates `movies
 
 Production runs a Cloudflare Tunnel connector that routes `https://autocomplete.noahtigner.com` to the internal `go_autocomplete:8090` service. The connector token is stored in the ignored `secrets/cloudflare_tunnel_token.txt` file.
 
+Set `CORS_ALLOWED_ORIGIN=https://noahtigner.com` in the root `.env`. The service will not start without it and applies CORS headers only for that exact origin.
+
 ```sh
 docker compose -f compose.dev.yml -f compose.pro.yml up -d go_autocomplete cloudflared
 ```
@@ -67,12 +69,6 @@ Configure the Cloudflare tunnel's public hostname with service URL `http://go_au
    ```
 
 2. In **Security** > **Security rules**, create a rate limiting rule for URI Path equal to `/search`. Count by IP and start with 20 requests per 10 seconds, blocking for 10 seconds. Tune it from traffic.
-3. In **Rules** > **Transform Rules** > **Modify Response Header**, add a rule matching `autocomplete.noahtigner.com` and `/search` that sets these headers. Use the portfolio's canonical origin if it is served from a different hostname:
-
-   ```txt
-   Access-Control-Allow-Origin: https://noahtigner.com
-   Access-Control-Allow-Methods: GET
-   ```
 
 # Attribution
 

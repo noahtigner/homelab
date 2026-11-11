@@ -1,6 +1,6 @@
 FROM golang:1.25.1-alpine AS build
 
-ARG GO_AUTOCOMPLETE_REF=6d8bad11cb83e264ecf8286f70a99cb7975ad37e
+ARG GO_AUTOCOMPLETE_REF=d5c1a61dcd5cd7f61d9e5f9a4122324d449542f8
 
 RUN apk add --no-cache git
 
