@@ -54,7 +54,7 @@ The first start downloads the IMDb title and ratings datasets, generates `movies
 
 Production runs a Cloudflare Tunnel connector that routes `https://autocomplete.noahtigner.com` to the internal `go_autocomplete:8090` service. The connector token is stored in the ignored `secrets/cloudflare_tunnel_token.txt` file.
 
-Set `CORS_ALLOWED_ORIGIN=https://noahtigner.com` in the root `.env`. The service will not start without it and applies CORS headers only for that exact origin.
+Set `GO_AUTOCOMPLETE_CORS_ALLOWED_ORIGIN=https://noahtigner.com` in the root `.env`. The service will not start without it and applies CORS headers only for that exact origin.
 
 ```sh
 docker compose -f compose.dev.yml -f compose.pro.yml up -d go_autocomplete cloudflared
