@@ -36,7 +36,7 @@
 
 ## Monarch Money
 
-The API uses a saved Monarch browser session for `/money/accounts/` and `/money/portfolio/`. It sends the `session_id` and `csrftoken` cookies, a matching `X-CSRFToken` header, the Monarch app origin, and a browser-style User-Agent.
+The API uses a saved Monarch browser session for `/money/accounts/`, `/money/portfolio/`, and `/money/net-worth-history/`. It sends the `session_id` and `csrftoken` cookies, a matching `X-CSRFToken` header, the Monarch app origin, and a browser-style User-Agent.
 
 ### Initial setup
 
@@ -65,7 +65,15 @@ Session lifetime is currently unknown. When Monarch returns **401**, the API res
 
 A **403** can instead indicate failed CSRF validation or request filtering. The API distinguishes those errors from an expired session and displays an appropriate message. It logs the failed operation and a controlled error message.
 
-Accounts and portfolio responses are cached for five minutes. After setup or renewal, verify both endpoints on a cache miss (allow existing cached entries to expire) to confirm that upstream authentication succeeds.
+Accounts, portfolio, and net-worth history responses are cached for five minutes. After setup or renewal, verify the endpoints on a cache miss (allow existing cached entries to expire) to confirm that upstream authentication succeeds.
+
+### Net-worth history
+
+`GET /money/net-worth-history/?start_date=2026-05-10&end_date=2026-11-10` returns daily snapshots with `date`, `balance`, `assetsBalance`, and signed `liabilitiesBalance` fields inside a `snapshots` array. `end_date` is required; omit `start_date` for all available history. Each date range has its own cache entry. Daily granularity preserves the current partial month, which Monarch's adaptive monthly history can omit.
+
+The dashboard chart beneath the money table defaults to six months and also offers one month, three months, YTD, one year, and all time. Bounds use the browser's local calendar date. The headline net worth uses the same current account data as the table and stays visible while ranges load. Change compares the first and last available snapshots; percentage change is shown only for a positive starting balance. Historical snapshots can differ from current account balances due to snapshot timing and account inclusion settings.
+
+The chart derives a display series from the daily history: daily through six months, weekly through two years, and monthly for longer spans. Each bucket uses its last recorded snapshot, with the exact first and latest snapshots retained. Narrow charts can use multi-day/week/month buckets to stay within a width-based budget of 80–240 points. The resolution is shown beside the date range, and monotone interpolation softens the joins. Change calculations always use the full history's endpoints.
 
 ## go-autocomplete
 

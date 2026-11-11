@@ -2,12 +2,15 @@ import logging
 
 import requests
 from fastapi import HTTPException, Request, status
+from pydantic import ValidationError
 
 from api.config import Settings
 from api.monarchmoney.models import (
     MoneyAccountsResponse,
     MoneyAccountSummary,
     MoneyAccountSummaryType,
+    MoneyNetWorthHistoryIncoming,
+    MoneyNetWorthHistoryResponse,
     MoneyPortfolioIncoming,
     MoneyPortfolioOutgoing,
 )
@@ -75,13 +78,66 @@ def _post_graphql(body: dict) -> dict:
     except requests.exceptions.RequestException:
         detail = "Could not connect to Monarch Money. Try again later."
     else:
-        return response.json()
+        try:
+            payload = response.json()
+        except ValueError:
+            detail = "Monarch Money returned an invalid response. Try again later."
+        else:
+            if not isinstance(payload, dict):
+                detail = "Monarch Money returned an invalid response. Try again later."
+            elif payload.get("errors"):
+                detail = "Monarch Money could not complete the query. Try again later."
+            else:
+                return payload
 
     logger.warning("Monarch operation %s failed: %s", body["operationName"], detail)
     raise HTTPException(
         status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
         detail=detail,
     ) from None
+
+
+@cache("money:net-worth-history", MoneyNetWorthHistoryResponse, ttl=60 * 5)
+async def retrieve_net_worth_history(
+    request: Request, end_date: str, start_date: str | None = None
+) -> MoneyNetWorthHistoryResponse:
+    filters = {
+        "endDate": end_date,
+        # Adaptive monthly snapshots omit the current partial month.
+        "useAdaptiveGranularity": False,
+        "accountFilters": {},
+    }
+    if start_date is not None:
+        filters["startDate"] = start_date
+    body = {
+        "operationName": "Common_GetAggregateSnapshots",
+        "variables": {"filters": filters},
+        "query": """
+            query Common_GetAggregateSnapshots($filters: AggregateSnapshotFilters) {
+                aggregateSnapshots(filters: $filters) {
+                    date
+                    balance
+                    assetsBalance
+                    liabilitiesBalance
+                }
+            }
+        """,
+    }
+    try:
+        response = MoneyNetWorthHistoryIncoming.model_validate(_post_graphql(body))
+    except ValidationError:
+        detail = "Monarch Money returned invalid net-worth history. Try again later."
+        logger.warning("Monarch operation %s failed: %s", body["operationName"], detail)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=detail
+        ) from None
+
+    snapshots_by_date = {
+        snapshot.date: snapshot for snapshot in response.data.aggregateSnapshots
+    }
+    return MoneyNetWorthHistoryResponse(
+        snapshots=[snapshots_by_date[day] for day in sorted(snapshots_by_date)]
+    )
 
 
 @cache("money:portfolio", MoneyPortfolioOutgoing, ttl=60 * 5)

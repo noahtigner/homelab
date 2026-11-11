@@ -2,11 +2,13 @@ import type { ReactNode } from 'react';
 import { isAxiosError } from 'axios';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getNetWorthTotal } from '@/lib/netWorthHistory';
 import useQueryMoneyAccounts, {
 	AccountTypeSummary,
 	NetWorthSummaryData,
 } from '../../hooks/useQueryMoneyAccounts';
 import { useInvestmentSummary } from '../../hooks/useInvestmentSummary';
+import NetWorthHistory from './NetWorthHistory';
 
 const formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -86,14 +88,7 @@ function NetWorthSummaryInner({
 	accounts: NetWorthSummaryData;
 	portfolio: { totalValue: number; oneDayChangeDollars: number };
 }) {
-	const totalNetWorth = accounts.data.accountTypeSummaries.reduce(
-		(acc, accountTypeSummary) =>
-			acc +
-			(accountTypeSummary.type.group === 'asset'
-				? accountTypeSummary.totalDisplayBalance
-				: -accountTypeSummary.totalDisplayBalance),
-		0
-	);
+	const totalNetWorth = getNetWorthTotal(accounts.data.accountTypeSummaries);
 	const totalAssets = accounts.data.accountTypeSummaries
 		.filter((accountType) => accountType.type.group === 'asset')
 		.reduce(
@@ -156,7 +151,7 @@ function NetWorthSummaryInner({
 	return (
 		<table className="w-full text-sm">
 			<tbody>
-				<tr className="border-b">
+				<tr className="border-b font-bold">
 					<td className="py-1 pr-4">
 						<div className="flex justify-between gap-2">
 							<span className="text-muted-foreground">
@@ -178,9 +173,7 @@ function NetWorthSummaryInner({
 						</div>
 					</td>
 					<SummaryCell label="Net Worth">
-						<span className="font-medium">
-							{formatter.format(totalNetWorth)}
-						</span>
+						<span>{formatter.format(totalNetWorth)}</span>
 					</SummaryCell>
 				</tr>
 				<tr className="border-b">
@@ -229,8 +222,11 @@ function NetWorthSummaryInner({
 	);
 }
 
-function NetWorthSummary() {
-	const accounts = useQueryMoneyAccounts();
+function NetWorthSummary({
+	accounts,
+}: {
+	accounts: ReturnType<typeof useQueryMoneyAccounts>;
+}) {
 	const portfolio = useInvestmentSummary();
 	const error = accounts.error ?? portfolio.error;
 
@@ -273,6 +269,10 @@ function NetWorthSummary() {
 }
 
 function NetWorthSummaryCard() {
+	const accounts = useQueryMoneyAccounts();
+	const currentNetWorth = accounts.data
+		? getNetWorthTotal(accounts.data.data.accountTypeSummaries)
+		: undefined;
 	return (
 		<Card>
 			<CardContent>
@@ -292,7 +292,8 @@ function NetWorthSummaryCard() {
 						<h2 className="text-xl">Monarch Money</h2>
 					</a>
 				</div>
-				<NetWorthSummary />
+				<NetWorthSummary accounts={accounts} />
+				<NetWorthHistory currentNetWorth={currentNetWorth} />
 			</CardContent>
 		</Card>
 	);

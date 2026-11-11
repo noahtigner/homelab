@@ -9,6 +9,8 @@ vi.mock('../../services/api/utils', () => ({
 	getRequest: vi.fn(),
 }));
 
+vi.mock('./NetWorthHistory', () => ({ default: () => null }));
+
 describe('NetWorthSummary errors', () => {
 	const clients: QueryClient[] = [];
 
