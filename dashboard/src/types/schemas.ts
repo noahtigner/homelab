@@ -243,6 +243,17 @@ export const netWorthSummaryDataSchema = z.object({
 	}),
 });
 
+export const netWorthHistorySchema = z.object({
+	snapshots: z.array(
+		z.object({
+			date: z.iso.date(),
+			balance: z.number(),
+			assetsBalance: z.number(),
+			liabilitiesBalance: z.number(),
+		})
+	),
+});
+
 // OGP Preview schema
 export const ogpPreviewSchema = z.object({
 	hybridGraph: z.object({

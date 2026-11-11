@@ -1,6 +1,7 @@
+from datetime import date as Date
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, FiniteFloat
 
 
 class MoneyPerformance(BaseModel):
@@ -22,6 +23,25 @@ class MoneyPortfolioIncoming(BaseModel):
 
 class MoneyPortfolioOutgoing(MoneyPerformance):
     pass
+
+
+class MoneyNetWorthSnapshot(BaseModel):
+    date: Date
+    balance: FiniteFloat
+    assetsBalance: FiniteFloat
+    liabilitiesBalance: FiniteFloat
+
+
+class MoneyNetWorthHistoryData(BaseModel):
+    aggregateSnapshots: list[MoneyNetWorthSnapshot]
+
+
+class MoneyNetWorthHistoryIncoming(BaseModel):
+    data: MoneyNetWorthHistoryData
+
+
+class MoneyNetWorthHistoryResponse(BaseModel):
+    snapshots: list[MoneyNetWorthSnapshot]
 
 
 class MoneyAccountInstitution(BaseModel):
