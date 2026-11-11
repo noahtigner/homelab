@@ -22,7 +22,8 @@ services:
     secrets:
       - pihole_password
       - ga4_credentials
-      - monarchmoney_token
+      - monarchmoney_session_id
+      - monarchmoney_csrf_token
       - plex_token
     labels:
       - 'traefik.enable=true'
@@ -134,7 +135,9 @@ secrets:
     file: './secrets/slack_app_token.txt'
   ga4_credentials:
     file: './secrets/ga4_credentials.json'
-  monarchmoney_token:
-    file: './secrets/monarchmoney_token.txt'
+  monarchmoney_session_id:
+    file: './secrets/monarchmoney_session_id.txt'
+  monarchmoney_csrf_token:
+    file: './secrets/monarchmoney_csrf_token.txt'
   plex_token:
     file: './secrets/plex_token.txt'
