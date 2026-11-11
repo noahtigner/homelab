@@ -109,7 +109,7 @@ services:
     build:
       context: ./go_autocomplete
     environment:
-      CORS_ALLOWED_ORIGIN: '${CORS_ALLOWED_ORIGIN}'
+      CORS_ALLOWED_ORIGIN: '${GO_AUTOCOMPLETE_CORS_ALLOWED_ORIGIN}'
     ports:
       - '8090:8090'
     restart: 'unless-stopped'
