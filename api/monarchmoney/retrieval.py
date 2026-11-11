@@ -1,4 +1,3 @@
-import json
 import logging
 
 import requests
@@ -17,11 +16,76 @@ from api.utils.cache import cache
 logger = logging.getLogger(__name__)
 
 MONARCH_GRAPHQL_ENDPOINT = "https://api.monarch.com/graphql"
+MONARCH_USER_AGENT = (
+    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:160.0) Gecko/20100101 Firefox/160.0"
+)
+
+
+def _post_graphql(body: dict) -> dict:
+    """Send a query with the saved browser session and matching CSRF token."""
+    try:
+        response = requests.post(
+            MONARCH_GRAPHQL_ENDPOINT,
+            json=body,
+            cookies={
+                "session_id": Settings.MONARCHMONEY_SESSION_ID,
+                "csrftoken": Settings.MONARCHMONEY_CSRF_TOKEN,
+            },
+            headers={
+                "X-CSRFToken": Settings.MONARCHMONEY_CSRF_TOKEN,
+                "Origin": "https://app.monarch.com",
+                "User-Agent": MONARCH_USER_AGENT,
+                "Content-Type": "application/json",
+            },
+            timeout=(5, 30),
+        )
+        response.raise_for_status()
+    except requests.exceptions.Timeout:
+        detail = "Monarch Money request timed out. Try again later."
+    except requests.exceptions.HTTPError as error:
+        upstream = error.response
+        code = upstream.status_code if upstream is not None else None
+        if code == 401:
+            detail = (
+                "Monarch authentication needs renewal. Replace the session and "
+                "CSRF secrets and recreate the API container."
+            )
+        elif code == 403:
+            try:
+                payload = upstream.json()
+                upstream_detail = (
+                    payload.get("detail") if isinstance(payload, dict) else None
+                )
+            except ValueError:
+                upstream_detail = None
+            if isinstance(upstream_detail, str) and upstream_detail.startswith(
+                "CSRF Failed:"
+            ):
+                detail = (
+                    "Monarch rejected CSRF validation. Check that the session and "
+                    "CSRF credentials come from the same browser session."
+                )
+            else:
+                detail = (
+                    "Monarch rejected the request. Check the session credentials "
+                    "and browser-style request headers."
+                )
+        else:
+            detail = "Monarch Money returned an upstream HTTP error. Try again later."
+    except requests.exceptions.RequestException:
+        detail = "Could not connect to Monarch Money. Try again later."
+    else:
+        return response.json()
+
+    logger.warning("Monarch operation %s failed: %s", body["operationName"], detail)
+    raise HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        detail=detail,
+    ) from None
 
 
 @cache("money:portfolio", MoneyPortfolioOutgoing, ttl=60 * 5)
 async def retrieve_portfolio(request: Request) -> MoneyPortfolioOutgoing:
-    token = Settings.MONARCHMONEY_API_TOKEN
     body = {
         "operationName": "Web_GetInvestmentsDashboardCard",
         "variables": {},
@@ -37,27 +101,11 @@ async def retrieve_portfolio(request: Request) -> MoneyPortfolioOutgoing:
         """,
     }
 
-    try:
-        r = requests.post(
-            MONARCH_GRAPHQL_ENDPOINT,
-            data=json.dumps(body),
-            headers={
-                "Authorization": f"Token {token}",
-                "Content-Type": "application/json",
-            },
-        )
-        r.raise_for_status()
-        data = MoneyPortfolioIncoming(**r.json())
-        return MoneyPortfolioOutgoing(
-            totalValue=data.data.portfolio.performance.totalValue,
-            oneDayChangeDollars=data.data.portfolio.performance.oneDayChangeDollars,
-        )
-    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Connection to Monarch Money Refused: {e}",
-        )
+    data = MoneyPortfolioIncoming(**_post_graphql(body))
+    return MoneyPortfolioOutgoing(
+        totalValue=data.data.portfolio.performance.totalValue,
+        oneDayChangeDollars=data.data.portfolio.performance.oneDayChangeDollars,
+    )
 
 
 def _split_mortgage_from_loans(response: MoneyAccountsResponse) -> None:
@@ -105,7 +153,6 @@ def _split_mortgage_from_loans(response: MoneyAccountsResponse) -> None:
 
 @cache("money:accounts", MoneyAccountsResponse, ttl=60 * 5)
 async def retrieve_accounts(request: Request) -> MoneyAccountsResponse:
-    token = Settings.MONARCHMONEY_API_TOKEN
     body = {
         "operationName": "Web_GetAccountsPage",
         "variables": {},
@@ -161,23 +208,6 @@ async def retrieve_accounts(request: Request) -> MoneyAccountsResponse:
         """,
     }
 
-    try:
-        r = requests.post(
-            MONARCH_GRAPHQL_ENDPOINT,
-            data=json.dumps(body),
-            headers={
-                "Authorization": f"Token {token}",
-                "Content-Type": "application/json",
-            },
-        )
-        r.raise_for_status()
-
-        response = MoneyAccountsResponse(**r.json())
-        _split_mortgage_from_loans(response)
-        return response
-    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as e:
-        logger.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Connection to Monarch Money Refused: {e}",
-        )
+    response = MoneyAccountsResponse(**_post_graphql(body))
+    _split_mortgage_from_loans(response)
+    return response

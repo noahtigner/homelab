@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { isAxiosError } from 'axios';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import useQueryMoneyAccounts, {
@@ -234,10 +235,18 @@ function NetWorthSummary() {
 	const error = accounts.error ?? portfolio.error;
 
 	if (error) {
+		const detail: unknown = isAxiosError<{ detail?: unknown }>(error)
+			? error.response?.data?.detail
+			: undefined;
+		const message =
+			typeof detail === 'string' && detail.trim()
+				? detail
+				: error.message;
+
 		return (
 			<div>
-				<h2 className="mb-2 text-xl">An unexpected error occurred</h2>
-				<h3 className="break-words text-base">{error.message}</h3>
+				<h2 className="mb-2 text-xl">Monarch Money unavailable</h2>
+				<h3 className="break-words text-base">{message}</h3>
 			</div>
 		);
 	}

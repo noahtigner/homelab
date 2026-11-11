@@ -34,6 +34,39 @@
 - [x] [go-autocomplete](https://github.com/noahtigner/go-autocomplete) - IMDb title autocomplete and substring search service
 - [ ] DB
 
+## Monarch Money
+
+The API uses a saved Monarch browser session for `/money/accounts/` and `/money/portfolio/`. It sends the `session_id` and `csrftoken` cookies, a matching `X-CSRFToken` header, the Monarch app origin, and a browser-style User-Agent.
+
+### Initial setup
+
+1. Sign in at [app.monarch.com](https://app.monarch.com), open your browser's developer tools, and select the **Network** tab.
+2. Navigate to an account page and inspect a successful request to `https://api.monarch.com/graphql`.
+3. Copy the request's `session_id` cookie value into `secrets/monarchmoney_session_id.txt`.
+4. Copy its `csrftoken` cookie value into `secrets/monarchmoney_csrf_token.txt`. This should match the request's `x-csrftoken` header. Obtain both values from the same browser session.
+
+Each file should contain only the cookie value, without quotes, cookie names, or other headers. These files are covered by the existing `secrets/` Git ignore rule. The API loads them through Docker secrets; local runs can supply the equivalent `monarchmoney_session_id` and `monarchmoney_csrf_token` environment variables. These replace the former `monarchmoney_token` configuration.
+
+Recreate the API container to load the new credentials. For development:
+
+```sh
+docker compose -f compose.dev.yml up -d --no-deps --force-recreate api
+```
+
+For production:
+
+```sh
+docker compose -f compose.dev.yml -f compose.pro.yml up -d --no-deps --force-recreate api
+```
+
+### Renewing a session
+
+Session lifetime is currently unknown. When Monarch returns **401**, the API responds with **503** and renewal instructions, which the dashboard displays. Obtain a fresh pair of cookie values, replace both secret files, and recreate the API container using the command above. Settings are loaded at process startup, so editing the files alone does not reload credentials.
+
+A **403** can instead indicate failed CSRF validation or request filtering. The API distinguishes those errors from an expired session and displays an appropriate message. It logs the failed operation and a controlled error message.
+
+Accounts and portfolio responses are cached for five minutes. After setup or renewal, verify both endpoints on a cache miss (allow existing cached entries to expire) to confirm that upstream authentication succeeds.
+
 ## go-autocomplete
 
 Start the service with:
