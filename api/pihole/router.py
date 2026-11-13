@@ -3,8 +3,12 @@ import logging
 import requests
 from fastapi import APIRouter, HTTPException, Request, status
 
-from api.pihole.models import PiholeRecentStatsResponse
-from api.pihole.retrieval import retrieve_blocking, retrieve_recent_stats
+from api.pihole.models import PiholeHistoryResponse, PiholeRecentStatsResponse
+from api.pihole.retrieval import (
+    retrieve_blocking,
+    retrieve_history,
+    retrieve_recent_stats,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -38,3 +42,15 @@ async def get_pihole_summary(request: Request):
     except Exception as e:
         logger.error(f"Error retrieving Pi-hole summary: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+
+
+@router.get("/history/", response_model=PiholeHistoryResponse)
+async def get_pihole_history(request: Request):
+    try:
+        return await retrieve_history(request)
+    except Exception:
+        logger.warning("Could not retrieve Pi-hole history")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Pi-hole history is unavailable. Try again later.",
+        ) from None

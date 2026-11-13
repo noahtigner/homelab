@@ -34,6 +34,12 @@
 - [x] [go-autocomplete](https://github.com/noahtigner/go-autocomplete) - IMDb title autocomplete and substring search service
 - [ ] DB
 
+## Pi-hole dashboard
+
+The Pi-hole DNS Ad Blocking card combines rolling 24-hour query totals, query rate, blocked percentage, blocked-domain count, and client count. Its compact 90px chart uses filled total-query (mint) and blocked-query (amber) series on a shared zero-based scale. The blocked series is drawn last so its fill and line remain on top of the total series.
+
+`GET /pihole/history/` proxies Pi-hole v6's `/api/history/database` for the previous 24 hours using the existing Pi-hole session authentication. It returns `window_start`, `window_end`, `interval_seconds` (600), and a `history` array of `{timestamp, total, blocked}` buckets. Timestamps are Unix seconds. Results are cached for 30 seconds, and the dashboard polls every 30 seconds. The chart connects recorded buckets across missing intervals, with tooltips showing only recorded counts. History failures leave summary values visible. Compact metrics wrap onto additional rows on smaller screens.
+
 ## Monarch Money
 
 The API uses a saved Monarch browser session for `/money/accounts/`, `/money/portfolio/`, and `/money/net-worth-history/`. It sends the `session_id` and `csrftoken` cookies, a matching `X-CSRFToken` header, the Monarch app origin, and a browser-style User-Agent.
