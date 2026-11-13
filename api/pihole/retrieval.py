@@ -9,6 +9,8 @@ from api.pihole.authentication import pihole_session
 from api.pihole.models import (
     PiholeBlockingResponse,
     PiholeFTLSummary,
+    PiholeHistoryIncoming,
+    PiholeHistoryResponse,
     PiholeRecentStats,
     PiholeRecentStatsResponse,
 )
@@ -59,3 +61,27 @@ async def retrieve_recent_stats(
 
     data = PiholeRecentStatsResponse(**stats_data.model_dump(), **ftl_data.model_dump())
     return data
+
+
+@cache("pihole:history", PiholeHistoryResponse, ttl=30)
+@pihole_session
+async def retrieve_history(request: Request, sid: str) -> PiholeHistoryResponse:
+    now = int(time.time())
+    window_start = now - 24 * 60 * 60
+    response = requests.get(
+        f"{Settings.PIHOLE_API_BASE}/api/history/database",
+        params={"from": window_start, "until": now},
+        headers={"X-FTL-SID": sid},
+        verify=False,
+        timeout=(5, 20),
+    )
+    response.raise_for_status()
+    incoming = PiholeHistoryIncoming.model_validate(response.json())
+    points = {point.timestamp: point for point in incoming.history}
+    return PiholeHistoryResponse(
+        history=[points[timestamp] for timestamp in sorted(points)],
+        window_start=window_start,
+        window_end=now,
+        # Pi-hole's long-term database history uses ten-minute buckets.
+        interval_seconds=600,
+    )
