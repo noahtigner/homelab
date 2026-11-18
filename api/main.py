@@ -1,5 +1,6 @@
+import asyncio
 import logging
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from itertools import product
 
 import redis.asyncio as redis
@@ -10,6 +11,7 @@ from api.cache.router import router as cache_router
 from api.config import Settings
 from api.github.router import router as github_router
 from api.google_analytics.router import router as google_analytics_router
+from api.leetcode.activity import activity_worker
 from api.leetcode.router import router as leetcode_router
 from api.monarchmoney.router import router as monarchmoney_router
 from api.nas.router import router as nas_router
@@ -83,9 +85,14 @@ async def lifespan(app: FastAPI):
     # set up redis cache
     app.state.redis = redis.Redis(host="cache", port=6379, db=0)
     logger.info(f"Ping successful: {await app.state.redis.ping()}")
-    yield
-    # cleanup
-    await app.state.redis.close()
+    worker = asyncio.create_task(activity_worker())
+    try:
+        yield
+    finally:
+        worker.cancel()
+        with suppress(asyncio.CancelledError):
+            await worker
+        await app.state.redis.close()
 
 
 api = FastAPI(

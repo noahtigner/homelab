@@ -1,4 +1,11 @@
-import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
+import {
+	ResponsiveContainer,
+	AreaChart,
+	Area,
+	Tooltip,
+	YAxis,
+	CartesianGrid,
+} from 'recharts';
 import type { TooltipContentProps } from 'recharts';
 import type { z } from 'zod';
 
@@ -10,11 +17,16 @@ import type { activePerDaySchema } from '@/types/schemas';
 
 type ActivePerDay = z.infer<typeof activePerDaySchema>;
 
+const countFormatter = new Intl.NumberFormat('en-US', {
+	notation: 'compact',
+	maximumFractionDigits: 1,
+});
+
 function ActiveUsersChips({ activePerDay }: { activePerDay: ActivePerDay }) {
 	const chipData = [
 		{
 			label: 'Today',
-			value: activePerDay.per_day.slice(-1)[0].active_users,
+			value: activePerDay.per_day.slice(-1)[0]?.active_users ?? 0,
 		},
 		{
 			label: 'This Week',
@@ -80,28 +92,56 @@ function AnalyticsSummary({ activePerDay }: { activePerDay: ActivePerDay }) {
 			>
 				<h2 className="text-xl">noahtigner.com</h2>
 			</a>
-			<div className="mt-auto">
-				<ResponsiveContainer
-					width="100%"
-					aspect={15}
-					style={{ zIndex: 50 }}
-				>
-					<AreaChart
-						data={activePerDay.per_day}
-						margin={{ top: 0, right: 0, bottom: 2, left: 0 }}
+			<div
+				className="relative mt-2 min-h-[120px] min-w-0 flex-1"
+				role="img"
+				aria-label="Daily active users"
+			>
+				<div className="absolute inset-0">
+					<ResponsiveContainer
+						width="100%"
+						height="100%"
+						minWidth={0}
 					>
-						<Area
-							type="monotone"
-							dataKey="active_users"
-							stroke="var(--color-primary)"
-							fill="var(--color-primary)"
-							fillOpacity={0.2}
-						/>
-						<Tooltip content={CustomTooltip} />
-					</AreaChart>
-				</ResponsiveContainer>
-				<ActiveUsersChips activePerDay={activePerDay} />
+						<AreaChart
+							data={activePerDay.per_day}
+							margin={{ top: 8, right: 4, bottom: 8, left: 0 }}
+							accessibilityLayer
+						>
+							<CartesianGrid
+								vertical={false}
+								stroke="var(--border)"
+							/>
+							<YAxis
+								domain={[0, 'auto']}
+								allowDecimals={false}
+								tickCount={4}
+								interval={0}
+								width={44}
+								tickFormatter={(value: number) =>
+									countFormatter.format(value)
+								}
+								tick={{
+									fill: 'var(--muted-foreground)',
+									fontSize: 11,
+								}}
+								tickLine={false}
+								axisLine={false}
+							/>
+							<Area
+								type="monotone"
+								dataKey="active_users"
+								stroke="var(--primary)"
+								fill="var(--primary)"
+								fillOpacity={0.2}
+								isAnimationActive={false}
+							/>
+							<Tooltip content={CustomTooltip} />
+						</AreaChart>
+					</ResponsiveContainer>
+				</div>
 			</div>
+			<ActiveUsersChips activePerDay={activePerDay} />
 		</>
 	);
 }
@@ -119,9 +159,9 @@ function ActiveUsersPerDayCardContent() {
 
 	if (isLoading || !data) {
 		return (
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-1 flex-col gap-2">
 				<Skeleton className="h-6 w-40" />
-				<Skeleton className="h-16 w-full" />
+				<Skeleton className="min-h-[120px] w-full flex-1" />
 				<Skeleton className="h-6 w-64" />
 			</div>
 		);

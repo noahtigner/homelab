@@ -281,16 +281,18 @@ describe('NetWorthHistory', () => {
 				? response({ snapshots })
 				: new Promise(() => {});
 		});
-		renderHistory(<NetWorthSummaryCard />);
+		renderHistory(
+			<NetWorthSummaryCard isPrivate={false} onTogglePrivacy={vi.fn()} />
+		);
 		const history = within(
 			screen.getByRole('region', { name: 'Net worth history' })
 		);
 		await history.findByTestId('plotted-history');
 		const current = history.getByLabelText('Current net worth');
 		expect(current).toHaveTextContent('$1,500.00');
-		expect(
-			within(screen.getByRole('table')).getByText('$1,500.00')
-		).toBeInTheDocument();
+		const table = await screen.findByRole('table', { hidden: true });
+		expect(table).not.toBeVisible();
+		expect(within(table).getByText('$1,500.00')).toBeInTheDocument();
 		fireEvent.change(history.getByRole('combobox'), {
 			target: { value: '1m' },
 		});
@@ -304,7 +306,7 @@ describe('NetWorthHistory', () => {
 		expect(historyRequests).toBe(2);
 	});
 
-	it('keeps the table visible when history needs session renewal', async () => {
+	it('allows expanding the table when history needs session renewal', async () => {
 		const detail = 'Monarch authentication needs renewal.';
 		const error = new AxiosError(
 			'Request failed',
@@ -324,8 +326,11 @@ describe('NetWorthHistory', () => {
 					: { totalValue: 1000, oneDayChangeDollars: 10 }
 			);
 		});
-		renderHistory(<NetWorthSummaryCard />);
+		renderHistory(
+			<NetWorthSummaryCard isPrivate={false} onTogglePrivacy={vi.fn()} />
+		);
 		expect(await screen.findByText(detail)).toBeInTheDocument();
+		fireEvent.click(screen.getByText('Account details'));
 		await waitFor(() =>
 			expect(screen.getByRole('table')).toBeInTheDocument()
 		);
@@ -335,5 +340,62 @@ describe('NetWorthHistory', () => {
 		expect(
 			screen.queryByText('Monarch Money unavailable')
 		).not.toBeInTheDocument();
+	});
+
+	it('shows the chart above a collapsed table and preserves disclosure state across range changes', async () => {
+		vi.mocked(servicesClient.get).mockImplementation(async (url) =>
+			response(
+				url === '/money/accounts/'
+					? { data: { accountTypeSummaries: [] } }
+					: url === '/money/portfolio/'
+						? { totalValue: 1000, oneDayChangeDollars: 10 }
+						: { snapshots }
+			)
+		);
+		renderHistory(
+			<NetWorthSummaryCard isPrivate={false} onTogglePrivacy={vi.fn()} />
+		);
+		await screen.findByTestId('plotted-history');
+		const chart = screen.getByRole('region', { name: 'Net worth history' });
+		const trigger = screen.getByText('Account details');
+		const disclosure = trigger.closest('details');
+		const table = await screen.findByRole('table', { hidden: true });
+		expect(disclosure).not.toHaveAttribute('open');
+		expect(table).not.toBeVisible();
+		expect(chart).toBeVisible();
+		expect(
+			chart.compareDocumentPosition(disclosure!) &
+				Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
+		fireEvent.click(trigger);
+		expect(disclosure).toHaveAttribute('open');
+		expect(table).toBeVisible();
+		for (const label of [
+			'Assets',
+			'Liabilities',
+			'Net Worth',
+			'Equity',
+			'Portfolio',
+			'Liquid Funds',
+		]) {
+			expect(within(table).getByText(label)).toBeVisible();
+		}
+		fireEvent.change(screen.getByRole('combobox'), {
+			target: { value: '1m' },
+		});
+		await screen.findByTestId('plotted-history');
+		expect(disclosure).toHaveAttribute('open');
+		expect(screen.getByRole('table')).toBe(table);
+		fireEvent.click(trigger);
+		expect(disclosure).not.toHaveAttribute('open');
+		expect(table).not.toBeVisible();
+		expect(screen.getByRole('combobox')).toHaveValue('1m');
+		for (const endpoint of ['/money/accounts/', '/money/portfolio/']) {
+			expect(
+				vi
+					.mocked(servicesClient.get)
+					.mock.calls.filter(([url]) => url === endpoint)
+			).toHaveLength(1);
+		}
 	});
 });

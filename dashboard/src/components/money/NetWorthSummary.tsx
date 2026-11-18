@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { isAxiosError } from 'axios';
+import { ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getNetWorthTotal } from '@/lib/netWorthHistory';
@@ -9,6 +10,7 @@ import useQueryMoneyAccounts, {
 } from '../../hooks/useQueryMoneyAccounts';
 import { useInvestmentSummary } from '../../hooks/useInvestmentSummary';
 import NetWorthHistory from './NetWorthHistory';
+import SensitiveValue from './SensitiveValue';
 
 const formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -38,9 +40,11 @@ const getAccountTypeSummary = (
 function AccountBalanceCell({
 	accountType,
 	label = accountType?.type.display,
+	isPrivate,
 }: {
 	accountType?: AccountTypeSummary;
 	label?: string;
+	isPrivate: boolean;
 }) {
 	if (!accountType || !label) {
 		return <td />;
@@ -57,7 +61,9 @@ function AccountBalanceCell({
 							: 'text-destructive-foreground'
 					}
 				>
-					{formatter.format(accountType.totalDisplayBalance)}
+					<SensitiveValue hidden={isPrivate}>
+						{formatter.format(accountType.totalDisplayBalance)}
+					</SensitiveValue>
 				</span>
 			</div>
 		</td>
@@ -84,9 +90,11 @@ function SummaryCell({
 function NetWorthSummaryInner({
 	accounts,
 	portfolio,
+	isPrivate,
 }: {
 	accounts: NetWorthSummaryData;
 	portfolio: { totalValue: number; oneDayChangeDollars: number };
+	isPrivate: boolean;
 }) {
 	const totalNetWorth = getNetWorthTotal(accounts.data.accountTypeSummaries);
 	const totalAssets = accounts.data.accountTypeSummaries
@@ -158,7 +166,9 @@ function NetWorthSummaryInner({
 								Assets
 							</span>
 							<span className="text-success-foreground">
-								{formatter.format(totalAssets)}
+								<SensitiveValue hidden={isPrivate}>
+									{formatter.format(totalAssets)}
+								</SensitiveValue>
 							</span>
 						</div>
 					</td>
@@ -168,32 +178,50 @@ function NetWorthSummaryInner({
 								Liabilities
 							</span>
 							<span className="text-destructive-foreground">
-								{formatter.format(totalLiabilities)}
+								<SensitiveValue hidden={isPrivate}>
+									{formatter.format(totalLiabilities)}
+								</SensitiveValue>
 							</span>
 						</div>
 					</td>
 					<SummaryCell label="Net Worth">
-						<span>{formatter.format(totalNetWorth)}</span>
+						<SensitiveValue hidden={isPrivate}>
+							{formatter.format(totalNetWorth)}
+						</SensitiveValue>
 					</SummaryCell>
 				</tr>
 				<tr className="border-b">
-					<AccountBalanceCell accountType={realEstate} />
+					<AccountBalanceCell
+						accountType={realEstate}
+						isPrivate={isPrivate}
+					/>
 					<AccountBalanceCell
 						accountType={mortgage}
 						label="Mortgage"
+						isPrivate={isPrivate}
 					/>
 					<SummaryCell label="Equity">
 						<span className="font-medium">
-							{formatter.format(equity)}
+							<SensitiveValue hidden={isPrivate}>
+								{formatter.format(equity)}
+							</SensitiveValue>
 						</span>
 					</SummaryCell>
 				</tr>
 				<tr className="border-b">
-					<AccountBalanceCell accountType={investments} />
-					<AccountBalanceCell accountType={loans} />
+					<AccountBalanceCell
+						accountType={investments}
+						isPrivate={isPrivate}
+					/>
+					<AccountBalanceCell
+						accountType={loans}
+						isPrivate={isPrivate}
+					/>
 					<SummaryCell label="Portfolio">
 						<span className="font-medium">
-							{formatter.format(portfolio.totalValue)}
+							<SensitiveValue hidden={isPrivate}>
+								{formatter.format(portfolio.totalValue)}
+							</SensitiveValue>
 						</span>
 					</SummaryCell>
 				</tr>
@@ -201,19 +229,29 @@ function NetWorthSummaryInner({
 					<tr key={index} className="border-b">
 						<AccountBalanceCell
 							accountType={remainingAssets[index]}
+							isPrivate={isPrivate}
 						/>
 						<AccountBalanceCell
 							accountType={remainingLiabilities[index]}
+							isPrivate={isPrivate}
 						/>
 						<td />
 					</tr>
 				))}
 				<tr>
-					<AccountBalanceCell accountType={cash} />
-					<AccountBalanceCell accountType={creditCards} />
+					<AccountBalanceCell
+						accountType={cash}
+						isPrivate={isPrivate}
+					/>
+					<AccountBalanceCell
+						accountType={creditCards}
+						isPrivate={isPrivate}
+					/>
 					<SummaryCell label="Liquid Funds">
 						<span className="font-medium">
-							{formatter.format(liquidFunds)}
+							<SensitiveValue hidden={isPrivate}>
+								{formatter.format(liquidFunds)}
+							</SensitiveValue>
 						</span>
 					</SummaryCell>
 				</tr>
@@ -224,8 +262,10 @@ function NetWorthSummaryInner({
 
 function NetWorthSummary({
 	accounts,
+	isPrivate,
 }: {
 	accounts: ReturnType<typeof useQueryMoneyAccounts>;
+	isPrivate: boolean;
 }) {
 	const portfolio = useInvestmentSummary();
 	const error = accounts.error ?? portfolio.error;
@@ -264,11 +304,18 @@ function NetWorthSummary({
 		<NetWorthSummaryInner
 			accounts={accounts.data}
 			portfolio={portfolio.data}
+			isPrivate={isPrivate}
 		/>
 	);
 }
 
-function NetWorthSummaryCard() {
+function NetWorthSummaryCard({
+	isPrivate,
+	onTogglePrivacy,
+}: {
+	isPrivate: boolean;
+	onTogglePrivacy: () => void;
+}) {
 	const accounts = useQueryMoneyAccounts();
 	const currentNetWorth = accounts.data
 		? getNetWorthTotal(accounts.data.data.accountTypeSummaries)
@@ -291,9 +338,44 @@ function NetWorthSummaryCard() {
 					>
 						<h2 className="text-xl">Monarch Money</h2>
 					</a>
+					<button
+						type="button"
+						onClick={onTogglePrivacy}
+						aria-label="Money privacy mode"
+						aria-pressed={isPrivate}
+						title={
+							isPrivate
+								? 'Show money amounts'
+								: 'Hide money amounts'
+						}
+						className="ml-auto inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
+					>
+						{isPrivate ? (
+							<EyeOff aria-hidden="true" className="size-4" />
+						) : (
+							<Eye aria-hidden="true" className="size-4" />
+						)}
+					</button>
 				</div>
-				<NetWorthSummary accounts={accounts} />
-				<NetWorthHistory currentNetWorth={currentNetWorth} />
+				<NetWorthHistory
+					currentNetWorth={currentNetWorth}
+					isPrivate={isPrivate}
+				/>
+				<details className="group/details mt-3 border-t pt-2">
+					<summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+						Account details
+						<ChevronDown
+							aria-hidden="true"
+							className="size-4 shrink-0 transition-transform group-open/details:rotate-180 motion-reduce:transition-none"
+						/>
+					</summary>
+					<div className="min-w-0 overflow-x-auto pt-2">
+						<NetWorthSummary
+							accounts={accounts}
+							isPrivate={isPrivate}
+						/>
+					</div>
+				</details>
 			</CardContent>
 		</Card>
 	);

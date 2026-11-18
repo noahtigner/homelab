@@ -23,6 +23,7 @@ import {
 	sampleNetWorthHistory,
 	type NetWorthPeriod,
 } from '@/lib/netWorthHistory';
+import SensitiveValue from './SensitiveValue';
 
 const currency = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -69,7 +70,13 @@ function HistoryTooltip({ active, payload }: TooltipContentProps) {
 	);
 }
 
-function HistoryChart({ snapshots }: { snapshots: NetWorthSnapshot[] }) {
+function HistoryChart({
+	snapshots,
+	isPrivate,
+}: {
+	snapshots: NetWorthSnapshot[];
+	isPrivate: boolean;
+}) {
 	const [pointBudget, setPointBudget] = useState(240);
 	const handleResize = useCallback((width: number) => {
 		// Account for the Y axis and right chart margin.
@@ -146,11 +153,13 @@ function HistoryChart({ snapshots }: { snapshots: NetWorthSnapshot[] }) {
 							tick={{
 								fill: 'var(--muted-foreground)',
 								fontSize: 11,
+								visibility: isPrivate ? 'hidden' : undefined,
+								'aria-hidden': isPrivate || undefined,
 							}}
 							tickLine={false}
 							axisLine={false}
 						/>
-						<Tooltip content={HistoryTooltip} />
+						{!isPrivate && <Tooltip content={HistoryTooltip} />}
 						<Area
 							type="monotoneX"
 							dataKey="balance"
@@ -171,8 +180,10 @@ function HistoryChart({ snapshots }: { snapshots: NetWorthSnapshot[] }) {
 
 export default function NetWorthHistory({
 	currentNetWorth,
+	isPrivate = false,
 }: {
 	currentNetWorth?: number;
+	isPrivate?: boolean;
 }) {
 	const [period, setPeriod] = useState<NetWorthPeriod>('6m');
 	const selectId = useId();
@@ -193,10 +204,7 @@ export default function NetWorthHistory({
 			: history.error?.message;
 
 	return (
-		<section
-			className="mt-5 min-w-0 border-t pt-4"
-			aria-label="Net worth history"
-		>
+		<section className="mt-3 min-w-0" aria-label="Net worth history">
 			<div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
 				<div
 					className="flex flex-wrap items-baseline gap-x-3 gap-y-1"
@@ -206,9 +214,13 @@ export default function NetWorthHistory({
 						className="text-xl font-bold"
 						aria-label="Current net worth"
 					>
-						{currentNetWorth === undefined
-							? '—'
-							: currency.format(currentNetWorth)}
+						<SensitiveValue
+							hidden={isPrivate && currentNetWorth !== undefined}
+						>
+							{currentNetWorth === undefined
+								? '—'
+								: currency.format(currentNetWorth)}
+						</SensitiveValue>
 					</span>
 					{change ? (
 						<span
@@ -220,9 +232,11 @@ export default function NetWorthHistory({
 										: 'text-muted-foreground'
 							}`}
 						>
-							{signedCurrency.format(change.dollars)}
-							{change.percent !== null &&
-								` (${percentage.format(change.percent)})`}{' '}
+							<SensitiveValue hidden={isPrivate}>
+								{signedCurrency.format(change.dollars)}
+								{change.percent !== null &&
+									` (${percentage.format(change.percent)})`}
+							</SensitiveValue>{' '}
 							<span className="text-muted-foreground">
 								{snapshots?.length === 1
 									? 'Only one snapshot available'
@@ -286,7 +300,10 @@ export default function NetWorthHistory({
 					No net-worth history available for this period.
 				</p>
 			) : (
-				<HistoryChart snapshots={history.data.snapshots} />
+				<HistoryChart
+					snapshots={history.data.snapshots}
+					isPrivate={isPrivate}
+				/>
 			)}
 		</section>
 	);

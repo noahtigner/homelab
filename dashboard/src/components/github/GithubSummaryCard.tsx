@@ -1,4 +1,3 @@
-import { GitCompareArrows } from 'lucide-react';
 import type { z } from 'zod';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGithubEvents } from '@/hooks/useGithubEvents';
 import type { githubEventsSchema } from '@/types/schemas';
+import GithubContributionCalendar from './GithubContributionCalendar';
 
 type GithubEvents = z.infer<typeof githubEventsSchema>;
 
@@ -40,11 +40,7 @@ function GithubChips({ githubEvents }: { githubEvents: GithubEvents }) {
 function GithubSummary({ githubEvents }: { githubEvents: GithubEvents }) {
 	return (
 		<>
-			<div className="mb-2 flex grow justify-between">
-				<h3 className="text-2xl">Contributions</h3>
-				<GitCompareArrows className="size-8 text-success-foreground" />
-			</div>
-			<div>
+			<div className="grid gap-x-4 gap-y-1 sm:grid-cols-2">
 				{githubEvents.repos_seen
 					.slice(0, 4)
 					.map(({ id, name, url }) => (
@@ -98,7 +94,7 @@ function GithubSummaryCard() {
 				<div className="mb-1 flex items-center">
 					<img
 						src="https://github.githubassets.com/favicons/favicon-dark.svg"
-						alt="Github"
+						alt="GitHub"
 						width={20}
 						className="mr-2"
 					/>
@@ -108,10 +104,16 @@ function GithubSummaryCard() {
 						rel="noreferrer"
 						className="no-underline text-inherit hover:text-primary"
 					>
-						<h2 className="text-xl">Github</h2>
+						<h2 className="text-xl">GitHub</h2>
 					</a>
 				</div>
-				<GithubSummaryCardContent />
+				<GithubContributionCalendar />
+				<div className="mt-3 border-t pt-2">
+					<h3 className="mb-2 text-sm font-medium text-muted-foreground">
+						Recent public activity
+					</h3>
+					<GithubSummaryCardContent />
+				</div>
 			</CardContent>
 		</Card>
 	);
