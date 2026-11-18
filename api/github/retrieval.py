@@ -1,18 +1,132 @@
 import logging
+from datetime import date, datetime
 
 import requests
 from fastapi import HTTPException, Request, status
+from pydantic import ValidationError
 
 from api.config import Settings
 from api.github.models import (
+    ContributionCalendarModel,
     ContributionsModel,
     EventModel,
     EventsResponseModel,
     RepoModel,
 )
 from api.utils.cache import cache
+from api.utils.calendar import calendar_date_range
 
 logger = logging.getLogger(__name__)
+
+CONTRIBUTIONS_QUERY = """
+    query DashboardContributions($login: String!) {
+        user(login: $login) {
+            contributionsCollection {
+                startedAt
+                endedAt
+                contributionCalendar {
+                    totalContributions
+                    weeks {
+                        firstDay
+                        contributionDays {
+                            date
+                            weekday
+                            contributionCount
+                            contributionLevel
+                        }
+                    }
+                }
+            }
+        }
+    }
+"""
+
+
+@cache("github:contributions:v2", ContributionCalendarModel, ttl=60 * 60)
+async def retrieve_contributions(
+    request: Request, username: str, as_of: str
+) -> ContributionCalendarModel:
+    # The username and local end date identify the fixed display window.
+    if not Settings.GITHUB_TOKEN:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Set GITHUB_TOKEN on the API to enable the GitHub contribution calendar.",
+        )
+
+    try:
+        response = requests.post(
+            "https://api.github.com/graphql",
+            json={
+                "operationName": "DashboardContributions",
+                "query": CONTRIBUTIONS_QUERY,
+                "variables": {"login": username},
+            },
+            headers={
+                "Authorization": f"Bearer {Settings.GITHUB_TOKEN}",
+                "Accept": "application/vnd.github+json",
+                "User-Agent": "homelab-dashboard",
+            },
+            timeout=(5, 20),
+        )
+        response.raise_for_status()
+    except requests.exceptions.Timeout:
+        detail = "GitHub contribution calendar timed out. Try again later."
+    except requests.exceptions.HTTPError as error:
+        upstream = error.response
+        code = upstream.status_code if upstream is not None else None
+        if code == 401:
+            detail = (
+                "GitHub token is invalid or expired. Update GITHUB_TOKEN on the API."
+            )
+        elif code in (403, 429):
+            detail = "GitHub denied or rate-limited the calendar request. Check token access or try again later."
+        else:
+            detail = "GitHub contribution calendar is unavailable. Try again later."
+    except requests.exceptions.RequestException:
+        detail = "Could not connect to GitHub for the contribution calendar. Try again later."
+    else:
+        try:
+            payload = response.json()
+            if payload.get("errors"):
+                raise ValueError("GraphQL errors")
+            user = payload["data"]["user"]
+            if user is None:
+                raise ValueError("Unknown GitHub user")
+            collection = user["contributionsCollection"]
+            calendar = ContributionCalendarModel(
+                username=username,
+                window_start=datetime.fromisoformat(collection["startedAt"]).date(),
+                window_end=datetime.fromisoformat(collection["endedAt"]).date(),
+                **collection["contributionCalendar"],
+            )
+            start, end = calendar_date_range(date.fromisoformat(as_of))
+            weeks = []
+            for week in calendar.weeks:
+                days = [day for day in week.days if start <= day.date <= end]
+                if days:
+                    weeks.append(week.model_copy(update={"days": days}))
+            if not weeks:
+                raise ValueError("No contribution dates in the requested window")
+            return calendar.model_copy(
+                update={
+                    "window_start": start,
+                    "window_end": end,
+                    "weeks": weeks,
+                    "total_contributions": sum(
+                        day.contribution_count for week in weeks for day in week.days
+                    ),
+                }
+            )
+        except ValueError, TypeError, KeyError, AttributeError, ValidationError:
+            detail = (
+                "GitHub returned invalid calendar data or could not complete the query. "
+                "Check the username and token access."
+            )
+
+    logger.warning("GitHub contribution calendar failed: %s", detail)
+    raise HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=detail
+    ) from None
 
 
 @cache("github:events", EventsResponseModel, ttl=60 * 60)

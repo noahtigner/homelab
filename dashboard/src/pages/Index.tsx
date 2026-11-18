@@ -1,4 +1,3 @@
-import LeetCodeSummaryCard from '@/components/leetcode/LeetCodeSummaryCard';
 // import DockerTable from '@/components/docker/DockerTable';
 import NPMPackageCard from '@/components/npm/NPMPackageCard';
 import GithubSummaryCard from '@/components/github/GithubSummaryCard';
@@ -12,8 +11,12 @@ import DashboardTable from '@/components/diagnostics/DiagnosticsTable';
 import NasStorageCard from '@/components/diagnostics/NasStorageCard';
 import PlexMediaLibraryCard from '@/components/plex/PlexMediaLibraryCard';
 import PlexActiveSessionsCard from '@/components/plex/PlexActiveSessionsCard';
+import { useGuestMode } from '@/hooks/useGuestMode';
+import LeetCodeActivityCard from '@/components/leetcode/LeetCodeActivityCard';
 
 function Index() {
+	const { isGuest, toggleGuestMode } = useGuestMode();
+
 	return (
 		<div className="grid grid-cols-12 gap-2 sm:gap-3">
 			<h1 className="sr-only">Homelab Dashboard</h1>
@@ -41,23 +44,26 @@ function Index() {
 			</div>
 
 			<div className="col-span-12">
-				<NetWorthSummaryCard />
+				<NetWorthSummaryCard
+					isPrivate={isGuest}
+					onTogglePrivacy={() => void toggleGuestMode()}
+				/>
 			</div>
 
 			<div className="col-span-12 sm:col-span-6 lg:col-span-4">
 				<ActiveUsersPerDayCard />
 			</div>
 			<div className="col-span-12 sm:col-span-6 lg:col-span-4">
-				<LeetCodeSummaryCard />
-			</div>
-			<div className="col-span-12 sm:col-span-6 lg:col-span-4">
 				<NPMPackageCard packageName="validate-env-vars" />
 			</div>
 			<div className="col-span-12 sm:col-span-6 lg:col-span-4">
-				<GithubSummaryCard />
-			</div>
-			<div className="col-span-12 sm:col-span-6 lg:col-span-4">
 				<OGPPreview url="https://noahtigner.com/" />
+			</div>
+			<div className="col-span-12 min-w-0">
+				<LeetCodeActivityCard />
+			</div>
+			<div className="col-span-12 min-w-0">
+				<GithubSummaryCard />
 			</div>
 		</div>
 	);

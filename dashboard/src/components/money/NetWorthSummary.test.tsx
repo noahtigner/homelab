@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AxiosError, AxiosHeaders } from 'axios';
 import NetWorthSummaryCard from './NetWorthSummary';
@@ -28,9 +28,13 @@ describe('NetWorthSummary errors', () => {
 		vi.mocked(getRequest).mockRejectedValue(error);
 		render(
 			<QueryClientProvider client={client}>
-				<NetWorthSummaryCard />
+				<NetWorthSummaryCard
+					isPrivate={false}
+					onTogglePrivacy={vi.fn()}
+				/>
 			</QueryClientProvider>
 		);
+		fireEvent.click(screen.getByText('Account details'));
 	};
 
 	it('displays the API renewal instructions', async () => {

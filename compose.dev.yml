@@ -5,6 +5,7 @@ services:
     command: 'uvicorn api.main:api --proxy-headers --host 0.0.0.0 --port 8000 --root-path /api --reload'
     volumes:
       - ./api:/app/api
+      - leetcode_activity_data:/app/data
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
     expose:
       - '8000'
@@ -12,7 +13,11 @@ services:
     environment:
       SERVER_IP: '${SERVER_IP}'
       LEETCODE_USERNAME: '${LEETCODE_USERNAME}'
+      LEETCODE_SESSION: '${LEETCODE_SESSION:-}'
+      LEETCODE_CSRF_TOKEN: '${LEETCODE_CSRF_TOKEN:-}'
+      GENERIC_TIMEZONE: '${GENERIC_TIMEZONE:-UTC}'
       GITHUB_USERNAME: '${GITHUB_USERNAME}'
+      GITHUB_TOKEN: '${GITHUB_TOKEN:-}'
       OGP_IO_API_KEY: '${OGP_IO_API_KEY}'
       GA4_PROPERTY_ID: '${GA4_PROPERTY_ID}'
       NAS_IP: '${NAS_IP}'
@@ -125,6 +130,7 @@ volumes:
       device: ':/volume1/media/'
   exclude:
   go_autocomplete_data:
+  leetcode_activity_data:
 
 secrets:
   pihole_password:

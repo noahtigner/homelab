@@ -327,6 +327,30 @@ export const npmPackageInfoSchema = z.object({
 	downloads: npmDownloadsSchema,
 });
 
+// LeetCode activity schemas
+export const leetCodeActivityDaySchema = z.object({
+	date: z.iso.date(),
+	solved_count: z.number().int().nonnegative(),
+	by_difficulty: z.object({
+		easy: z.number().int().nonnegative(),
+		medium: z.number().int().nonnegative(),
+		hard: z.number().int().nonnegative(),
+	}),
+	hardest_difficulty: z.enum(['easy', 'medium', 'hard']).nullable(),
+	coverage: z.enum(['complete', 'partial', 'unknown']),
+});
+
+export const leetCodeActivitySchema = z.object({
+	username: z.string(),
+	window_start: z.iso.date(),
+	window_end: z.iso.date(),
+	timezone: z.string(),
+	updated_at: z.iso.datetime({ offset: true }).nullable(),
+	sync_status: z.enum(['pending', 'syncing', 'partial', 'ready', 'error']),
+	message: z.string().nullable(),
+	days: z.array(leetCodeActivityDaySchema).min(1).max(366),
+});
+
 // GitHub schemas
 export const githubRepoSchema = z.object({
 	id: z.number(),
@@ -344,6 +368,35 @@ export const githubEventsSchema = z.object({
 	events_seen: z.unknown(),
 	repos_seen: z.array(githubRepoSchema),
 	contributions: githubContributionsSchema,
+});
+
+export const githubContributionDaySchema = z.object({
+	date: z.iso.date(),
+	weekday: z.number().int().min(0).max(6),
+	contribution_count: z.number().int().nonnegative(),
+	contribution_level: z.enum([
+		'NONE',
+		'FIRST_QUARTILE',
+		'SECOND_QUARTILE',
+		'THIRD_QUARTILE',
+		'FOURTH_QUARTILE',
+	]),
+});
+
+export const githubContributionCalendarSchema = z.object({
+	username: z.string(),
+	window_start: z.iso.date(),
+	window_end: z.iso.date(),
+	total_contributions: z.number().int().nonnegative(),
+	weeks: z
+		.array(
+			z.object({
+				first_day: z.iso.date(),
+				days: z.array(githubContributionDaySchema).min(1).max(7),
+			})
+		)
+		.min(1)
+		.max(54),
 });
 
 // Analytics schemas

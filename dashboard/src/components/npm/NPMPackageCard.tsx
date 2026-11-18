@@ -1,5 +1,12 @@
 import { Download, Link as LinkIcon } from 'lucide-react';
-import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
+import {
+	ResponsiveContainer,
+	AreaChart,
+	Area,
+	Tooltip,
+	YAxis,
+	CartesianGrid,
+} from 'recharts';
 import type { TooltipContentProps } from 'recharts';
 import type { z } from 'zod';
 
@@ -10,6 +17,11 @@ import { useNpmPackage } from '@/hooks/useNpmPackage';
 import type { npmPackageInfoSchema } from '@/types/schemas';
 
 type NPMPackageInfo = z.infer<typeof npmPackageInfoSchema>;
+
+const countFormatter = new Intl.NumberFormat('en-US', {
+	notation: 'compact',
+	maximumFractionDigits: 1,
+});
 
 function NPMChips({ npmPackageInfo }: { npmPackageInfo: NPMPackageInfo }) {
 	const chipData = [
@@ -77,34 +89,62 @@ function NPMPackageSummary({
 }) {
 	return (
 		<>
-			<div className="mb-2 flex grow justify-between">
+			<div className="flex justify-between">
 				<h3 className="text-2xl">
 					{npmPackageInfo.downloads.total} / month
 				</h3>
 				<Download className="size-8 text-success-foreground" />
 			</div>
-			<div className="mt-auto">
-				<ResponsiveContainer
-					width="100%"
-					aspect={8}
-					style={{ zIndex: 50 }}
-				>
-					<AreaChart
-						data={npmPackageInfo.downloads.per_day}
-						margin={{ top: 0, right: 0, bottom: 2, left: 0 }}
+			<div
+				className="relative mt-2 min-h-[120px] min-w-0 flex-1"
+				role="img"
+				aria-label={`Daily downloads for ${npmPackageInfo.name}`}
+			>
+				<div className="absolute inset-0">
+					<ResponsiveContainer
+						width="100%"
+						height="100%"
+						minWidth={0}
 					>
-						<Area
-							type="monotone"
-							dataKey="downloads"
-							stroke="var(--color-primary)"
-							fill="var(--color-primary)"
-							fillOpacity={0.2}
-						/>
-						<Tooltip content={CustomTooltip} />
-					</AreaChart>
-				</ResponsiveContainer>
-				<NPMChips npmPackageInfo={npmPackageInfo} />
+						<AreaChart
+							data={npmPackageInfo.downloads.per_day}
+							margin={{ top: 8, right: 4, bottom: 8, left: 0 }}
+							accessibilityLayer
+						>
+							<CartesianGrid
+								vertical={false}
+								stroke="var(--border)"
+							/>
+							<YAxis
+								domain={[0, 'auto']}
+								allowDecimals={false}
+								tickCount={4}
+								interval={0}
+								width={44}
+								tickFormatter={(value: number) =>
+									countFormatter.format(value)
+								}
+								tick={{
+									fill: 'var(--muted-foreground)',
+									fontSize: 11,
+								}}
+								tickLine={false}
+								axisLine={false}
+							/>
+							<Area
+								type="monotone"
+								dataKey="downloads"
+								stroke="var(--primary)"
+								fill="var(--primary)"
+								fillOpacity={0.2}
+								isAnimationActive={false}
+							/>
+							<Tooltip content={CustomTooltip} />
+						</AreaChart>
+					</ResponsiveContainer>
+				</div>
 			</div>
+			<NPMChips npmPackageInfo={npmPackageInfo} />
 		</>
 	);
 }
@@ -122,9 +162,9 @@ function NPMPackageCardContent({ packageName }: { packageName: string }) {
 
 	if (isLoading || !data) {
 		return (
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-1 flex-col gap-2">
 				<Skeleton className="h-10 w-48" />
-				<Skeleton className="h-16 w-full" />
+				<Skeleton className="min-h-[120px] w-full flex-1" />
 				<Skeleton className="h-6 w-64" />
 			</div>
 		);
